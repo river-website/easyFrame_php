@@ -6,14 +6,17 @@
  * Time: 14:13
  */
 
-class testAction extends ezControl{
-
-	public function test(){
-		$ez_user = ezModel::getInterface('ez_user');
-        $ez_user->insert(array('id'=>'1'));
-		echo "com in !<br>";
-	}
-	public function hook(){
-		echo "hook in".'<br>';
-	}
+class testAction extends ezControl
+{
+    
+    public function test()
+    {
+        $ez_user = ezModel::getInterface('ez_user');
+        $a       = $ez_user->select();
+        var_dump($a);
+    }
+    public function hook()
+    {
+        echo "hook in" . '<br>';
+    }
 }

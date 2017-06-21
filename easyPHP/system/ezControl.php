@@ -6,6 +6,7 @@
  * Time: 14:13
  */
 
-class ezControl {
-
+class ezControl
+{
+    
 }

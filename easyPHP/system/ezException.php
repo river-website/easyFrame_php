@@ -5,13 +5,16 @@
  * Date: 2017/6/19
  * Time: 10:16
  */
-class ezException{
+class ezException
+{
     private $conf = null;
-    public function __construct(){
+    public function __construct()
+    {
         $this->conf = $GLOBALS['ezData']['conf']->getNode('exception');
-
+        
     }
-    public function excep($ex){
-
+    public function excep($ex)
+    {
+        
     }
 }
