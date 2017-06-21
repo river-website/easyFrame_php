@@ -4,18 +4,18 @@ $ezConf = array(
     //Êı¾İ¿âÅäÖÃ 
     'db' => array(
         'state'=>true,
-        'data'=>array(
+        'conf'=>array(
             'host'=>'127.0.0.1',
             'user'=>'root',
-            'password'=>'12345678',
+            'password'=>'123456',
             'dataBase'=>'test',
-            'port'=>3389
+            'port'=>3306
         )
     ),
     // ¾²Ì¬»¯ÅäÖÃ
     'html'=>array(
         'state'=>true,
-        'data'=>array(
+        'conf'=>array(
             'path'=>'runtime/html',
             'rules'=>array(
                 'ControlName/meth/para'=>'3600'
@@ -25,14 +25,14 @@ $ezConf = array(
     // ´úÂë»º´æÅäÖÃ
     'codeCache'=> array(
         'stata'=>true,
-        'data'=>array(
+        'conf'=>array(
             'time'=>'3600'
         )
     ),
     // »º´æÅäÖÃ
     'cache'=>array(
         'state'=>true,
-        'data'=>array(
+        'conf'=>array(
             'redis'=>array(
                 'state'=>true,
                 'data'=>array(
@@ -44,15 +44,15 @@ $ezConf = array(
     ),
     // debug ÅäÖÃ
     'debug'=> array(
-        'stats'=>true
+        'state'=>true
     ),
     // hook ÅäÖÃ
     'hook'=>array(
         'state'=>true,
         'conf'=>array(
-            'default'=>'control/methon',
-            'control_Name1'=>array(
-                'defualt'=>'control/methon',
+            'default'=>'testAction/hook',
+            'testAction'=>array(
+                'defualt'=>'testAction/hook',
                 'methon_name1'=>'control/methon',
                 'methon_name2'=>'control/methon',
             ),
@@ -73,7 +73,7 @@ $ezConf = array(
     // monitorÅäÖÃ
     'monitor'=> array(
         'state'=>true,
-        'data'=>array(
+        'conf'=>array(
             'executeTime'=> true,
             'mem'=> true,
             'cpu'=>true

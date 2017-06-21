@@ -8,35 +8,29 @@
 
 class ezDB{
 
-    private $DbConf = null;
-    private $Con = null;
-    private $sql = '';
+    private $conf = null;
+    private $connect = null;
 
     public function __construct(){
-        global $ezConf;
-        $DbConf = $ezConf['db'];
-        if($DbConf['state'] != true)
-            return 'error';
-        $this->DbConf = $DbConf['data'];
-        $this->Con = $this->connectDB();
+        $this->conf = $GLOBALS['ezData']['conf']->getNode('db');
+        $this->connect = $this->connectDB();
     }
 
     private function connectDB(){
-        global $ezData;
-        if(isset($ezData['dbConnect']))
-            return $ezData['dbConnect'];
+        if(!empty($GLOBALS['ezData']['dbConnect']))
+            return $GLOBALS['ezData']['dbConnect'];
 
-        $con = mysqli_connect($this->DbConf['host'],$this->DbConf['user'],$this->DbConf['password'],$this->DbConf['dataBase'],$this->DbConf['port']);
+        $con = mysqli_connect($this->conf['host'],$this->conf['user'],$this->conf['password'],$this->conf['dataBase'],$this->conf['port']);
         if (!$con)
         {
             die('Could not connect: ' . mysqli_error());
         }
-        $ezData['dbConnect'] = $con;
+        $GLOBALS['ezData']['dbConnect'] = $con;
         return $con;
     }
     function checkTableExist($table)
     {
-        $row = mysqli_query($this->Con,"show tables");
+        $row = mysqli_query($this->connect,"show tables");
         $tables = array();
         while ($result=mysqli_fetch_array($row))
         {
@@ -52,6 +46,10 @@ class ezDB{
         {
             return false;
         }
+    }
+
+    public function getConnect(){
+        return $this->connect;
     }
 
 }

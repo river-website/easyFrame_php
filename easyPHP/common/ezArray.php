@@ -39,7 +39,7 @@ if(!function_exists('ezDicToString')) {
                 global $ret;
                 global $link;
                 $tempAry[] = $key."$link".$v;
-            ');
+            '));
         return implode($split,$tempAry);
     }
 }

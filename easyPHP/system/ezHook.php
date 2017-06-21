@@ -6,25 +6,19 @@
  * Time: 10:19
  */
 class ezHook{
-    private $hookConf = null;
-    private $route = null;
+    private $conf = null;
 
     public function __construct(){
-        global $ezConf;
-        $Conf = $ezConf['hook'];
-        if($Conf['state'] != true)
-            return 'error';
-        $this->hookConf = $Conf['conf'];
+        $this->conf = $GLOBALS['ezData']['conf']->getNode('hook');
     }
 
     public function getHook($route){
-            $this->route = $route;
-    	if(!isset($this->hookConf[$this->route['control']]))
-    		return $this->hookConf['default'];
-    	$hookControl = $this->hookConf[$this->route['control']];
-    	if(!isset($hookControl[$this->route['methon']]))
+    	if(empty($this->conf[$route['control']]))
+    		return $this->conf['default'];
+    	$hookControl = $this->conf[$route['control']];
+    	if(empty($hookControl[$route['methon']]))
     		return $hookControl['default'];
-    	return $hookControl[$this->route['methon']];
+    	return $hookControl[$route['methon']];
     }
 
 } 

@@ -5,15 +5,19 @@
  * Date: 2017/6/19
  * Time: 10:19
  */
+
+require_once ezAPPPATH.'/conf.php';
+
 class ezConf{
     private $conf = null;
     public function __construct(){
         $this->reload();
-        $GLOBALS['ezData']['conf'] = $this;
     }
     public function reload(){
-        if(!isset($GLOBALS['ezConf']))
-            throw new Exception("ÅäÖÃÎÄ¼þ´íÎó");
+        if(empty($GLOBALS['ezConf']))
+            throw new Exception("é…ç½®æ–‡ä»¶é”™è¯¯");
+        if(ezFilter($GLOBALS['ezConf'],array('db','html','codeCache','cache','debug','hook','log','monitor','app')) != true)
+            throw new Exception("é…ç½®æ–‡ä»¶é”™è¯¯");
         $this->conf = $GLOBALS['ezConf'];
     }
     public function getNode($node){

@@ -6,131 +6,152 @@
  * Time: 11:31
  */
 
+require_once ezSYSPATH.'/system/ezDB.php';
+
 class ezModel{
 
+    private $db = null;
     private $dbConnect = null;
     private $table = null;
-    private $sql = array();
+    private $sql = array(
+            'option'=>'',
+            'where'=>'',
+            'group by'=>'',
+            'having'=>'',
+            'union'=>'',
+            'order by'=>'',
+            'limit'=>''
+        );
 
     static function getInterface($model){
-        global $ezData;
-        if(!isset($model)||empty($model))
-            return 'error';
-        if(!isset($ezData['dbConnect'])){
-            require_once ezSYSPATH.'/system/ezDB.php';
+        if(empty($model))
+            throw new Exception("model名为空");
+
+        if(empty($GLOBALS['ezData']['db'])) {
             $db = new ezDB();
+            $GLOBALS['ezData']['db'] = $db;
         }
-        else $db = $ezData['dbConnect'];
-        if(file_exists($_SERVER['DOCUMENT_ROOT'].'/easyPHP/'.ezAPPPATH.'/model/'.$model.'.php')){
+        else
+            $db = $GLOBALS['ezData']['db'];
+
+        if(file_exists(ezAPPPATH.'/model/'.$model.'.php')){
             require_once ezAPPPATH.'/model/'.$model.'.php';
             if(!class_exists($model))
-                return '没有这个类';
+                throw new Exception("没有这个类");
             if(get_parent_class($model) != 'ezModel')
-                return '类没有继承ez';
+                throw new Exception("类没有继承ezModel");
             return new $model();
         }else{
             if(!$db->checkTableExist($model))
-                return '没有这个模型';
+                throw new Exception("没有这个模型");
             return new ezModel($model);
         }
     }
 
     public function __construct($model){
-        global $ezData;
+        if(empty($GLOBALS['ezData']['db'])) {
+            $this->db = new ezDB();
+            $GLOBALS['ezData']['db'] = $this->db;
+        }
+        else
+            $this->db = $GLOBALS['ezData']['db'];
+        $this->dbConnect = $this->db->getConnect();
         $this->table = $model;
-        $this->dbConnect =  $ezData['dbConnect'];
     }
 
-    public function execute(){
+    private function execute(){
+        //組合sql
+        $sql = $this->sql['option'];
+        $this->sql['option'] = '';
+        foreach ($this->sql as $key => $value){
+            $sql .= $value == ''?:' '.$key.' '.$value;
+        }
+
         // 执行sql查询
-        $row = mysqli_query($this->dbConnect,$this->sql);
+        $row = mysqli_query($this->dbConnect,$sql);
 
         // 获取查询结果
-        $datas = array();
+        $data = array();
         if($row == false)
-            return $datas;
+            return $data;
         while ($result=mysqli_fetch_array($row))
         {
-            $datas[]=$result[0];
+            $data[]=$result[0];
         }
-        return $datas;
+        return $data;
     }
 
     public function select($condition){
-            if(gettype($condition) == 'array'){
-                    $this->sql['select'] = count($condition)==0?'*':implode(',', $condition);
-            }else if(gettype($condition) == 'string'){
-                $this->sql['select'] = $condition!=''?:'*';
-            }else if(gettype($condition) == 'NULL'){
-               $this->sql['select'] = '*';
-            }else{
-                echo 'error';
-            }
+        if(gettype($condition) == 'array'){
+                $this->sql['option'] = 'select '.(count($condition)==0?'*':implode(',', $condition)).' from '.$this->table;
+        }else if(gettype($condition) == 'string'){
+            $this->sql['option'] = 'select '.($condition!=''?:'*').' from '.$this->table;
+        }else if(gettype($condition) == 'NULL'){
+           $this->sql['option'] = 'select '.'*'.' from '.$this->table;
+        }
+        return $this->execute();
     }
 
     public function where_in($key, array $condition){
-        if(count($condition) == 0)
-            return 'error';
-        if(empty($key))
-            return 'error';
-        $prefix = $sql['where'] == '':' and ';
-        $this->sql['where'] .= $prefix.' in('.implode(',', $condition).')';
+        if(count($condition) > 0 & !empty($key)) {
+            $prefix = $this->sql['where'] == '' ?: ' and ';
+            $this->sql['where'] .= $prefix . ' in(' . implode(',', $condition) . ')';
+        }
+        return $this;
     }
     public function where($condition){
-        $prefix = $sql['where'] == '':' and ';
+        $prefix = $this->sql['where'] == ''?:' and ';
         if(gettype($condition) == 'array'){
-                    $this->sql['where'] .= $prefix.count($condition)==0?'':ezDicToString($condition,' and ','=');
-            }else if(gettype($condition) == 'string'){
-                $this->sql['where'] .= $prefix.$condition!=''?:'*';
-            }else{
-                echo 'error';
-            }
+            $this->sql['where'] .= $prefix.count($condition)==0?'':ezDicToString($condition,' and ','=');
+        }else if(gettype($condition) == 'string'){
+            $this->sql['where'] .= $prefix.$condition!=''?:'*';
+        }
+        return $this;
     }
 
     public function limit($limit,$offset=0){
-        $this->sql .= ' limit '.$offset.','.$limit;
+        $this->sql['limit'] = ' '.$offset.','.$limit;
     }
 
     public function beginTransaction(){
-        $this->Con->autocommit(false);
+        $this->dbConnect->autocommit(false);
     }
 
     public function endTransaction(){
-        if($this->Con->error){
-            $this->Con->commit();
-            $this->Con->autocommit(true);
+        if($this->dbConnect->error){
+            $this->dbConnect->commit();
+            $this->dbConnect->autocommit(true);
             return true;
         }else{
-            $this->Con->rollback();
-            $this->Con->autocommit(true);
+            $this->dbConnect->rollback();
+            $this->dbConnect->autocommit(true);
             return false;
         }
     }
 
     public function insert($data){
-        $this->sql .= ' insert into '.$this->table.'('.implode(',',array_keys($data)).') values ('.implode(',',array_values($data)).')';
-        $this->execute();
+        $this->sql['option'] = 'insert into '.$this->table.'('.implode(',',array_keys($data)).') values ('.implode(',',array_values($data)).')';
+        return $this->execute();
     }
 
     public function insertList($dataList){
         $firstRow = reset($dataList);
         if(!is_array($firstRow))
-            return 'error';
+            return $this;
 
-        $this->sql .= ' insert into '.$this->defTable.'('.explode(',',array_keys($firstRow)).') values ';
+        $sql = 'insert into '.$this->table.'('.explode(',',array_keys($firstRow)).') values ';
+
         foreach ($dataList as $data)
-            $this->sql .= '('.array_values($data).'),';
-        $this->sql = substr($this->sql, 0, -1);
+            $sql .= '('.implode(',',array_values($data)).'),';
+        $this->sql['option'] = substr($sql, 0, -1);
         return $this->execute();
     }
 
     public function update(array $data,array $condition = array()){
-        $this->sql .= 'update '.$this->defTable.'set ';
+        $sql = 'update '.$this->table.'set ';
         foreach ($data as $key=>$value)
-            $this->sql .= $key.'='.$value.',';
-        $this->sql = substr($this->sql,0,-1);
-        foreach ($condition as $key => $value)
-            $this->sql .= ' and '.$key.'='.$value;
+            $sql .= $key.'='.$value.',';
+        $this->sql['option'] = substr($this->sql,0,-1);
         return $this->execute();
     }
 }
