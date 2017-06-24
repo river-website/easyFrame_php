@@ -13,8 +13,8 @@ class ezException
         $this->conf = $GLOBALS['ezData']['conf']->getNode('exception');
         
     }
-    public function excep($ex)
+   public function exceptHandle($ex)
     {
-        
+        echo "<pre>";print_r($ex);echo "<pre>"; 
     }
 }

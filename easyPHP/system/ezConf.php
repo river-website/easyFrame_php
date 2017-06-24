@@ -24,6 +24,7 @@ class ezConf
             'html',
             'codeCache',
             'cache',
+            'rewrite',
             'debug',
             'hook',
             'log',

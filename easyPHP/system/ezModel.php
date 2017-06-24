@@ -6,7 +6,6 @@
  * Time: 11:31
  */
 
-require_once ezSYSPATH . '/system/ezDB.php';
 
 class ezModel
 {
@@ -16,30 +15,30 @@ class ezModel
     private $table = null;
     private $sql = array('option' => '', 'where' => '', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
     
-    static function getInterface($model)
-    {
-        if (empty($model))
-            throw new Exception("model名为空");
+    // static function getInterface($model)
+    // {
+    //     if (empty($model))
+    //         throw new Exception("model名为空");
         
-        if (empty($GLOBALS['ezData']['db'])) {
-            $db                      = new ezDB();
-            $GLOBALS['ezData']['db'] = $db;
-        } else
-            $db = $GLOBALS['ezData']['db'];
+    //     if (empty($GLOBALS['ezData']['db'])) {
+    //         $db                      = new ezDB();
+    //         $GLOBALS['ezData']['db'] = $db;
+    //     } else
+    //         $db = $GLOBALS['ezData']['db'];
         
-        if (file_exists(ezAPPPATH . '/model/' . $model . '.php')) {
-            require_once ezAPPPATH . '/model/' . $model . '.php';
-            if (!class_exists($model))
-                throw new Exception("没有这个类");
-            if (get_parent_class($model) != 'ezModel')
-                throw new Exception("类没有继承ezModel");
-            return new $model();
-        } else {
-            if (!$db->checkTableExist($model))
-                throw new Exception("没有这个模型");
-            return new ezModel($model);
-        }
-    }
+    //     if (file_exists(ezAPPPATH . '/model/' . $model . '.php')) {
+    //         require_once ezAPPPATH . '/model/' . $model . '.php';
+    //         if (!class_exists($model))
+    //             throw new Exception("没有这个类");
+    //         if (get_parent_class($model) != 'ezModel')
+    //             throw new Exception("类没有继承ezModel");
+    //         return new $model();
+    //     } else {
+    //         if (!$db->checkTableExist($model))
+    //             throw new Exception("没有这个模型");
+    //         return new ezModel($model);
+    //     }
+    // }
     
     public function __construct($model)
     {

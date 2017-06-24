@@ -23,9 +23,17 @@ $ezConf = array(
     ),
     // ¥˙¬Îª∫¥Ê≈‰÷√
     'codeCache' => array(
-        'stata' => true,
+        'state' => true,
         'conf' => array(
             'time' => '3600'
+        )
+    ),
+    // Œ±æ≤Ã¨≈‰÷√
+    'rewrite'=>array(
+        'state'=>true,
+        'conf'=>array(
+            't/(.*)'=>'testAction/$1',
+            'u/(\d+)'=>'testAction/hook/$1'
         )
     ),
     // ª∫¥Ê≈‰÷√
