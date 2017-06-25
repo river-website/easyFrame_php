@@ -17,7 +17,17 @@ $ezConf = array(
         'conf' => array(
             'path' => 'runtime/html',
             'rules' => array(
-                'ControlName/meth/para' => '3600'
+                'default' => 600,
+                'testAction' => array(
+                    'default' => 'testAction/hook',
+                    'methon_name1' => 'control/methon',
+                    'methon_name2' => 'control/methon'
+                ),
+                'control_Name2' => array(
+                    'default' => 'control/methon',
+                    'methon_name1' => 'control/methon',
+                    'methon_name2' => 'control/methon'
+                )
             )
         )
     ),
@@ -47,6 +57,32 @@ $ezConf = array(
                     'port' => 3389
                 )
             )
+        )
+    ),
+    'redis'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'host'=>'127.0.0.1',
+            'port'=>3306
+        )
+    ),
+    'file'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'path'=>'path',
+            'time'=>3000
+        )
+    ),
+    'opcode'=>array(
+        'state'=>true,
+        'conf'=>array(
+
+        )
+    ),
+    'shmop'=>array(
+        'state'=>true,
+        'conf'=>array(
+
         )
     ),
     // debug ÅäÖÃ

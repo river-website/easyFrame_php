@@ -1,3 +1,22 @@
 1. easyPHP/common directory is some functions will often to use
 2. easyPHP/library directory is third party library
 3. easyPHP/system directory is framework code
+
+
+
+1.	用户URL请求
+2.	调用应用入口文件（通常是网站的index.php）
+3.	载入框架入口文件（ezAPP.php）
+4.	记录初始运行时间和内存开销
+5.	设置错误处理机制和自动加载机制
+9.	部署模式下如果存在应用编译缓存文件则直接加载
+13.	加载应用配置文件
+24.	调用Think\App类的run方法启动应用
+25.	应用初始化（app_init）标签位侦听并执行绑定行为
+26.	判断并加载动态配置和函数文件
+27.	调用Think\Dispatcher::dispatch方法进行URL请求调度
+38.	URL后缀检测（URL_DENY_SUFFIX以及URL_HTML_SUFFIX处理）
+46.	默认调用系统的ReadHtmlCache行为读取静态缓存（HTML_CACHE_ON参数开启）
+64.	判断后置操作方法是否定义，有的话执行
+67.	执行系统的ShowPageTrace行为（SHOW_PAGE_TRACE参数开启并且不是AJAX请求）
+68.	日志信息存储写入
