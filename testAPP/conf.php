@@ -15,7 +15,7 @@ $ezConf = array(
     'html' => array(
         'state' => true,
         'conf' => array(
-            'path' => 'runtime/html',
+            'path' => '/runtime/cache/html',
             'rules' => array(
                 'default' => 600,
                 'testAction' => array(
@@ -69,7 +69,7 @@ $ezConf = array(
     'file'=>array(
         'state'=>true,
         'conf'=>array(
-            'path'=>'path',
+            'path'=>'/runtime/cache/file',
             'time'=>3000
         )
     ),
@@ -111,7 +111,7 @@ $ezConf = array(
     'log' => array(
         'state' => true,
         'conf' => array(
-            'path' => 'runtime/html'
+            'path' => '/runtime/log'
         )
     ),
     // monitor≈‰÷√
