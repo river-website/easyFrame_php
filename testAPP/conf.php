@@ -66,6 +66,22 @@ $ezConf = array(
             'port'=>3306
         )
     ),
+    'cacheHtml'=>array(
+        'state'=>true,
+        'conf' => array(
+            'default' => 'testAction/hook',
+            'testAction' => array(
+                'default' => 'testAction/hook',
+                'methon_name1' => 'control/methon',
+                'methon_name2' => 'control/methon'
+            ),
+            'control_Name2' => array(
+                'default' => 'control/methon',
+                'methon_name1' => 'control/methon',
+                'methon_name2' => 'control/methon'
+            )
+        )
+    ),
     'file'=>array(
         'state'=>true,
         'conf'=>array(

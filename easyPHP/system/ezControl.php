@@ -10,6 +10,44 @@ class ezControl
 {
     private $log = null;
     private $db = null;
+    private $cacheFile = null;
+    private $cacheRedis = null;
+    public function cacheFileSave($key,$value,$time = null){
+        if(empty($this->cacheFile)){
+            require_once ezSYSPATH.'/system/ezCacheFile.php';
+            $this->cacheFile = new ezCacheFile();
+        }
+        if(empty($time))
+            return $this->cacheFile->save($key,$value);
+        else return $this->cacheFile->save($key,$value,$time);
+    }
+    public function cacheFileGet($key){
+        if(empty($this->cacheFile)){
+            require_once ezSYSPATH.'/system/ezCacheFile.php';
+            $this->cacheFile = new ezCacheFile();
+        }
+        return $this->cacheFile->get($key);
+    }
+
+    public function cacheRedisSave($key,$value,$time=null){
+        if(empty($this->cacheRedis)){
+            require_once ezSYSPATH.'/system/ezCacheRedis.php';
+            $this->cacheRedis = new ezCacheRedis();
+        }
+        if(empty($time))
+            return $this->cacheRedis->save($key,$value);
+        else return $this->cacheRedis->save($key,$value,$time);
+    }
+
+    public function cacheRedisGet($key){
+        if(empty($this->cacheRedis)){
+            require_once ezSYSPATH.'/system/ezCacheRedis.php';
+            $this->cacheRedis = new ezCacheRedis();
+        }
+        return $this->cacheRedis->get($key);
+
+    }
+
     public function log($env, $msg, $write = false)
     {
     	if(empty($this->log))
