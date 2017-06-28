@@ -12,6 +12,9 @@ class ezControl
     private $db = null;
     private $cacheFile = null;
     private $cacheRedis = null;
+    private $cacheHtml = null;
+    private $dispatch = null;
+
     public function cacheFileSave($key,$value,$time = null){
         if(empty($this->cacheFile)){
             require_once ezSYSPATH.'/system/ezCacheFile.php';
@@ -21,6 +24,7 @@ class ezControl
             return $this->cacheFile->save($key,$value);
         else return $this->cacheFile->save($key,$value,$time);
     }
+
     public function cacheFileGet($key){
         if(empty($this->cacheFile)){
             require_once ezSYSPATH.'/system/ezCacheFile.php';
@@ -46,6 +50,16 @@ class ezControl
         }
         return $this->cacheRedis->get($key);
 
+    }
+
+    public function cacheHtmlGet($unit = null){
+
+    }
+
+    public function setDispatch($dispatch){
+        if(empty($dispatch) || empty('control') || empty('methon') || empty('param'))
+            throw new Exception('设置dispatch错误');
+        $this->dispatch = $dispatch;
     }
 
     public function log($env, $msg, $write = false)

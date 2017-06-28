@@ -62,6 +62,7 @@ class ezRoute
         
         // 获取这个函数参数类型定义
         $instance = new $dispatch['control']();
+        $instance->setDispatch($dispatch);
         return $method->invokeArgs($instance, $dispatch['param']);
     }
 }
