@@ -69,16 +69,19 @@ $ezConf = array(
     'cacheHtml'=>array(
         'state'=>true,
         'conf' => array(
-            'default' => 'testAction/hook',
-            'testAction' => array(
-                'default' => 'testAction/hook',
-                'methon_name1' => 'control/methon',
-                'methon_name2' => 'control/methon'
-            ),
-            'control_Name2' => array(
-                'default' => 'control/methon',
-                'methon_name1' => 'control/methon',
-                'methon_name2' => 'control/methon'
+            'path' => '/runtime/cache/html',
+            'rules' => array(
+                'default' => 600,
+                'testAction' => array(
+                    'default' => 600,
+                    'methon_name1' => 50,
+                    'methon_name2' => 80
+                ),
+                'control_Name2' => array(
+                    'default' => 600,
+                    'methon_name1' => 80,
+                    'methon_name2' => 100
+                )
             )
         )
     ),
