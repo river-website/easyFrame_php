@@ -15,45 +15,63 @@ class ezControl
     private $cacheHtml = null;
     private $dispatch = null;
 
-    public function cacheFileSave($key,$value,$time = null){
+    private function initCacheFile(){
         if(empty($this->cacheFile)){
             require_once ezSYSPATH.'/system/ezCacheFile.php';
             $this->cacheFile = new ezCacheFile();
         }
+    }
+
+    public function cacheFileSave($key,$value,$time = null){
+        $this->initCacheFile();
         if(empty($time))
             return $this->cacheFile->save($key,$value);
         else return $this->cacheFile->save($key,$value,$time);
     }
 
     public function cacheFileGet($key){
-        if(empty($this->cacheFile)){
-            require_once ezSYSPATH.'/system/ezCacheFile.php';
-            $this->cacheFile = new ezCacheFile();
-        }
+        $this->initCacheFile();
         return $this->cacheFile->get($key);
     }
 
-    public function cacheRedisSave($key,$value,$time=null){
+    private function initCacheRedis(){
         if(empty($this->cacheRedis)){
             require_once ezSYSPATH.'/system/ezCacheRedis.php';
             $this->cacheRedis = new ezCacheRedis();
         }
+    }
+
+    public function cacheRedisSave($key,$value,$time=null){
+        $this->initCacheRedis();
         if(empty($time))
             return $this->cacheRedis->save($key,$value);
         else return $this->cacheRedis->save($key,$value,$time);
     }
 
     public function cacheRedisGet($key){
-        if(empty($this->cacheRedis)){
-            require_once ezSYSPATH.'/system/ezCacheRedis.php';
-            $this->cacheRedis = new ezCacheRedis();
-        }
+        $this->initCacheRedis();
         return $this->cacheRedis->get($key);
+    }
 
+    private function initCacheHtml(){
+        if(empty($this->cacheHtml)){
+            require_once ezSYSPATH.'/system/ezCacheHtml.php';
+            $this->cacheHtml = new ezCacheHtml();
+            $this->cacheHtml->setDispatch($this->dispatch);
+        }
+    }
+
+    public function cacheHtmlSave($unit = null){
+        $this->initCacheHtml();
+        $dispatch = $this->dispatch;
+        $dispatch['param'] = implode('-',$dispatch['param']);
+        $dispatch = array_values($dispatch);
+        $this->cacheHtml->save(implode('_',$dispatch),$unit);
     }
 
     public function cacheHtmlGet($unit = null){
-
+        $this->initCacheHtml();
+        $this->cacheHtml->save($unit);
     }
 
     public function setDispatch($dispatch){
@@ -71,6 +89,7 @@ class ezControl
     	}
     	$this->log->log_message($env,$msg,$write);
     }
+
     public function getModel($model)
     {
 

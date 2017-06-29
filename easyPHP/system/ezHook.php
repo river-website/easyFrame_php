@@ -13,7 +13,11 @@ class ezHook
     {
         $this->conf = $GLOBALS['ezData']['conf']->getNode('hook');
     }
-    
+    public function confValid(){
+        if(is_array($this->conf))
+            return true;
+        return false;
+    }
     public function getHook($route)
     {
         if (empty($this->conf[$route['control']]))

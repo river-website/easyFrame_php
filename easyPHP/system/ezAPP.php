@@ -27,15 +27,22 @@ class ezAPP
         set_exception_handler(array('ezException','exceptHandle'));
         // 加载路由重写模块
         $ezReWrite = new ezReWrite();
-        $reRoute = $ezReWrite->reWriteRoute(explode('index.php/', $_SERVER['REQUEST_URI'])[1]);
+        if($ezReWrite->confValid()) $reRoute = $ezReWrite->reWriteRoute();
+        else{
+            $reRoute = null;
+            $ezReWrite = null;
+        }
         // 加载路由模块
         $ezRoute                   = new ezRoute();
         $dispatch                  = $ezRoute->analyseRoute($reRoute);
         // 加载钩子模块
         $ezHook                    = new ezHook();
-        $hookDispatch = $ezRoute->analyseRoute($ezHook->getHook($dispatch));
-        $hookDispatch['param'] = $dispatch['param'];
-        $ezRoute->executeRoute($hookDispatch);
+        if($ezHook->confValid()) {
+            $hookDispatch = $ezRoute->analyseRoute($ezHook->getHook($dispatch));
+            $hookDispatch['param'] = $dispatch['param'];
+            $ezRoute->executeRoute($hookDispatch);
+        }
+        else $ezHook = null;
         $ezRoute->executeRoute($dispatch);
     }
 }

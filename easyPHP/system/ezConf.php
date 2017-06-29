@@ -34,13 +34,17 @@ class ezConf
             throw new Exception("配置文件错误");
         $this->conf = $GLOBALS['ezConf'];
     }
-    public function getNode($node)
+    public function getNode($node, $throw = true)
     {
-        if (!isset($this->conf[$node]))
-            return false;
+        if (!isset($this->conf[$node])){
+            if($throw)throw new Exception("没有这个节点");
+            else return false;
+        }
         $nodeConf = $this->conf[$node];
-        if ($nodeConf['state'] != true)
-            return false;
+        if ($nodeConf['state'] != true){
+            if($throw)throw new Exception("模块未开启");
+            else return false;
+        }
         return $nodeConf['conf'];
     }
 }
