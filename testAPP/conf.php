@@ -85,6 +85,14 @@ $ezConf = array(
             )
         )
     ),
+
+    'msgQueue'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'maxMsg'=>1000
+
+        )
+    ),
     'file'=>array(
         'state'=>true,
         'conf'=>array(
@@ -146,6 +154,12 @@ $ezConf = array(
     'exception' => array(
         'state' => true,
         'conf' => array()
+    ),
+    'outApp'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'app1'=>'path1'
+        )
     ),
     // app ÅäÖÃ
     'app' => array()

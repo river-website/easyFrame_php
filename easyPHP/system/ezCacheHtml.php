@@ -47,13 +47,10 @@ class ezCacheHtml{
         return file_get_contents($fileName);
     }
     public function save($data = null,$unit = null){
-
-        $filename = empty($unit)?'.html':'_'.$unit.'.html';
-        $filename = $this->path.$this->prefix.$filename;
-        if(empty($data)){
-            file_put_contents($filename, ob_get_contents());
-
-        }
-
+        $unit = empty($unit)?'':'_'.$unit;
+        $fileName = $this->path.$this->prefix.$this->dispatchToFile($this->dispatch).$unit.'.html';
+        $obData = ob_get_contents();
+        if($obData != false)ob_end_clean();
+        file_put_contents($fileName,$obData.$data);
     }
 }
