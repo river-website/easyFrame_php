@@ -75,7 +75,7 @@ class ezControl
     }
 
     public function setDispatch($dispatch){
-        if(empty($dispatch) || empty('control') || empty('methon') || empty('param'))
+        if(empty($dispatch) || empty($dispatch['control']) || empty($dispatch['methon']) || empty($dispatch['param']))
             throw new Exception('设置dispatch错误');
         $this->dispatch = $dispatch;
     }
