@@ -13,6 +13,7 @@ class ezControl
     private $cacheFile = null;
     private $cacheRedis = null;
     private $cacheHtml = null;
+    private $cacheShm = null;
     private $dispatch = null;
 
     private function initCacheFile(){
@@ -22,14 +23,14 @@ class ezControl
         }
     }
 
-    public function cacheFileSave($key,$value,$time = null){
+    public function saveCacheFile($key,$value,$time = null){
         $this->initCacheFile();
         if(empty($time))
             return $this->cacheFile->save($key,$value);
         else return $this->cacheFile->save($key,$value,$time);
     }
 
-    public function cacheFileGet($key){
+    public function getCacheFile($key){
         $this->initCacheFile();
         return $this->cacheFile->get($key);
     }
@@ -41,14 +42,14 @@ class ezControl
         }
     }
 
-    public function cacheRedisSave($key,$value,$time=null){
+    public function saveCacheRedis($key,$value,$time=null){
         $this->initCacheRedis();
         if(empty($time))
             return $this->cacheRedis->save($key,$value);
         else return $this->cacheRedis->save($key,$value,$time);
     }
 
-    public function cacheRedisGet($key){
+    public function getCacheRedis($key){
         $this->initCacheRedis();
         return $this->cacheRedis->get($key);
     }
@@ -61,7 +62,7 @@ class ezControl
         }
     }
 
-    public function cacheHtmlSave($unit = null){
+    public function saveCacheHtml($unit = null){
         $this->initCacheHtml();
         $dispatch = $this->dispatch;
         $dispatch['param'] = implode('-',$dispatch['param']);
@@ -69,13 +70,29 @@ class ezControl
         $this->cacheHtml->save(implode('_',$dispatch),$unit);
     }
 
-    public function cacheHtmlGet($unit = null){
+    public function getCacheHtml($unit = null){
         $this->initCacheHtml();
-        $this->cacheHtml->save($unit);
+        return $this->cacheHtml->get($unit);
+    }
+    
+    public function initCacheShm(){
+        if(empty($this->cacheShm)){
+            require_once ezSYSPATH.'/system/ezCacheShm.php';
+            $this->cacheShm = new ezCacheShm();
+        }
     }
 
+    public function getCacheShm($key){
+        $this->initCacheShm();
+        return $this->cacheShm->get($key);
+    }
+    public function saveCacheShm($key,$value,$time = null){
+        $this->initCacheShm();
+        return $this->cacheShm->save($key,$value,$time);
+        
+    }
     public function setDispatch($dispatch){
-        if(empty($dispatch) || empty($dispatch['control']) || empty($dispatch['methon']) || empty($dispatch['param']))
+        if(empty($dispatch) || empty($dispatch['control']) || empty($dispatch['methon']) || !isset($dispatch['param']))
             throw new Exception('设置dispatch错误');
         $this->dispatch = $dispatch;
     }

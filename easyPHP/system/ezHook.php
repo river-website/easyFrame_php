@@ -1,23 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: win10
- * Date: 2017/6/15
- * Time: 10:19
- */
-class ezHook
+
+class ezHook extends ezBase
 {
-    private $conf = null;
-    
-    public function __construct()
-    {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('hook');
-    }
-    public function confValid(){
-        if(is_array($this->conf))
-            return true;
-        return false;
-    }
+    protected $confNode = 'hook';
+    protected $throw = false;
+
     public function getHook($route)
     {
         if (empty($this->conf[$route['control']]))

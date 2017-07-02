@@ -5,15 +5,16 @@
  * Date: 2017/6/27
  * Time: 14:42
  */
-class ezCacheShm{
-    private $conf = null;
+class ezCacheShm extends ezBase
+{
+    protected $confNode = 'cacheShm';
     private $shmKey = null;
     private $size = null;
     private $auth = null;
     private $index = 0;
     public function __construct()
     {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('cacheShm');
+        parent::__construct();
         $this->shmKey = $this->conf['shmKey'];
         $this->size = $this->conf['size'];
         $this->auth = $this->conf['auth'];

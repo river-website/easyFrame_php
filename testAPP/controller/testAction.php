@@ -13,7 +13,12 @@ class testAction extends ezControl
     {
         $ez_user = $this->getModel('ez_user');
         $a       = $ez_user->select();
-        var_dump($a);
+        
+        $test = $this->getCacheFile('test');
+        if(empty($test))
+            $this->saveCacheFile('test','test value',300);
+        else
+            echo '<br>'.$test.'<br>';   
     }
     public function hook($in)
     {

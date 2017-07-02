@@ -6,10 +6,10 @@
  * Time: 11:31
  */
 
-class ezDB
+class ezDB extends ezBase
 {
     
-    private $conf = null;
+    protected $confNode = 'db';
     private $connect = null;
     
     public function __construct()

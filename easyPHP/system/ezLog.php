@@ -5,15 +5,15 @@
  * Date: 2017/6/15
  * Time: 10:19
  */
-class ezLog
+class ezLog extends ezBase
 {
-    private $conf = null;
+    private $confNode = 'log';
     private $path = null;
     private $msg = '';
 
     public function __construct()
     {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('log');
+        parent::__construct();
         $this->path = $this->conf['path'];
     }
     
@@ -23,7 +23,7 @@ class ezLog
         if($write == true)
         {
             $fileName = 'ezLog-' . date('Y-m-d', time()) . '.log';
-            if (!file_put_contents($this->path . $fileName, $messgae, FILE_APPEND)) {
+            if (!file_put_contents($this->path . $fileName, $messgae, FILE_APPEND)) 
                 return "日志写入失败。<br />";
         }
     }

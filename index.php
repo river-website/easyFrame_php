@@ -7,6 +7,5 @@ define('ezWEB_ROOT', dirname(__FILE__));
 define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
 // app ´úÂëÂ·¾¶
 define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
-
 require_once ezSYSPATH . '/system/ezAPP.php';
 ezAPP::runApp();

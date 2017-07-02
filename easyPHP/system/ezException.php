@@ -5,15 +5,12 @@
  * Date: 2017/6/19
  * Time: 10:16
  */
-class ezException
+class ezException extends ezBase 
 {
-    private $conf = null;
-    public function __construct()
-    {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('exception');
-        
-    }
-   public function exceptHandle($ex)
+    protected $confNode = 'exception';
+    protected $throw = false;
+
+    public function exceptHandle($ex)
     {
         echo "<pre>";print_r($ex);echo "<pre>"; 
     }

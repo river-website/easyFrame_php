@@ -21,9 +21,11 @@ class ezConf
             throw new Exception("配置文件错误");
         if (ezFilter($GLOBALS['ezConf'], array(
             'db',
-            'html',
+            'cacheRedis',
+            'cacheFile',
+            'cacheShm',
+            'cacheHtml',
             'codeCache',
-            'cache',
             'rewrite',
             'debug',
             'hook',

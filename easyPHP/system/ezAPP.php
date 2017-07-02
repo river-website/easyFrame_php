@@ -1,19 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lhe.River
- * Date: 2017/6/13
- * Time: 22:01
- */
 
-$ezData = array();
-
-require_once ezSYSPATH . '/system/ezConf.php';
 require_once ezSYSPATH . '/common/ezArray.php';
+require_once ezSYSPATH . '/common/ezFile.php';
+require_once ezSYSPATH . '/system/ezConf.php';
+require_once ezSYSPATH . '/system/ezBase.php';
 require_once ezSYSPATH . '/system/ezRoute.php';
 require_once ezSYSPATH . '/system/ezHook.php';
 require_once ezSYSPATH . '/system/ezRewrite.php';
 require_once ezSYSPATH . '/system/ezException.php';
+require_once ezSYSPATH . '/system/ezCacheHtml.php';
+
+$ezData = array();
 
 class ezAPP
 {
@@ -29,7 +26,7 @@ class ezAPP
         $ezReWrite = new ezReWrite();
         if($ezReWrite->confValid()) $reRoute = $ezReWrite->reWriteRoute();
         else{
-            $reRoute = null;
+            $reRoute = null;#18060C
             $ezReWrite = null;
         }
         // 加载路由模块
@@ -43,6 +40,19 @@ class ezAPP
             $ezRoute->executeRoute($hookDispatch);
         }
         else $ezHook = null;
-        $ezRoute->executeRoute($dispatch);
+        // 加载cache html 模块
+        $cacheHtml = new ezCacheHtml();
+        if($cacheHtml->confValid()){
+            $cacheHtml->setDispatch($dispatch);
+            $htmlData = $cacheHtml->get();
+            if($htmlData)return;
+            $cacheHtml->start();
+        }else{
+            $cacheHtml = null;
+        }
+        $ezRoute->executeRoute($dispatch);        
+        if(!empty($cacheHtml)){
+            $cacheHtml->save();
+        }
     }
 }

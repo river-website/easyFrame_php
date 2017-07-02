@@ -1,6 +1,6 @@
 <?php
 $ezConf = array(
-    //Êı¾İ¿âÅäÖÃ
+    // Êı¾İ¿âÅäÖÃ
     'db' => array(
         'state' => true,
         'conf' => array(
@@ -11,61 +11,32 @@ $ezConf = array(
             'port' => 3306
         )
     ),
-    // ¾²Ì¬»¯ÅäÖÃ
-    'html' => array(
-        'state' => true,
-        'conf' => array(
-            'path' => '/runtime/cache/html',
-            'rules' => array(
-                'default' => 600,
-                'testAction' => array(
-                    'default' => 'testAction/hook',
-                    'methon_name1' => 'control/methon',
-                    'methon_name2' => 'control/methon'
-                ),
-                'control_Name2' => array(
-                    'default' => 'control/methon',
-                    'methon_name1' => 'control/methon',
-                    'methon_name2' => 'control/methon'
-                )
-            )
-        )
-    ),
-    // ´úÂë»º´æÅäÖÃ
-    'codeCache' => array(
-        'state' => true,
-        'conf' => array(
-            'time' => '3600'
-        )
-    ),
-    // Î±¾²Ì¬ÅäÖÃ
-    'rewrite'=>array(
-        'state'=>true,
-        'conf'=>array(
-            't/(.*)'=>'testAction/$1',
-            'u/(\d+)'=>'testAction/hook/$1'
-        )
-    ),
-    // »º´æÅäÖÃ
-    'cache' => array(
-        'state' => true,
-        'conf' => array(
-            'redis' => array(
-                'state' => true,
-                'data' => array(
-                    'host' => '127.0.0.1',
-                    'port' => 3389
-                )
-            )
-        )
-    ),
-    'redis'=>array(
+    // redis»º´æÅäÖÃ
+    'cacheRedis'=>array(
         'state'=>true,
         'conf'=>array(
             'host'=>'127.0.0.1',
-            'port'=>3306
+            'port'=>6379
         )
     ),
+    // ÎÄ¼ş»º´æÅäÖÃ
+    'cacheFile'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'path'=>'/runtime/cache/file',
+            'time'=>3000
+        )
+    ),
+    // shmÄÚ´æ¹²Ïí»º´æÅäÖÃ
+    'cacheShm'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'shmKey'=>10000,
+            'size'=>100000,
+            'auth'=>0666
+        )
+    ),
+    // html¾²Ì¬»¯»º´æÅäÖÃ
     'cacheHtml'=>array(
         'state'=>true,
         'conf' => array(
@@ -85,39 +56,15 @@ $ezConf = array(
             )
         )
     ),
-
-    'msgQueue'=>array(
+    // Â·ÓÉÖØĞ´Î±¾²Ì¬ÅäÖÃ
+    'rewrite'=>array(
         'state'=>true,
         'conf'=>array(
-            'maxMsg'=>1000
-
+            't/(.*)'=>'testAction/$1',
+            'u/(\d+)'=>'testAction/hook/$1'
         )
     ),
-    'file'=>array(
-        'state'=>true,
-        'conf'=>array(
-            'path'=>'/runtime/cache/file',
-            'time'=>3000
-        )
-    ),
-    'opcode'=>array(
-        'state'=>true,
-        'conf'=>array(
-
-        )
-    ),
-    'shmop'=>array(
-        'state'=>true,
-        'conf'=>array(
-
-        )
-    ),
-    // debug ÅäÖÃ
-    'debug' => array(
-        'state' => true,
-        'conf' => array()
-    ),
-    // hook ÅäÖÃ
+    // hook¹³×ÓÅäÖÃ
     'hook' => array(
         'state' => true,
         'conf' => array(
@@ -134,14 +81,37 @@ $ezConf = array(
             )
         )
     ),
-    // log ÅäÖÃ
+    // Òì³£ÅäÖÃ
+    'exception' => array(
+        'state' => true,
+        'conf' => array()
+    ),
+    // µ÷ÊÔÅäÖÃ
+    'debug' => array(
+        'state' => true,
+        'conf' => array()
+    ),
+    // ÈÕÖ¾ÅäÖÃ
     'log' => array(
         'state' => true,
         'conf' => array(
             'path' => '/runtime/log'
         )
     ),
-    // monitorÅäÖÃ
+    // ÏûÏ¢¶ÓÁĞÅäÖÃ
+    'msgQueue'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'maxMsg'=>1000
+
+        )
+    ),
+    // php´úÂë»º´æ
+    'opcode'=>array(
+        'state'=>true,
+        'conf'=>array()
+    ),
+    // ¼à¿ØÅäÖÃ
     'monitor' => array(
         'state' => true,
         'conf' => array(
@@ -150,17 +120,16 @@ $ezConf = array(
             'cpu' => true
         )
     ),
-    // exceptionÅäÖÃ
-    'exception' => array(
-        'state' => true,
-        'conf' => array()
-    ),
+    // Íâ²¿appÅäÖÃ
     'outApp'=>array(
         'state'=>true,
         'conf'=>array(
             'app1'=>'path1'
         )
     ),
-    // app ÅäÖÃ
-    'app' => array()
+    // appÓÃ»§ÅäÖÃ
+    'app' => array(
+        'state'=>true,
+        'conf'=>array()
+    )
 );

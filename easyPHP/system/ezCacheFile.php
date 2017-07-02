@@ -1,20 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: win10
- * Date: 2017/6/15
- * Time: 10:19
- */
-class ezCacheFile
+
+class ezCacheFile extends ezBase
 {
-    private $conf = null;
+    protected $confNode = 'cacheFile';
     private $path = null;
     private $time = null;
     private $prefix = '/ezCacheFile_';
 
     public function __construct()
     {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('cacheFile');
+        parent::__construct();
         $this->path = ezAPPPATH.$this->conf['path'];
         $this->time = $this->conf['time'];
     }
@@ -27,18 +22,18 @@ class ezCacheFile
         $path = $this->path.$this->prefix.$key;
         $data['endTime'] = $time;
         $data['data'] = $value;
-        file_put_contents($path, serialize($data));
+        ezFilePut($path, serialize($data));
         return true;
     }
     public function get($key)
     {
         $path = $this->path.$this->prefix.$key;
         if(!file_exists($path))return null;
-        $data = file_get_contents($path);
-        if(time()>$data['time']){
-            delete ($path);
+        $data = unserialize(file_get_contents($path));
+        if(time()>$data['endTime']){
+            unlink ($path);
             return null;
         }
-        return unserialize($data['data']);
+        return $data['data'];
     }
 }

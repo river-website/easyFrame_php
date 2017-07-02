@@ -5,8 +5,9 @@
  * Date: 2017/6/28
  * Time: 15:22
  */
-class ezCacheHtml{
-    private $conf = null;
+class ezCacheHtml extends ezBase
+{
+    protected $confNode = 'cacheHtml';
     private $path = null;
     private $rules = null;
     private $dispatch = null;
@@ -14,12 +15,12 @@ class ezCacheHtml{
     private $obStatus = false;
     public function __construct()
     {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('cacheHtml');
+        parent::__construct();
         $this->path = ezAPPPATH.$this->conf['path'];
-        $this->rules = ezAPPPATH.$this->conf['rules'];
+        $this->rules = $this->conf['rules'];
     }
     public function setDispatch($dispatch){
-        if(empty($dispatch) || empty('control') || empty('methon') || empty('param'))
+        if(empty($dispatch) || empty($dispatch['control']) || empty($dispatch['methon']) || !isset($dispatch['param']))
             throw new Exception('设置dispatch错误');
         $this->dispatch = $dispatch;
     }
@@ -37,20 +38,24 @@ class ezCacheHtml{
         $dispatch = array_values($dispatch);
         return implode('_',$dispatch);
     }
+    public function start(){
+        ob_start();
+    }
     public function get($unit = null){
         $unit = empty($unit)?'':'_'.$unit;
         $fileName = $this->path.$this->prefix.$this->dispatchToFile($this->dispatch).$unit.'.html';
         if(!file_exists($fileName))
-            return null;
+            return false; 
         $time = $this->getRules($this->dispatch);
-        if(filectime($fileName)+$time>time())return false;
-        return file_get_contents($fileName);
+        if(filectime($fileName)+$time*60<time())return false;
+        include $fileName;
+        return true;
     }
-    public function save($data = null,$unit = null){
+    public function save($unit = null){
         $unit = empty($unit)?'':'_'.$unit;
         $fileName = $this->path.$this->prefix.$this->dispatchToFile($this->dispatch).$unit.'.html';
         $obData = ob_get_contents();
-        if($obData != false)ob_end_clean();
-        file_put_contents($fileName,$obData.$data);
+        if($obData != false)ob_end_flush();
+        ezFilePut($fileName,$obData);
     }
 }

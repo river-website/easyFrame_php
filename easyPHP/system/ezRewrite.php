@@ -1,23 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: win10
- * Date: 2017/6/19
- * Time: 10:16
- */
-class ezRewrite
+
+class ezRewrite extends ezBase
 {
-    private $conf = null;
-    public function __construct()
-    {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('rewrite',false);
-        
-    }
-    public function confValid(){
-        if(is_array($this->conf))
-            return true;
-        return false;
-    }
+    protected $confNode = 'rewrite';
+    protected $throw = false;
     public function reWriteRoute($route = null){
         if ($route == null)
             $route = explode('index.php/', $_SERVER['REQUEST_URI'])[1];
@@ -29,7 +15,7 @@ class ezRewrite
             if(preg_match($key, $route_encode, $matches)){
                 for($i=1;$i<count($matches);$i++)
                     $value = str_replace('$'.$i,$matches[$i],$value);
-                return $value;
+                return str_replace('%20', '/', $value);
             }
         }
         return $route;

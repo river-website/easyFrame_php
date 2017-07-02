@@ -7,7 +7,7 @@
  */
 
 
-class ezModel
+class ezModel extends ezBase
 {
     
     private $db = null;

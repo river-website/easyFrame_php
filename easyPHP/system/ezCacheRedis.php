@@ -5,15 +5,16 @@
  * Date: 2017/6/15
  * Time: 10:19
  */
-class ezCacheRedis
+class ezCacheRedis extends ezBase
 {
-    private $conf = null;
+    protected $confNode = 'cacheRedis';
     private $redis = null;
     private $time = null;
     public function __construct()
     {
-        $this->conf = $GLOBALS['ezData']['conf']->getNode('cacheRedis');
+        parent::__construct();
         $this->time = $this->conf['time'];
+        $this->connect();
     }
 
     public function connect()
