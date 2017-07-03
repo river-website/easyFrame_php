@@ -20,7 +20,7 @@ class ezCacheRedis extends ezBase
     public function connect()
     {
         $this->redis = new Redis();
-        $this->redis->pconnect($this->conf['host'], $this->conf['port']);
+        $this->redis->connect($this->conf['host'], $this->conf['port']);
     }
     public function save($key,$value,$time = null)
     {
@@ -31,6 +31,6 @@ class ezCacheRedis extends ezBase
     public function get($key)
     {
         if(empty($key))return false;
-        return $this->redis->get($key);
+        return unserialize($this->redis->get($key));
     }
 }

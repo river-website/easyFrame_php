@@ -3,7 +3,6 @@
 class ezRewrite extends ezBase
 {
     protected $confNode = 'rewrite';
-    protected $throw = false;
     public function reWriteRoute($route = null){
         if ($route == null)
             $route = explode('index.php/', $_SERVER['REQUEST_URI'])[1];

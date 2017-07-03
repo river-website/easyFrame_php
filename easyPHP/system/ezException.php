@@ -8,9 +8,8 @@
 class ezException extends ezBase 
 {
     protected $confNode = 'exception';
-    protected $throw = false;
 
-    public function exceptHandle($ex)
+    static public function exceptHandle($ex)
     {
         echo "<pre>";print_r($ex);echo "<pre>"; 
     }

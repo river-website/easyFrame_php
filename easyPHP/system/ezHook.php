@@ -3,7 +3,6 @@
 class ezHook extends ezBase
 {
     protected $confNode = 'hook';
-    protected $throw = false;
 
     public function getHook($route)
     {

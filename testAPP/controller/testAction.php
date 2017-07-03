@@ -18,7 +18,12 @@ class testAction extends ezControl
         if(empty($test))
             $this->saveCacheFile('test','test value',300);
         else
-            echo '<br>'.$test.'<br>';   
+            echo '<br>'.$test.'<br>';
+
+        $a = $this->getCacheRedis('redis_test');
+        if(empty($a))
+            $this->saveCacheRedis('redis_test','test_value');
+        echo $a;
     }
     public function hook($in)
     {

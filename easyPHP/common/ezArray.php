@@ -76,7 +76,7 @@ if (!function_exists('ezFilter')) {
             return true;
         } else {
             return array(
-                'ret' => fasle,
+                'ret' => false,
                 'msg' => array(
                     'requiredLost' => $requiredLostArray,
                     'notNeed' => $notNeedArray

@@ -18,8 +18,11 @@ class ezControl
 
     private function initCacheFile(){
         if(empty($this->cacheFile)){
-            require_once ezSYSPATH.'/system/ezCacheFile.php';
-            $this->cacheFile = new ezCacheFile();
+            if(empty($GLOBALS['ezData']['cacheFile'])) {
+                require_once ezSYSPATH.'/system/ezCacheFile.php';
+                $this->cacheFile = new ezCacheFile();
+                $GLOBALS['ezData']['cacheFile'] = $this->cacheFile;
+            }else $this->cacheFile = $GLOBALS['ezData']['cacheFile'];
         }
     }
 
@@ -37,8 +40,11 @@ class ezControl
 
     private function initCacheRedis(){
         if(empty($this->cacheRedis)){
-            require_once ezSYSPATH.'/system/ezCacheRedis.php';
-            $this->cacheRedis = new ezCacheRedis();
+            if(empty($GLOBALS['ezData']['cacheRedis'])) {
+                require_once ezSYSPATH . '/system/ezCacheRedis.php';
+                $this->cacheRedis = new ezCacheRedis();
+                $GLOBALS['ezData']['cacheRedis'] = $this->cacheRedis;
+            }else $this->cacheRedis = $GLOBALS['ezData']['cacheRedis'];
         }
     }
 
@@ -56,8 +62,11 @@ class ezControl
 
     private function initCacheHtml(){
         if(empty($this->cacheHtml)){
-            require_once ezSYSPATH.'/system/ezCacheHtml.php';
-            $this->cacheHtml = new ezCacheHtml();
+            if(empty($GLOBALS['ezData']['cacheHtml'])) {
+                require_once ezSYSPATH.'/system/ezCacheHtml.php';
+                $this->cacheHtml = new ezCacheHtml();
+                $GLOBALS['ezData']['cacheHtml'] = $this->cacheHtml;
+            }else $this->cacheHtml = $GLOBALS['ezData']['cacheHtml'];
             $this->cacheHtml->setDispatch($this->dispatch);
         }
     }
@@ -77,8 +86,11 @@ class ezControl
     
     public function initCacheShm(){
         if(empty($this->cacheShm)){
-            require_once ezSYSPATH.'/system/ezCacheShm.php';
-            $this->cacheShm = new ezCacheShm();
+            if(empty($GLOBALS['ezData']['cachShm'])) {
+                require_once ezSYSPATH.'/system/ezCacheShm.php';
+                $this->cacheShm = new ezCacheShm();
+                $GLOBALS['ezData']['cachShm'] = $this->cacheShm;
+            }else $this->cacheShm = $GLOBALS['ezData']['cachShm'];
         }
     }
 

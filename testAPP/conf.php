@@ -6,7 +6,7 @@ $ezConf = array(
         'conf' => array(
             'host' => '127.0.0.1',
             'user' => 'root',
-            'password' => '12345678',
+            'password' => '123456',
             'dataBase' => 'test',
             'port' => 3306
         )
@@ -16,7 +16,8 @@ $ezConf = array(
         'state'=>true,
         'conf'=>array(
             'host'=>'127.0.0.1',
-            'port'=>6379
+            'port'=>6379,
+            'time'=>600
         )
     ),
     // 文件缓存配置
@@ -38,7 +39,7 @@ $ezConf = array(
     ),
     // html静态化缓存配置
     'cacheHtml'=>array(
-        'state'=>true,
+        'state'=> true,
         'conf' => array(
             'path' => '/runtime/cache/html',
             'rules' => array(
@@ -54,6 +55,14 @@ $ezConf = array(
                     'methon_name2' => 100
                 )
             )
+        )
+    ),
+    // 后台服务配置，此进程会一直存在
+    'server'=>array(
+        'state'=>true,
+        'conf'=>array(
+            'ip'=>'127.0.0.1',
+            'port'=>4455
         )
     ),
     // 路由重写伪静态配置
