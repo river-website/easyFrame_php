@@ -11,14 +11,9 @@ class ezServer extends ezBase
     protected $confNode = 'server';
     private $ip = null;
     private $port = null;
-    private $path = null;
-    private $status = null;
-    private $stop = null;
-    private $file = null;
     public function __construct()
     {
         parent::__construct();
-        $this->path = ezAPPPATH.$this->conf['path'];
         $this->ip = $this->conf['ip'];
         $this->port = $this->conf['port'];
     }
@@ -59,6 +54,33 @@ class ezServer extends ezBase
         } while (true);
 
         socket_close($sock);
+    }
+    public function startServer(){
+        if(($sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP)) < 0)
+            throw Exception("socket_create() 失败的原因是:".socket_strerror($sock));
+        if(($ret = socket_bind($sock,$this->ip,$this->port)) < 0)
+            throw Exception("socket_bind() 失败的原因是:".socket_strerror($ret));
+        if(($ret = socket_listen($sock,4)) < 0)
+            throw Exception("socket_listen() 失败的原因是:".socket_strerror($ret));
+        while(true){
+            if (($msgsock = socket_accept($sock)) < 0) {
+                throw Exception("socket_accept() failed: reason: " . socket_strerror($msgsock));
+                break;
+            }else{
+                
+            }
+        }
+    }
+    public function addTask($msg){
+        if(($sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP)) < 0)
+            throw Exception("socket_create() 失败的原因是:".socket_strerror($sock));
+        if(($result = socket_connect($socket, $ip, $port)) < 0)
+            throw Exception("socket_connect() failed.\nReason: ($result) " . socket_strerror($result));
+        $msg = serialize($msg);
+        if(!socket_write($socket, $msg, strlen($msg))) {
+            throw Exception("socket_write() failed: reason: " . socket_strerror($socket));
+        }
+            
     }
     public function init(){
         if(!is_dir($this->path))mkdir($this->path,0777,true);
