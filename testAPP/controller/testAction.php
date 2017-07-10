@@ -12,18 +12,21 @@ class testAction extends ezControl
     public function test()
     {
         $ez_user = $this->getModel('ez_user');
+        $ez_user->func = function($data){
+            var_dump($data);
+        };
         $a       = $ez_user->select();
         
-        $test = $this->getCacheFile('test');
-        if(empty($test))
-            $this->saveCacheFile('test','test value',300);
-        else
-            echo '<br>'.$test.'<br>';
+//        $test = $this->getCacheFile('test');
+//        if(empty($test))
+//            $this->saveCacheFile('test','test value',300);
+//        else
+//            echo '<br>'.$test.'<br>';
 
-        $a = $this->getCacheRedis('redis_test');
-        if(empty($a))
-            $this->saveCacheRedis('redis_test','test_value');
-        echo $a;
+//        $a = $this->getCacheRedis('redis_test');
+//        if(empty($a))
+//            $this->saveCacheRedis('redis_test','test_value');
+//        echo $a;
     }
     public function hook($in)
     {

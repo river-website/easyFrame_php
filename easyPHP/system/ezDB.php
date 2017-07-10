@@ -22,8 +22,11 @@ class ezDB extends ezBase
     {
         if (!empty($GLOBALS['ezData']['dbConnect']))
             return $GLOBALS['ezData']['dbConnect'];
-        
-        $con = mysqli_connect($this->conf['host'], $this->conf['user'], $this->conf['password'], $this->conf['dataBase'], $this->conf['port']);
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if ($socket === false) {
+            echo "socket_create() failed, reason: ".socket_strerror(socket_last_error())."\n";
+        }
+        $con = mysqli_connect($this->conf['host'], $this->conf['user'], $this->conf['password'], $this->conf['dataBase'], $this->conf['port'],$socket);
         if (!$con)
             throw new Exception(mysqli_error());
         $GLOBALS['ezData']['dbConnect'] = $con;

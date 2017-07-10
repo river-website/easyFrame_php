@@ -9,9 +9,9 @@ require_once ezSYSPATH . '/system/ezHook.php';
 require_once ezSYSPATH . '/system/ezRewrite.php';
 require_once ezSYSPATH . '/system/ezException.php';
 require_once ezSYSPATH . '/system/ezCacheHtml.php';
-require_once ezSYSPATH . '/system/ezServer.php';
+//require_once ezSYSPATH . '/system/ezServer.php';
 
-$ezData = array();
+$GLOBALS['ezData'] = array();
 
 class ezAPP
 {

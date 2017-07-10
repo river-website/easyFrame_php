@@ -1,5 +1,6 @@
 <?php
-$ezConf = array(
+
+$GLOBALS['ezConf'] = array(
     // Êı¾İ¿âÅäÖÃ
     'db' => array(
         'state' => true,
@@ -39,7 +40,7 @@ $ezConf = array(
     ),
     // html¾²Ì¬»¯»º´æÅäÖÃ
     'cacheHtml'=>array(
-        'state'=> true,
+        'state'=> false,
         'conf' => array(
             'path' => '/runtime/cache/html',
             'rules' => array(

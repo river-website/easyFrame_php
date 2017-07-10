@@ -14,7 +14,7 @@ class ezModel extends ezBase
     private $dbConnect = null;
     private $table = null;
     private $sql = array('option' => '', 'where' => '', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
-    
+    public $func = null;
     // static function getInterface($model)
     // {
     //     if (empty($model))
@@ -59,16 +59,20 @@ class ezModel extends ezBase
         foreach ($this->sql as $key => $value) {
             $sql .= $value == '' ? '' : ' ' . $key . ' ' . $value;
         }
-        // 执行sql查询
-        $row = mysqli_query($this->dbConnect, $sql);
-        if (gettype($row) != 'object')
-            return $row;
-        // 获取查询结果
-        $data = array();
-        while ($result = mysqli_fetch_assoc($row)) {
-            $data[] = $result;
-        }
-        return $data;
+        $asynDB = $GLOBALS['server']->asynDB;
+        $asynDB->add($this->dbConnect);
+        $asynDB->excute($sql);
+        return true;
+//        // 执行sql查询
+//        $row = mysqli_query($this->dbConnect, $sql);
+//        if (gettype($row) != 'object')
+//            return $row;
+//        // 获取查询结果
+//        $data = array();
+//        while ($result = mysqli_fetch_assoc($row)) {
+//            $data[] = $result;
+//        }
+//        return $data;
     }
     
     public function select($condition = null)
