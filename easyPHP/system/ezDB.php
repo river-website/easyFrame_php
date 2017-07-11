@@ -22,18 +22,18 @@ class ezDB extends ezBase
     {
         if (!empty($GLOBALS['ezData']['dbConnect']))
             return $GLOBALS['ezData']['dbConnect'];
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        if ($socket === false) {
-            echo "socket_create() failed, reason: ".socket_strerror(socket_last_error())."\n";
-        }
-        $con = mysqli_connect($this->conf['host'], $this->conf['user'], $this->conf['password'], $this->conf['dataBase'], $this->conf['port'],$socket);
+
+        $con = mysqli_connect($this->conf['host'], $this->conf['user'], $this->conf['password'], $this->conf['dataBase'], $this->conf['port']);
         if (!$con)
             throw new Exception(mysqli_error());
+        $asynDB = $GLOBALS['server']->asynDB;
+        $asynDB->add($con);
         $GLOBALS['ezData']['dbConnect'] = $con;
         return $con;
     }
     function checkTableExist($table)
     {
+        return true;
         $row    = mysqli_query($this->connect, "show tables");
         $tables = array();
         while ($result = mysqli_fetch_array($row)) {

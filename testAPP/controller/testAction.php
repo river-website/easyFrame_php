@@ -8,13 +8,13 @@
 
 class testAction extends ezControl
 {
-    
+    public function revsql($data){
+        var_dump($data);
+    }
     public function test()
     {
         $ez_user = $this->getModel('ez_user');
-        $ez_user->func = function($data){
-            var_dump($data);
-        };
+        $ez_user->func = array($this,'revsql');
         $a       = $ez_user->select();
         
 //        $test = $this->getCacheFile('test');
