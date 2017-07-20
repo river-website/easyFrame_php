@@ -16,7 +16,7 @@ class testAction extends ezControl
         $ez_user = $this->getModel('ez_user');
         $ez_user->func = array($this,'revsql');
         $a       = $ez_user->select();
-        
+        var_dump($a);
 //        $test = $this->getCacheFile('test');
 //        if(empty($test))
 //            $this->saveCacheFile('test','test value',300);

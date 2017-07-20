@@ -59,10 +59,9 @@ class ezModel extends ezBase
         foreach ($this->sql as $key => $value) {
             $sql .= $value == '' ? '' : ' ' . $key . ' ' . $value;
         }
-        $GLOBALS['server']->curConn->sendStatus = false;
+//        $GLOBALS['server']->curConn->sendStatus = false;
         $asynDB = $GLOBALS['server']->asynDB;
-        $asynDB->excute($sql,$this->func);
-        return true;
+		return $asynDB->excute($sql,$this->func);
 //        // 执行sql查询
 //        $row = mysqli_query($this->dbConnect, $sql);
 //        if (gettype($row) != 'object')

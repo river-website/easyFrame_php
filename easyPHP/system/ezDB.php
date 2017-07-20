@@ -15,7 +15,7 @@ class ezDB extends ezBase
     public function __construct()
     {
         $this->conf    = $GLOBALS['ezData']['conf']->getNode('db');
-        $this->connect = $this->connectDB();
+//        $this->connect = $this->connectDB();
     }
     
     private function connectDB()
