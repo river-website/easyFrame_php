@@ -1,11 +1,11 @@
 <?php
 // 定义服务器的网站根目录
-define('ezSERVER_ROOT', 'D:/phpStudy/WWW');
+if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', 'D:/phpStudy/WWW');
 // website在服务器根目录下的相对路径
-define('ezWEB_ROOT', dirname(__FILE__));
+if(!defined('ezWEB_ROOT'))define('ezWEB_ROOT', dirname(__FILE__));
 // easy 核心代码路径
-define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
+if(!defined('ezSYSPATH'))define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
 // app 代码路径
-define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
+if(!defined('ezAPPPATH'))define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
 require_once ezSYSPATH . '/system/ezAPP.php';
 ezAPP::runApp();
