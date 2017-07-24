@@ -1,12 +1,12 @@
 <?php
-echo "com in";return;
-// ¶¨Òå·þÎñÆ÷µÄÍøÕ¾¸ùÄ¿Â¼
+//echo "com in";return;
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾ï¿½ï¿½Ä¿Â¼
 if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', 'D:/phpStudy/WWW');
-// websiteÔÚ·þÎñÆ÷¸ùÄ¿Â¼ÏÂµÄÏà¶ÔÂ·¾¶
+// websiteï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½Âµï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 if(!defined('ezWEB_ROOT'))define('ezWEB_ROOT', dirname(__FILE__));
-// easy ºËÐÄ´úÂëÂ·¾¶
+// easy ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 if(!defined('ezSYSPATH'))define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
-// app ´úÂëÂ·¾¶
+// app ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 if(!defined('ezAPPPATH'))define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
 require_once ezSYSPATH . '/system/ezAPP.php';
-ezAPP::runApp(); 
+ezAPP::runApp();
