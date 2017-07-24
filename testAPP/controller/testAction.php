@@ -13,10 +13,11 @@ class testAction extends ezControl
     }
     public function test()
     {
+//    	echo "test com in";
         $ez_user = $this->getModel('ez_user');
 //        $ez_user->func = array($this,'revsql');
         $a       = $ez_user->select();
-//        var_dump($a);
+        var_dump($a);
 //        $test = $this->getCacheFile('test');
 //        if(empty($test))
 //            $this->saveCacheFile('test','test value',300);
