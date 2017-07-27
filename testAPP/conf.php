@@ -58,14 +58,6 @@ $GLOBALS['ezConf'] = array(
             )
         )
     ),
-    // 后台服务配置，此进程会一直存在
-    'server'=>array(
-        'state'=>true,
-        'conf'=>array(
-            'ip'=>'127.0.0.1',
-            'port'=>4455
-        )
-    ),
     // 路由重写伪静态配置
     'rewrite'=>array(
         'state'=>true,
