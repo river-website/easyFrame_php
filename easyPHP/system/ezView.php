@@ -7,27 +7,27 @@
  */
 class ezView
 {
-    private $data = array();
-    private $templet = '';
-    public function display()
-    {
-        if (!file_exists($this->templet))
-            return 'Ä£°å²»´æÔÚ';
-        $view = file_get_contents($this->templet);
-        //½âÎö²¢Ìæ»»
-        //ÅÐ¶ÏÊÇ·ñÐèÒªhtml
-        if ($GLOBALS['html']['state']) {
-            $rules = $GLOBALS['html']['data']['rules'];
-            $path  = $GLOBALS['html']['data']['path'];
-            $host  = $_SERVER['host'];
-            foreach ($rules as $key => $value) {
-                if (preg_match($key, $host)) {
-                    file_put_contents($path . $value, $view);
-                    break;
-                }
-            }
-        }
-        
-        echo $view;
-    }
+	private $data = array();
+	private $templet = '';
+	public function display()
+	{
+		if (!file_exists($this->templet))
+			return 'æ¨¡æ¿ä¸å­˜åœ¨';
+		$view = file_get_contents($this->templet);
+		//è§£æžå¹¶æ›¿æ¢
+		//åˆ¤æ–­æ˜¯å¦éœ€è¦html
+		if ($GLOBALS['html']['state']) {
+			$rules = $GLOBALS['html']['data']['rules'];
+			$path	= $GLOBALS['html']['data']['path'];
+			$host	= $_SERVER['host'];
+			foreach ($rules as $key => $value) {
+				if (preg_match($key, $host)) {
+					file_put_contents($path . $value, $view);
+					break;
+				}
+			}
+		}
+
+		echo $view;
+	}
 }

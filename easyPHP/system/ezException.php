@@ -7,10 +7,10 @@
  */
 class ezException extends ezBase 
 {
-    protected $confNode = 'exception';
+	protected $confNode = 'exception';
 
-    static public function exceptHandle($ex)
-    {
-        echo "<pre>";print_r($ex);echo "<pre>"; 
-    }
+	static public function exceptHandle($ex)
+	{
+		echo "<pre>";print_r($ex);echo "<pre>";
+	}
 }

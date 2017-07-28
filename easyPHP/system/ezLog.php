@@ -7,25 +7,25 @@
  */
 class ezLog extends ezBase
 {
-    private $confNode = 'log';
-    private $path = null;
-    private $msg = '';
+	private $confNode = 'log';
+	private $path = null;
+	private $msg = '';
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->path = $this->conf['path'];
-    }
-    
-    public function log_message($env, $msg, $write = false)
-    {
-        $this->msg  .= $env . '--' . date('Y-m-d H:i:s', time()) . '=>' . $msg.PHP_EOL;
-        if($write == true)
-        {
-            $fileName = 'ezLog-' . date('Y-m-d', time()) . '.log';
-            if (!file_put_contents($this->path . $fileName, $messgae, FILE_APPEND)) 
-                return "日志写入失败。<br />";
-        }
-    }
-    
+	public function __construct()
+	{
+		parent::__construct();
+		$this->path = $this->conf['path'];
+	}
+
+	public function log_message($env, $msg, $write = false)
+	{
+		$this->msg	.= $env . '--' . date('Y-m-d H:i:s', time()) . '=>' . $msg.PHP_EOL;
+		if($write == true)
+		{
+			$fileName = 'ezLog-' . date('Y-m-d', time()) . '.log';
+			if (!file_put_contents($this->path . $fileName, $messgae, FILE_APPEND))
+				return "日志写入失败。<br />";
+		}
+	}
+
 }

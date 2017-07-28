@@ -1,14 +1,13 @@
 <?php
-//echo "com in";
-//var_dump($argv);
-//return;
-// ??????????????????
-if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', 'D:/phpStudy/WWW');
-// website?????????????????·??
-if(!defined('ezWEB_ROOT'))define('ezWEB_ROOT', dirname(__FILE__));
-// easy ???????·??
-if(!defined('ezSYSPATH'))define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
-// app ????·??
-if(!defined('ezAPPPATH'))define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
-require_once ezSYSPATH . '/system/ezAPP.php';
-ezAPP::runApp();
+echo "com in";
+return;
+// 网站目录
+//if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', 'D:/phpStudy/WWW');
+//// website目录
+//if(!defined('ezWEB_ROOT'))define('ezWEB_ROOT', dirname(__FILE__));
+//// easy 核心目录
+//if(!defined('ezSYSPATH'))define("ezSYSPATH", ezWEB_ROOT . "/easyPHP");
+//// app 目录
+//if(!defined('ezAPPPATH'))define("ezAPPPATH", ezWEB_ROOT . "/testAPP");
+//require_once ezSYSPATH . '/system/ezAPP.php';
+//ezAPP::runApp();
