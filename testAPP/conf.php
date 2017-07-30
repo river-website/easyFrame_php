@@ -63,12 +63,13 @@ $GLOBALS['ezConf'] = array(
 		'state'=>true,
 		'conf'=>array(
 			't/(.*)'=>'testAction/$1',
-			'u/(\d+)'=>'testAction/hook/$1'
+			'u/(\d+)'=>'testAction/hook/$1',
+            'c'=>'indexAction/crawl'
 		)
 	),
 	// hook钩子配置
 	'hook' => array(
-		'state' => true,
+		'state' => false,
 		'conf' => array(
 			'default' => 'testAction/hook',
 			'testAction' => array(

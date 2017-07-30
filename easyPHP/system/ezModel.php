@@ -138,10 +138,10 @@ class ezModel extends ezBase
 		if (!is_array($firstRow))
 			return $this;
 
-		$sql = 'insert into ' . $this->table . '(' . explode(',', array_keys($firstRow)) . ') values ';
-
-		foreach ($dataList as $data)
-			$sql .= '(' . implode(',', array_values($data)) . '),';
+		$sql = 'insert into ' . $this->table . '(' . implode(',', array_keys($firstRow)) . ') values ';
+		foreach ($dataList as $data) {
+            $sql .= '(' . implode(',', array_values($data)) . '),';
+        }
 		$this->sql['option'] = substr($sql, 0, -1);
 		return $this->execute();
 	}
