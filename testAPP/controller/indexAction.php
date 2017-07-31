@@ -42,7 +42,7 @@ class indexAction extends ezControl{
 	public function look(){
 
 	}
-	public function crawl(){
+	public function crawl($start,$end){
         $rules['http://www.baiduyunpan.com/file'] = array(
             'name'=>array('.resource-h2','text'),
 //            'yunUserName'=>array('.x-right-li-a','text',null,function($contents){
@@ -60,28 +60,40 @@ class indexAction extends ezControl{
             'url'=>array('.main-xzfx-a:eq(0)','href',null,function($contents){
                 $a = explode('url=',$contents);
                 if(empty($a[1]))return '';
-                return $a[1];
+                return urldecode($a[1]);
             })
         );
         $yunUrl = $this->getModel('yunUrl');
         $baseUrl = 'http://www.baiduyunpan.com/file';
         $rule = $rules[$baseUrl];
-        $this->crawlData(array($baseUrl,$rule,$yunUrl));
+        $this->crawlData(array($baseUrl,$rule,$start,$end,$yunUrl));
 //        ezGLOBALS::$queEvent->add(array($this,'crawlData'),array($baseUrl,$rule,$yunUrl));
    	}
    	public function crawlData($args){
         echo "start crawl\n";
         $baseUrl = $args[0];
         $rule = $args[1];
-        $yunUrl = $args[2];
+		$start = $args[2];
+		$end = $args[3];
+		$yunUrl = $args[4];
         $phpQuery = new QueryList();
-        for ($i=1;$i<2;$i++){
+        for ($i=$start;$i<=$end;$i++){
             $phpQuery->html = $baseUrl."/$i.html";
             $data[] = $phpQuery->setQuery($rule)->data[0];
 //                var_dump($data);
         }
         $yunUrl->insertList($data);
     }
+    public function yunUrlVariable($yunUrlData){
+   		$url = urldecode($yunUrlData['url']);
+		$rules['http://pan.baidu.com/share/link?shareid=$shareid&uk=$uk&fid=$fid'] = array('title'=>array('head title'));
+		$rule = $rules['http://pan.baidu.com/share/link?shareid=$shareid&uk=$uk&fid=$fid'];
+		$phpQuery = new QueryList();
+		$title = $phpQuery->setQuery($rule)->data[0]['title'];
+		$fileName = str_replace('_免费高速下载|百度网盘-分享无限制',$title);
+		if($fileName !=  $yunUrlData['name'])return false;
+		else return true;
+	}
 	public function updateCrawl(){
 
 	}

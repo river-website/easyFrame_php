@@ -14,7 +14,7 @@ class testAction extends ezControl
 	}
 	public function test()
 	{
-//		echo "test com in";
+//		echo "test com in"; 
 //	$ez_user = ezGLOBALS::get('ez_user');
 //	if($ez_user == null) {
 		$ez_user = $this->getModel('ez_user');

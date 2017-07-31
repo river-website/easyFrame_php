@@ -140,7 +140,7 @@ class ezModel extends ezBase
 
 		$sql = 'insert into ' . $this->table . '(' . implode(',', array_keys($firstRow)) . ') values ';
 		foreach ($dataList as $data) {
-            $sql .= '(' . implode(',', array_values($data)) . '),';
+            $sql .= "('" . implode("','", array_values($data)) . "'),";
         }
 		$this->sql['option'] = substr($sql, 0, -1);
 		return $this->execute();

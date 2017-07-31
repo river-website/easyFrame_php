@@ -64,7 +64,7 @@ $GLOBALS['ezConf'] = array(
 		'conf'=>array(
 			't/(.*)'=>'testAction/$1',
 			'u/(\d+)'=>'testAction/hook/$1',
-            'c'=>'indexAction/crawl'
+            'c/(.*)'=>'indexAction/crawl/$1'
 		)
 	),
 	// hook钩子配置
@@ -99,6 +99,14 @@ $GLOBALS['ezConf'] = array(
 		'state' => true,
 		'conf' => array(
 			'path' => '/runtime/log'
+		)
+	),
+	// view配置
+	'view' => array(
+		'state'	=>	true,
+		'conf'	=>	array(
+			'left'	=>'{#',
+			'right'	=>'#}'
 		)
 	),
 	// 消息队列配置
