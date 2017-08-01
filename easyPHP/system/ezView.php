@@ -5,12 +5,30 @@
  * Date: 2017/6/14
  * Time: 19:27
  */
+require_once ezSYSPATH.'/library/smarty/Smarty.class.php';
 class ezView
 {
 	private $data = array();
 	private $templet = '';
-	public function display()
+    static private $smarty  = null;
+
+    public function __construct(){
+        if(empty(self::$smarty)) {
+            self::$smarty = new smarty();
+            self::$smarty->setLeftDelimiter('{{');
+            self::$smarty->setRightDelimiter('}}');
+        }
+    }
+
+    public function assign($key,$value){
+        self::$smarty->assign($key,$value);
+    }
+
+	public function display($tpl)
 	{
+	    $path = ezAPPPATH.'/view/'.$tpl;
+        self::$smarty->display($path);
+
 		if (!file_exists($this->templet))
 			return '模板不存在';
 		$view = file_get_contents($this->templet);

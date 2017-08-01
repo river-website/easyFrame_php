@@ -42,6 +42,10 @@ class indexAction extends ezControl{
 	public function look(){
 
 	}
+	public function test(){
+	    $this->assign('test','test');
+	    $this->display('index.tpl');
+    }
 	public function crawl($start,$end){
         $rules['http://www.baiduyunpan.com/file'] = array(
             'name'=>array('.resource-h2','text'),
@@ -66,8 +70,8 @@ class indexAction extends ezControl{
         $yunUrl = $this->getModel('yunUrl');
         $baseUrl = 'http://www.baiduyunpan.com/file';
         $rule = $rules[$baseUrl];
-        $this->crawlData(array($baseUrl,$rule,$start,$end,$yunUrl));
-//        ezGLOBALS::$queEvent->add(array($this,'crawlData'),array($baseUrl,$rule,$yunUrl));
+//        $this->crawlData(array($baseUrl,$rule,$start,$end,$yunUrl));
+        ezGLOBALS::$queEvent->add(array($this,'crawlData'),array($baseUrl,$rule,$start,$end,$yunUrl));
    	}
    	public function crawlData($args){
         echo "start crawl\n";
@@ -80,7 +84,7 @@ class indexAction extends ezControl{
         for ($i=$start;$i<=$end;$i++){
             $phpQuery->html = $baseUrl."/$i.html";
             $data[] = $phpQuery->setQuery($rule)->data[0];
-//                var_dump($data);
+                var_dump($data);
         }
         $yunUrl->insertList($data);
     }

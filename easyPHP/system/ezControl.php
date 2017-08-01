@@ -5,7 +5,7 @@
  * Date: 2017/6/12
  * Time: 14:13
  */
-
+require_once ezSYSPATH.'/system/ezView.php';
 class ezControl
 {
 	private $log = null;
@@ -15,7 +15,7 @@ class ezControl
 	private $cacheHtml = null;
 	private $cacheShm = null;
 	private $dispatch = null;
-
+    private $view       = null;
 	private function initCacheFile(){
 		if(empty($this->cacheFile)){
 			if(empty($GLOBALS['ezData']['cacheFile'])) {
@@ -149,4 +149,12 @@ class ezControl
 			return new ezModel($model);
 		}
 	}
+	public function assign($key, $value){
+        if(empty($this->view))$this->view = new ezView();
+         $this->view->assign($key,$value);
+    }
+    public function display($tpl){
+        if(empty($this->view))$this->view = new ezView();
+        $this->view->display($tpl);
+    }
 }
