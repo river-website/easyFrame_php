@@ -44,7 +44,7 @@ class indexAction extends ezControl{
 	}
 	public function test(){
 	    $this->assign('test','test');
-	    $this->display('index.tpl');
+	    $this->display('index');
     }
 	public function crawl($start,$end){
         $rules['http://www.baiduyunpan.com/file'] = array(

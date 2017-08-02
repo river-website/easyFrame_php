@@ -8,6 +8,8 @@
 require_once ezSYSPATH.'/library/smarty/Smarty.class.php';
 class ezView
 {
+	static private $path		= '/view';
+	static private $suffix		= '.tpl';
 	private $data = array();
 	private $templet = '';
     static private $smarty  = null;

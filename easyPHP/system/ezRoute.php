@@ -10,7 +10,8 @@ require_once ezSYSPATH . '/system/ezControl.php';
 
 class ezRoute
 {
-
+	static private $entryFileName		= 'index.php/';
+	static private $controllerPath		= '/controller';
 	public function analyseRoute($route = null)
 	{
 		if ($route == null) {
