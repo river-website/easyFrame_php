@@ -8,7 +8,7 @@
 require_once ezSYSPATH.'/library/smarty/Smarty.class.php';
 class ezView
 {
-	static private $path		= ezAPPPATH.'/view/';
+	static private $path		= '/view/';
 	static private $suffix		= '.tpl';
 	private $data = array();
 	private $templet = '';
@@ -16,9 +16,18 @@ class ezView
 
     public function __construct(){
         if(empty(self::$smarty)) {
-            self::$smarty = new smarty();
-            self::$smarty->setLeftDelimiter('{{');
-            self::$smarty->setRightDelimiter('}}');
+            $tpl = new smarty();
+            $tpl->setTemplateDir(ezAPPPATH."/view/");
+//            $tpl->setCompileDir(ezAPPPATH."/runtime/smarty");
+//            $tpl->setConfigDir(ezAPPPATH);
+//            $tpl->setCacheDir(ezAPPPATH."/runtime/cache/html");
+//            $tpl->cache_lifetime = 60 * 60 * 24;      //设置缓存时间
+            $tpl->caching        = false;             //这里是调试时设为false,发布时请使用true
+            $tpl->left_delimiter = '<{';
+            $tpl->right_delimiter = '}>';
+//            $tpl->compile_check = true;
+            $tpl->debugging = true;
+            self::$smarty = $tpl;
         }
     }
 
@@ -28,7 +37,7 @@ class ezView
 
 	public function display($tpl)
 	{
-	    $path = self::$path.$tpl;
+	    $path = ezAPPPATH.self::$path.$tpl.self::$suffix;
         self::$smarty->display($path);
 
 		if (!file_exists($this->templet))

@@ -1,4 +1,4 @@
  <meta charset="UTF-8">
- <title>{{$title}}</title>
- <meta name="Keywords" content="{{$keyWords}}">
- <meta name="Description" content="{{$description}}">
+ <title><{$websiteInfo.title}></title>
+ <meta name="Keywords" content="<{$websiteInfo.keyWords}>">
+ <meta name="Description" content="<{$websiteInfo.description}>">

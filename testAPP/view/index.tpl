@@ -1,9 +1,9 @@
 <html lang="en">
     <head>
-        <include src="head" />
+        <{include file='head.tpl'}>
     </head>
     <body>
-        <include src="header" />
-        <include src="'footer" />
+        <{include file="header.tpl"}>
+        <{include file="footer.tpl"}>
     </body>
 </html>

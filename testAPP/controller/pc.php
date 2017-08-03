@@ -15,7 +15,7 @@
 */
 require_once ezSYSPATH.'/library/QueryList/autoload.php';
 use QL\QueryList;
-class indexAction extends ezControl{
+class pc extends ezControl{
 	public function index(){
         $hotKeyData = ezGLOBALS::get('hotKeyData');
         if(empty($hotKeyData)){
@@ -35,6 +35,9 @@ class indexAction extends ezControl{
             $newUrlData = $yunUrl->select();
             ezGLOBALS::set('newUrlData',$newUrlData,600);
         }
+        $this->assign('websiteInfo',array('title'=>'test title'));
+        $this->assign('menuList',array('test1','test2'));
+        $this->display('index');
 	}
 	public function search($type,$searchWord){
 		$yunUrl = $this->getModel('yunUrl');

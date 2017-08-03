@@ -11,7 +11,7 @@ require_once ezSYSPATH . '/system/ezControl.php';
 class ezRoute
 {
 	static private $entryFileName		= 'index.php/';
-	static private $controllerPath		= ezAPPPATH . '/controller/';
+	static private $controllerPath		=  '/controller/';
 	static private $suffix				= '.php';
 	public function analyseRoute($route = null)
 	{
@@ -27,7 +27,7 @@ class ezRoute
 		for ($i = 2; $i < count($urlArray); $i++) {
 			$param[] = $urlArray[$i];
 		}
-		$file = self::$controllerPath . $controlName . self::$suffix;
+		$file =ezAPPPATH . self::$controllerPath . $controlName . self::$suffix;
 		if (!file_exists($file))
 			throw new Exception("没有这个控制器");
 
