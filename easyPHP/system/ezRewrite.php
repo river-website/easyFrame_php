@@ -2,10 +2,11 @@
 
 class ezRewrite extends ezBase
 {
+	static private $entryFileName		= 'index.php/';
 	protected $confNode = 'rewrite';
 	public function reWriteRoute($route = null){
 		if ($route == null)
-			$route = explode('/index.php/', $_SERVER['REQUEST_URI'])[1];
+			$route = explode(self::$entryFileName, $_SERVER['REQUEST_URI'])[1];
 		$route_encode = str_replace('/', '%20', $route);
 		foreach ($this->conf as $key => $value) {
 			$key = str_replace('/', '%20', $key);

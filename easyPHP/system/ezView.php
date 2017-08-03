@@ -8,7 +8,7 @@
 require_once ezSYSPATH.'/library/smarty/Smarty.class.php';
 class ezView
 {
-	static private $path		= '/view';
+	static private $path		= ezAPPPATH.'/view/';
 	static private $suffix		= '.tpl';
 	private $data = array();
 	private $templet = '';
@@ -28,7 +28,7 @@ class ezView
 
 	public function display($tpl)
 	{
-	    $path = ezAPPPATH.'/view/'.$tpl;
+	    $path = self::$path.$tpl;
         self::$smarty->display($path);
 
 		if (!file_exists($this->templet))

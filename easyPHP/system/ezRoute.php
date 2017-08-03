@@ -11,11 +11,12 @@ require_once ezSYSPATH . '/system/ezControl.php';
 class ezRoute
 {
 	static private $entryFileName		= 'index.php/';
-	static private $controllerPath		= '/controller';
+	static private $controllerPath		= ezAPPPATH . '/controller/';
+	static private $suffix				= '.php';
 	public function analyseRoute($route = null)
 	{
 		if ($route == null) {
-			$url = explode('index.php/', $_SERVER['REQUEST_URI'])[1];
+			$url = explode(self::$entryFileName, $_SERVER['REQUEST_URI'])[1];
 		} else
 			$url = $route;
 		// 解析url
@@ -26,11 +27,11 @@ class ezRoute
 		for ($i = 2; $i < count($urlArray); $i++) {
 			$param[] = $urlArray[$i];
 		}
-
-		if (!file_exists(ezAPPPATH . '/controller/' . $controlName . '.php'))
+		$file = self::$controllerPath . $controlName . self::$suffix;
+		if (!file_exists($file))
 			throw new Exception("没有这个控制器");
 
-		require_once ezAPPPATH . '/controller/' . $controlName . '.php';
+		require_once $file;
 		if (!class_exists($controlName))
 			throw new Exception("没有这个类");
 

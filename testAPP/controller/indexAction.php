@@ -37,6 +37,7 @@ class indexAction extends ezControl{
         }
 	}
 	public function search($type,$searchWord){
+		$yunUrl = $this->getModel('yunUrl');
 
 	}
 	public function look(){

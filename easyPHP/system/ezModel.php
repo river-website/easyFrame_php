@@ -72,7 +72,7 @@ class ezModel extends ezBase
 //		return $data;
 	}
 
-	public function select($condition = null)
+	public function select(array $condition = array())
 	{
 		if (gettype($condition) == 'array') {
 			$this->sql['option'] = 'select ' . (count($condition) == 0 ? '*' : implode(',', $condition)) . ' from ' . $this->table;
@@ -84,15 +84,15 @@ class ezModel extends ezBase
 		return $this->execute();
 	}
 
-	public function where_in($key, array $condition)
+	public function where_in($key, array $condition = array())
 	{
-		if (count($condition) > 0 & !empty($key)) {
-			$prefix = $this->sql['where'] == '' ?: ' and ';
-			$this->sql['where'] .= $prefix . ' in(' . implode(',', $condition) . ')';
+		if (count($condition) > 0 && !empty($key)) {
+			$prefix = $this->sql['where'] == '' ?: ' and';
+			$this->sql['where'] .= $prefix . " in('" . implode("','", $condition) . "')";
 		}
 		return $this;
 	}
-	public function where($condition)
+	public function where(array $condition = array())
 	{
 		$prefix = $this->sql['where'] == '' ?: ' and ';
 		if (gettype($condition) == 'array') {
