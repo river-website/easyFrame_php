@@ -13,7 +13,7 @@ class ezModel extends ezBase
 	private $db = null;
 	private $dbConnect = null;
 	private $table = null;
-	private $sql = array('option' => '', 'where' => '', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
+	private $sql = array('option' => '', 'where' => '', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '','join'=>'');
 	public $func = null;
 	// static function getInterface($model)
 	// {
@@ -72,13 +72,13 @@ class ezModel extends ezBase
 //		return $data;
 	}
 
-	public function select(array $condition = array())
+	public function select(array $fields = array())
 	{
-		if (gettype($condition) == 'array') {
-			$this->sql['option'] = 'select ' . (count($condition) == 0 ? '*' : implode(',', $condition)) . ' from ' . $this->table;
-		} else if (gettype($condition) == 'string') {
-			$this->sql['option'] = 'select ' . ($condition != '' ?: '*') . ' from ' . $this->table;
-		} else if (gettype($condition) == 'NULL') {
+		if (gettype($fields) == 'array') {
+			$this->sql['option'] = 'select ' . (count($fields) == 0 ? '*' : implode(',', $fields)) . ' from ' . $this->table;
+		} else if (gettype($fields) == 'string') {
+			$this->sql['option'] = 'select ' . ($fields != '' ?: '*') . ' from ' . $this->table;
+		} else if (gettype($fields) == 'NULL') {
 			$this->sql['option'] = 'select ' . '*' . ' from ' . $this->table;
 		}
 		return $this->execute();
@@ -92,6 +92,22 @@ class ezModel extends ezBase
 		}
 		return $this;
 	}
+	public function like(array $condition = array()){
+		if(count($condition) == 0){
+			foreach ($condition as $key=>$value) {
+				$prefix = $this->sql['where'] == '' ?: ' and';
+				$this->sql['where'] .= $prefix . " $key like %$value%";
+			}
+		}
+		return $this;
+	}
+	public function orderBy(array $keys = array(),$sort = 'asc'){
+		if(count($keys) > 0){
+			$keys = explode(',',$keys);
+			$this->sql['order by'] = " order by $keys $sort";
+		}
+		return $this;
+	}
 	public function where(array $condition = array())
 	{
 		$prefix = $this->sql['where'] == '' ?: ' and ';
@@ -102,7 +118,12 @@ class ezModel extends ezBase
 		}
 		return $this;
 	}
-
+	public function join($table,$condition){
+		if(!empty($table) || !empty($condition)){
+			$this->sql['join'] .= " join $table on $condition";
+		}
+		return $this;
+	}
 	public function limit($limit, $offset = 0)
 	{
 		$this->sql['limit'] = ' ' . $offset . ',' . $limit;
