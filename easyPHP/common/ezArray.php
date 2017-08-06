@@ -36,10 +36,10 @@ if (!function_exists('ezDicToString')) {
 	function ezDicToString($data, $split, $link)
 	{
 		$tempAry = array();
-		array_walk($data, create_function('$value,$key', '
+        array_walk($data, create_function('$value,$key', '
 				global $ret;
 				global $link;
-				$tempAry[] = $key."$link".$v;
+				$tempAry[] = $key."$link".$value ;
 			'));
 		return implode($split, $tempAry);
 	}

@@ -62,16 +62,19 @@ $GLOBALS['ezConf'] = array(
 	'rewrite'=>array(
 		'state'=>true,
 		'conf'=>array(
-			't/(.*)'=>'testAction/$1',
-			'u/(\d+)'=>'testAction/hook/$1',
-            'c/(.*)'=>'indexAction/crawl/$1'
+			'^t/(.*)'=>'testAction/$1',
+			'^u/(\d+)'=>'testAction/hook/$1',
+            '^c/(.*)'=>'indexAction/crawl/$1'
 		)
 	),
 	// hook钩子配置
 	'hook' => array(
-		'state' => false,
+		'state' => true,
 		'conf' => array(
 			'default' => 'testAction/hook',
+			'pc'=>array(
+			    'default'=>'pc/baseInfo'
+            ),
 			'testAction' => array(
 				'default' => 'testAction/hook',
 				'methon_name1' => 'control/methon',

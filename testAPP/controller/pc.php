@@ -17,70 +17,114 @@ require_once ezSYSPATH.'/library/QueryList/autoload.php';
 use QL\QueryList;
 class pc extends ezControl{
 	public function index(){
-		$webSiteData = ezGLOBALS::get('webSiteData');
-		if(empty($webSiteData)){
-			$webSite = $this->getModel('webSite');
-			$webSiteData = $webSite->select();
-			ezGLOBALS::set('webSiteData',$webSiteData,600);
-		}
-		$this->assign('webSite',$webSiteData);
-
-		$menusData = ezGLOBALS::get('menusData');
-		if(empty($menusData)){
-			$menus = $this->getModel('menus');
-			$menusData = $menus->select();
-			ezGLOBALS::set('menusData',$webSiteData,600);
-		}
-		$this->assign('menus',$menusData);
-
-        $hotKeyData = ezGLOBALS::get('hotKeyData');
-        if(empty($hotKeyData)){
-            $hotKey = $this->getModel('hotKey');
-            $hotKeyData = $hotKey->select();
-            ezGLOBALS::set('hotKeyData',$hotKeyData,600);
-        }
-		$this->assign('hotKey',$hotKeyData);
-
-		$hotUrlData = ezGLOBALS::get('hotUrlData');
-		if(empty($hotUrlData)){
-            $hotUrl = $this->getModel('hotUrl');
-            $hotUrlData = $hotUrl->select();
-            ezGLOBALS::set('hotUrlData',$hotUrlData,600);
-        }
-		$this->assign('hotUrl',$hotUrlData);
-
-		$newUrlData = ezGLOBALS::get('newUrlData');
-        if(empty($newUrlData)){
-            $yunUrl = $this->getModel('yunUrl');
-            $newUrlData = $yunUrl->select();
-            ezGLOBALS::set('newUrlData',$newUrlData,600);
-        }
-		$this->assign('newUrl',$newUrlData);
-
+        $this->hot();
+        $yunUrl = $this->getModel('yunUrl');
+        $newUrlData =  $yunUrl
+            ->order(array('id'))
+            ->limit(50)
+            ->select();
+        $this->assign('newUrlList',$newUrlData);
         $this->display('index');
 	}
-	public function search($menu,$type,$searchWord,$page){
+	public function hot(){
+        $hotSearchData = ezGLOBALS::get('hotSearchData');
+        if(empty($hotSearchData)){
+            $hotSearch = $this->getModel('hotSearch');
+            $today = date('Ymd',time());
+            $hotSearchData = $hotSearch
+                ->where(array("date=$today"))
+                ->group(array('searchWord'))
+                ->order(array('count(searchWord)'))
+                ->select(array('searchWord'));
+            ezGLOBALS::set('hotSearchData',$hotSearchData,600);
+        }
+        $this->assign('hotSearchList',$hotSearchData);
+
+        $hotUrlData = ezGLOBALS::get('hotUrlData');
+        if(empty($hotUrlData)){
+            $hotUrl = $this->getModel('hotUrl');
+            $today = date('Ymd',time());
+            $hotUrlData = $hotUrl
+                ->join('yunUrl','yunUrl.id=hotUrl.yunUrlID')
+                ->where(array("date=$today"))
+                ->group(array('yunUrlID'))
+                ->order(array('count(yunUrlID)'))
+                ->select(array('yunUrlID','yunUrl.name'));
+            ezGLOBALS::set('hotUrlData',$hotUrlData,600);
+        }
+        $this->assign('hotUrlList',$hotUrlData);
+
+        $hotUserData = ezGLOBALS::get('hotUserData');
+        if(empty($hotUserData)){
+            $hotUser = $this->getModel('hotUser');
+            $today = date('Ymd',time());
+            $hotUserData = $hotUser
+                ->join('yunUser','yunUser.id=hotUser.yunUserid')
+                ->where(array("date=$today"))
+                ->group(array('yunUserID'))
+                ->order(array('count(yunUserID)'))
+                ->select(array('yunUserID','name'));
+            ezGLOBALS::set('hotUserData',$hotUserData,600);
+        }
+        $this->assign('hotUserList',$hotUserData);
+    }
+    public function baseInfo(){
+	    // 网站基本信息
+	    $webSite = $this->getModel('webSite');
+	    $webSiteData = $webSite->where(array('id=1'))->select();
+	    $this->assign('websiteInfo',$webSiteData[0]);
+
+	    $types = $this->getModel('types');
+	    $typesData = $types->select();
+	    $this->assign('typeList',$typesData);
+    }
+	public function search($type,$suffix,$searchWord,$page = 0){
+	    $this->hot();
 		$yunUrl = $this->getModel('yunUrl');
-		if(!empty($menu)) {
-			$types = $this->getModel('types');
-			$data = $types->where(array('menu'=>$menu))->select(array('type'));
+		if(!empty($type)) {
+			$suffixTable = $this->getModel('suffix');
+			$data = $suffixTable->where(array("typeID=$type"))->select(array('suffix'));
 			foreach ($data as $value)
-				$typesList = $value['type'];
-			$yunUrl->where_in('type',$typesList);
+				$suffixList[] = $value['suffix'];
+			if(empty($suffixList) || count($suffixList) == 0)return;
+			$yunUrl->where_in('suffix',$suffixList);
 		}
-		if(!empty($type))
-			$yunUrl->where(array('type'=>$type));
-		if(!empty($searchWord))
-			$yunUrl->like(array('name'=>$searchWord));
-		$searchData = $yunUrl->join('yunUser','yunUser.id=yunUrl.yunUserID')->limit(10)->select('yunUrl.*,yunUser.name as yunUserName');
-		$this->assign('searchData',$searchData);
+		if(!empty($suffix))
+			$yunUrl->where(array("suffix=$suffix"));
+		if(!empty($searchWord)){
+		    $searchWord = urldecode($searchWord);
+            $insertdata['searchWord'] = $searchWord;
+            $insertdata['date'] = date('Ymd',time());
+            $hotSearch = $this->getModel('hotSearch');
+            $hotSearch->insert($insertdata);
+            $yunUrl->like(array('yunUrl.name'=>$searchWord));
+        }
+		$searchData = $yunUrl->join('yunUser','yunUser.id=yunUrl.yunUserID')->limit(20)->select(array('yunUrl.*,yunUser.name as yunUserName'));
+		$this->assign('searchList',$searchData);
 		$this->display('search');
 	}
 	public function file($fileID){
+	    $this->hot();
 		$yunUrl = $this->getModel('yunUrl');
-		$fileInfo = $yunUrl->where(array('id'=>$fileID))->join('yunUser','yunUser.id=yunUrl.yunUserID')->select();
-		$userFiles = $yunUrl->where(array('yunUserID'=>$fileInfo['yunUserID']))->limit(20)->select(array('name','url'));
-		$likeFiles = $yunUrl->like('name',$fileInfo['name'])->select(array('name','url'));
+		$fileInfo = $yunUrl
+            ->where(array("yunUrl.id=$fileID"))
+            ->join('yunUser','yunUser.id=yunUrl.yunUserID')
+            ->select(array('yunUrl.*','yunUser.name as userName'));
+		if(empty($fileInfo) || count($fileInfo) == 0)
+		    return;
+		$fileInfo = $fileInfo[0];
+		$userFiles = $yunUrl
+            ->where(array('yunUserID='.$fileInfo['yunUserID']))
+            ->limit(20)
+            ->select(array('name','id'));
+		$likeFiles = $yunUrl
+            ->like(array('name'=>$fileInfo['name']))
+            ->limit(20)
+            ->select(array('id','name'));
+		$data['date'] = date('Ymd',time());
+		$data['yunUrlID'] = $fileID;
+		$hotUrl = $this->getModel('hotUrl');
+		$hotUrl->insert($data);
 		$this->assign('fileInfo',$fileInfo);
 		$this->assign('userFiles',$userFiles);
 		$this->assign('likeFiles',$likeFiles);
@@ -160,16 +204,52 @@ class pc extends ezControl{
 		}
 
 	}
+	public function crawlYunUser(){
+	    $relus['http://www.baiduyunpan.com/user/%id%'] = array(
+	        'name'=>array('.main-right-h2','text',null,function($contents){
+	            return str_replace('的百度云资源','',$contents);
+            }),
+            'imgUrl'=>array('.main-left-a img','src')
+        );
+        $yunUser = $this->getModel('yunUser');
+        $yunUserIds = $yunUser->select(array('id'));
+        foreach ($yunUserIds as $yunUserId)
+            $ids[] = $yunUserId['id'];
+        $yunUrl = $this->getModel('yunUrl');
+        if(!empty($ids) && count($ids) > 0)
+            $yunUrl->where_not_in('yunUserID',$ids);
+        $newIDs = $yunUrl->group(array('yunUserID'))->select(array('yunUserID'));
+        $phpQuery = new QueryList();
+        $baseUrl = 'http://www.baiduyunpan.com/user/%id%';
+        $rule = $relus[$baseUrl];
+        foreach ($newIDs as $newID){
+            $yunUserID = $newID['yunUserID'];
+            $url = str_replace('%id%',$yunUserID.'-0-0.html','http://www.baiduyunpan.com/user/%id%');
+            $phpQuery->html = $url;
+            $data = $phpQuery->setQuery($rule)->data;
+            if(count($data) != 1)continue;
+            if(count($data[0]) != 2)continue;
+            $data[0]['id'] = $yunUserID;
+            $crawlData[] = $data[0];
+        }
+        $yunUser->insertList($crawlData);
+    }
 	public function yunUser($yunUserID,$page=0){
+	    $count = 20;
+	    $this->hot();
 		if(!empty($yunUserID)){
 			$yunUser = $this->getModel('yunUser');
-			$userInfo = $yunUser->where(array('id'=>$yunUserID))->select();
+			$userInfo = $yunUser->where(array("id=$yunUserID"))->select();
 			$yunUrl = $this->getModel('yunUrl');
-			$userFiles = $yunUrl->where(array('yunUserID'=>$yunUserID))->limit(10)->select();
+			$userFiles = $yunUrl->where(array("yunUserID=$yunUserID"))->limit($count,$page*$count)->select();
+			$data['yunUserID'] = $yunUserID;
+			$data['date'] = date('Ymd',time());
+			$hotUser = $this->getModel('hotUser');
+			$hotUser->insert($data);
 			$this->assign('userInfo',$userInfo);
 			$this->assign('userFiles',$userFiles);
 		}
-		$this->display('user');
+		$this->display('yunUser');
 	}
 	public function admin(){
 		if(empty($_COOKIE['id']))$this->display('login');
@@ -181,7 +261,7 @@ class pc extends ezControl{
 		$name = $_POST['name'];
 		$pwd = $_POST['pwd'];
 		$user = $this->getModel('user');
-		$userData = $user->where(array('name'=>$name))->select(array('user','pwd'));
+		$userData = $user->where(array("name=$name"))->select(array('user','pwd'));
 		if(count($userData) != 1){
 			echo "error";
 			return;

@@ -13,7 +13,8 @@ class ezModel extends ezBase
 	private $db = null;
 	private $dbConnect = null;
 	private $table = null;
-	private $sql = array('option' => '', 'where' => '', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '','join'=>'');
+    static private $initsql = array('option' => '', 'where' => '','join'=>'', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
+    private $sql = array('option' => '', 'join'=>'', 'where' => '','group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
 	public $func = null;
 	// static function getInterface($model)
 	// {
@@ -59,7 +60,8 @@ class ezModel extends ezBase
 		foreach ($this->sql as $key => $value) {
 			$sql .= $value == '' ? '' : ' ' . $key . ' ' . $value;
 		}
-	return ezGLOBALS::$dbEvent->excute($sql,$this->func);
+		$this->sql = self::$initsql;
+	    return ezGLOBALS::$dbEvent->excute($sql,$this->func);
 //		// 执行sql查询
 //		$row = mysqli_query($this->dbConnect, $sql);
 //		if (gettype($row) != 'object')
@@ -87,46 +89,60 @@ class ezModel extends ezBase
 	public function where_in($key, array $condition = array())
 	{
 		if (count($condition) > 0 && !empty($key)) {
-			$prefix = $this->sql['where'] == '' ?: ' and';
-			$this->sql['where'] .= $prefix . " in('" . implode("','", $condition) . "')";
+			$prefix = $this->sql['where'] == '' ?'': ' and';
+			$this->sql['where'] .= $prefix . " $key in('" . implode("','", $condition) . "')";
 		}
 		return $this;
 	}
+	public function where_not_in($key,array $condition = array()){
+	    if(count($condition) > 0 && !empty($key)){
+            $prefix = $this->sql['where'] == '' ?'': ' and';
+            $this->sql['where'] .= $prefix . " $key not in('" . implode("','", $condition) . "')";
+        }
+        return $this;
+    }
 	public function like(array $condition = array()){
-		if(count($condition) == 0){
+		if(count($condition) > 0){
 			foreach ($condition as $key=>$value) {
-				$prefix = $this->sql['where'] == '' ?: ' and';
-				$this->sql['where'] .= $prefix . " $key like %$value%";
+				$prefix = $this->sql['where'] == '' ?'': ' and';
+				$this->sql['where'] .= $prefix . " $key like '%$value%'";
 			}
 		}
 		return $this;
 	}
-	public function orderBy(array $keys = array(),$sort = 'asc'){
+	public function order(array $keys = array(),$sort = 'asc'){
 		if(count($keys) > 0){
-			$keys = explode(',',$keys);
-			$this->sql['order by'] = " order by $keys $sort";
+			$keys = implode(',',$keys);
+			$this->sql['order by'] = "$keys $sort";
 		}
 		return $this;
 	}
+
+	public function group(array $keys = array()){
+	     if(count($keys)>0){
+            $this->sql['group by'] = implode(',',$keys);
+         }
+         return $this;
+    }
+
 	public function where(array $condition = array())
 	{
-		$prefix = $this->sql['where'] == '' ?: ' and ';
-		if (gettype($condition) == 'array') {
-			$this->sql['where'] .= $prefix . count($condition) == 0 ? '' : ezDicToString($condition, ' and ', '=');
-		} else if (gettype($condition) == 'string') {
-			$this->sql['where'] .= $prefix . $condition != '' ?: '*';
-		}
+	    if(count($condition)>0) {
+            $prefix = $this->sql['where'] == '' ? '' : ' and ';
+            $this->sql['where'] .= $prefix . implode(' and', $condition);
+        }
 		return $this;
 	}
 	public function join($table,$condition){
 		if(!empty($table) || !empty($condition)){
-			$this->sql['join'] .= " join $table on $condition";
+			$this->sql['join'] .= "$table on $condition";
 		}
 		return $this;
 	}
 	public function limit($limit, $offset = 0)
 	{
 		$this->sql['limit'] = ' ' . $offset . ',' . $limit;
+		return $this;
 	}
 
 	public function beginTransaction()
@@ -149,7 +165,7 @@ class ezModel extends ezBase
 
 	public function insert($data)
 	{
-		$this->sql['option'] = 'insert into ' . $this->table . '(' . implode(',', array_keys($data)) . ') values (' . implode(',', array_values($data)) . ')';
+		$this->sql['option'] = 'insert into ' . $this->table . '(' . implode(',', array_keys($data)) . ') values ("' . implode('","', array_values($data)) . '")';
 		return $this->execute();
 	}
 
