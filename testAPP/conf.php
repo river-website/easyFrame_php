@@ -60,7 +60,7 @@ $GLOBALS['ezConf'] = array(
 	),
 	// 路由重写伪静态配置
 	'rewrite'=>array(
-		'state'=>true,
+		'state'=>false,
 		'conf'=>array(
 			'^t/(.*)'=>'testAction/$1',
 			'^u/(\d+)'=>'testAction/hook/$1',
@@ -69,7 +69,7 @@ $GLOBALS['ezConf'] = array(
 	),
 	// hook钩子配置
 	'hook' => array(
-		'state' => true,
+		'state' => false,
 		'conf' => array(
 			'default' => 'testAction/hook',
 			'pc'=>array(

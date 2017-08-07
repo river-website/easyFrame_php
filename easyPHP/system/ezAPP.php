@@ -32,7 +32,7 @@ class ezAPP
 		if($conf->validNode('rewrite')){
 			$ezReWrite = new ezReWrite();
 			$reRoute = $ezReWrite->reWriteRoute();
-		}
+		}else $reRoute = null;
 		// 加载路由模块
 		$ezRoute					 = new ezRoute();
 		$dispatch					= $ezRoute->analyseRoute($reRoute);
