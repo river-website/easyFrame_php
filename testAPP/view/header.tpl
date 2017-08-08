@@ -1,8 +1,8 @@
 <div class="header">
-    <div class="h-menu">
-        <ul class="h-m-ul">
-            <{foreach from=$menuList item=menu}>
-                <li class="h-m-u-li"><{$menu}></li>
+    <div class="h-types">
+        <ul class="h-t-ul">
+            <{foreach from=$typeList item=type}>
+                <li class="h-t-u-li"><{$type}></li>
             <{/foreach}>
         </ul>
     </div>
@@ -17,17 +17,18 @@
         <img class="h-l-img" src="<{$logImgPath}>"  />
     </div>
     <div class="h-search">
-        <div class="h-s-types">
-            <ul class="h-s-t-ul">
-                <li class="h-s-t-u-li">全部</li>
-                <{foreach from=$typeList item=type}>
-                    <li class="h-s-t-u-li"><{$type.name}></li>
-                <{/foreach}>
-            </ul>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary active">
+                <input type="checkbox" autocomplete="off" checked>全部
+            </label>
+            <{foreach from=$typeList item=type}>
+                <label class="btn btn-primary">
+                    <input type="checkbox" autocomplete="off"> type.name
+                </label>
+            <{/foreach}>
         </div>
         <div class="h-s-box">
-            <input type="text" class="h-s-b-text">
-            <input type="button" class="h-s-b-button">
+            <input class="btn btn-default" type="button" value="Input">
         </div>
     </div>
 </div>

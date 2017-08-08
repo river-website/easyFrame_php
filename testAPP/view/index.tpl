@@ -26,11 +26,24 @@
         </ul>
     </div>
     <div class="m-yunUrl">
-        <ul class="m-y-ul">
-            <{foreach from=$newUrlList item=newUrl}>
-            <li class="m-y-u-li"><{$newUrl.name}></li>
-            <{/foreach}>
-        </ul>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>文件名</th>
+                    <th>类型</th>
+                    <th>大小</th>
+                </tr>
+            </thead>
+            <tbody>
+                <{foreach from=$newUrlList item=newUrl}>
+                <tr>
+                    <td><{$newUrl.name}></td>
+                    <td><{$newUrl.suffix}></td>
+                    <td><{$newUrl.size}></td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+        </table>
     </div>
     <{include file="footer.tpl"}>
     </body>

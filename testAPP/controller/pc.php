@@ -15,6 +15,7 @@
 */
 class pc extends ezControl{
 	public function index(){
+		$this->baseInfo();
         $this->hot();
         $yunUrl = $this->getModel('yunUrl');
         $newUrlData =  $yunUrl

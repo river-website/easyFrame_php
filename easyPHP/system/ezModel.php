@@ -185,10 +185,14 @@ class ezModel extends ezBase
 
 	public function update(array $data, array $condition = array())
 	{
-		$sql = 'update ' . $this->table . 'set ';
+		$sql = 'update ' . $this->table . ' set ';
 		foreach ($data as $key => $value)
-			$sql .= $key . '=' . $value . ',';
-		$this->sql['option'] = substr($this->sql, 0, -1);
+			$temp[] = "$key='$value'";
+        if(!empty($temp)&&count($temp)>0)
+            $sql .= implode(',',$temp);
+        if(count($condition)>0)
+            $sql .= ' where '.implode(' and ',$condition);
+		$this->sql['option'] = $sql;
 		return $this->execute();
 	}
 }

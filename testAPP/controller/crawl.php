@@ -8,12 +8,24 @@
 require_once ezSYSPATH.'/library/QueryList/autoload.php';
 use QL\QueryList;
 
-class crawl{
+class crawl extends ezControl {
 	private $rules = array();
 	public function __construct(){
 		$this->initRules();
 	}
-
+	public function test(){
+		$yunUrl = $this->getModel('yunUrl');
+		$d = $yunUrl->order(array('id'))->select(array('id'));
+		$min = $d[0]['id'];
+		$max = $d[count($d)-1]['id'];
+		foreach ($d as $item) {
+			$g[$item['id']] = $item['id'];
+		}
+		for($i=$min;$i<=$max;$i++)
+			if(!isset($g[$i]))
+				$f[] = $i;
+		echo implode(',',$f);
+	}
 	private function initRules(){
 		$this->rules['http://www.baiduyunpan.com/file/%id%.html'] = array(
 			'name'=>array('.resource-h2','text'),
@@ -56,31 +68,46 @@ class crawl{
 		if(empty($fileName))return false;
 		else return true;
 	}
+	public function crawl(){
+	    $count = 100;
+	    while(--$count>=0)
+          ezGLOBALS::$queEvent->add(array($this,'baiduyunpan_file'));
+    }
 
 	public function baiduyunpan_file(){
+	    echoDebug("crawl yun url start");
 		$baseUrl = 'http://www.baiduyunpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
-		$yunUrl = $this->getModel('yunUrl');
-		$maxID = $yunUrl->order(array('id'),'desc')->limit(1)->select(array('id'));
-		if(count($maxID) == 0){
-			$start = 1;
-		}else{
-			$start = $maxID[0]['id']+1;
-		}
+		$crawlLast = $this->getModel('crawlLast');
+		$last = $crawlLast->where(array('web="http://www.baiduyunpan.com/file/"'))->select();
+		$last = $last[0];
+		$start = $last['last'] + 1;
 		$end = $start + 100;
+        $last['last'] = $last['last'] + 100;
+        $crawlLast->update($last,array('id='.$last['id']));
 		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
-		for ($i=$start;$i<=$end;$i++){
-			$phpQuery->html = $baseUrl."/$i.html";
+		for ($i=$start;$i<$end;$i++){
+			$phpQuery->html = str_replace('%id%',$i,$baseUrl);
 			$data = $phpQuery->setQuery($rule)->data;
-			if(count($data) != 1)continue;
-			if(count($data[0]) != 5)continue;
+			if(count($data) != 1 || count($data[0]) != 5){
+			    $errData[] = array('url'=>$phpQuery->html,'type'=>0);
+			    continue;
+            }
 			$crawlData[] = $data[0];
 		}
 		if(!empty($crawlData)&&count($crawlData)>0) {
-			$yunUrl->insertList($crawlData);
-		}
+            $yunUrl = $this->getModel('yunUrl');
+            $yunUrl->insertList($crawlData);
+            echoDebug("crawl yun url data,count=".count($crawlData));
+        }
+		if(!empty($errData)&&count($errData)>0){
+		    $err = $this->getModel('errCrawl');
+		    $err->insertList($errData);
+            echoDebug("crawl yun url err count=".count($errData));
+
+        }
 	}
 
 	public function baiduyunpan_user(){
