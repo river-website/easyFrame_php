@@ -16,6 +16,7 @@ class ezModel extends ezBase
     static private $initsql = array('option' => '', 'where' => '','join'=>'', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
     private $sql = array('option' => '', 'join'=>'', 'where' => '','group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
 	public $func = null;
+	public $lastSql = null;
 	// static function getInterface($model)
 	// {
 	//	 if (empty($model))
@@ -58,8 +59,12 @@ class ezModel extends ezBase
 		$sql				 = $this->sql['option'];
 		$this->sql['option'] = '';
 		foreach ($this->sql as $key => $value) {
-			$sql .= $value == '' ? '' : ' ' . $key . ' ' . $value;
+			if($key == 'join')
+				$sql .= $value;
+			else
+				$sql .= $value == '' ? '' : ' ' . $key . ' ' . $value;
 		}
+		$this->lastSql = $sql;
 		$this->sql = self::$initsql;
 	    return ezGLOBALS::$dbEvent->excute($sql,$this->func);
 //		// 执行sql查询
@@ -133,9 +138,9 @@ class ezModel extends ezBase
         }
 		return $this;
 	}
-	public function join($table,$condition){
+	public function join($table,$condition,$way = ''){
 		if(!empty($table) || !empty($condition)){
-			$this->sql['join'] .= "$table on $condition";
+			$this->sql['join'] .= " $way join $table on $condition";
 		}
 		return $this;
 	}

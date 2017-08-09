@@ -103,11 +103,12 @@ class pc extends ezControl{
 		$this->display('search');
 	}
 	public function file($fileID){
-	    $this->hot();
+		$this->baseInfo();
+		$this->hot();
 		$yunUrl = $this->getModel('yunUrl');
 		$fileInfo = $yunUrl
             ->where(array("yunUrl.id=$fileID"))
-            ->join('yunUser','yunUser.id=yunUrl.yunUserID')
+            ->join('yunUser','yunUser.id=yunUrl.yunUserID','left')
             ->select(array('yunUrl.*','yunUser.name as userName'));
 		if(empty($fileInfo) || count($fileInfo) == 0)
 		    return;
@@ -131,7 +132,8 @@ class pc extends ezControl{
 	}
 	public function yunUser($yunUserID,$page=0){
 	    $count = 20;
-	    $this->hot();
+		$this->baseInfo();
+		$this->hot();
 		if(!empty($yunUserID)){
 			$yunUser = $this->getModel('yunUser');
 			$userInfo = $yunUser->where(array("id=$yunUserID"))->select();

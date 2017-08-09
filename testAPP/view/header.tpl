@@ -2,19 +2,13 @@
     <div class="h-types">
         <ul class="h-t-ul">
             <{foreach from=$typeList item=type}>
-                <li class="h-t-u-li"><{$type}></li>
+                <li class="h-t-u-li"><{$type.name}></li>
             <{/foreach}>
         </ul>
     </div>
-    <div class="h-share">
-        <ul class="h-s-ul">
-            <{foreach from=$shareList item=share}>
-                <li class="h-s-u-li"><{$share}></li>
-            <{/foreach}>
-        </ul>
-    </div>
+    <{include file='share.tpl'}>
     <div class="h-log">
-        <img class="h-l-img" src="<{$logImgPath}>"  />
+        <img class="h-l-img" src="<{$websiteInfo.logoImg}>"  />
     </div>
     <div class="h-search">
         <div class="btn-group" data-toggle="buttons">
@@ -23,7 +17,7 @@
             </label>
             <{foreach from=$typeList item=type}>
                 <label class="btn btn-primary">
-                    <input type="checkbox" autocomplete="off"> type.name
+                    <input type="checkbox" autocomplete="off"> <{$type.name}>
                 </label>
             <{/foreach}>
         </div>

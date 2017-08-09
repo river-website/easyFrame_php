@@ -57,7 +57,6 @@ class crawl extends ezControl {
 			'title'=>array('head title')
 		);
 	}
-
 	public function urlVariable($url){
 		$baseUrl = 'http://pan.baidu.com/share/link?shareid=%shareid%&uk=%uk%&fid=%fid%';
 		$rule = $this->rules[$baseUrl];
@@ -73,9 +72,8 @@ class crawl extends ezControl {
 	    while(--$count>=0)
           ezGLOBALS::$queEvent->add(array($this,'baiduyunpan_file'));
     }
-
 	public function baiduyunpan_file(){
-	    echoDebug("crawl yun url start");
+		ezServerLog("crawl yun url start");
 		$baseUrl = 'http://www.baiduyunpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
@@ -95,6 +93,7 @@ class crawl extends ezControl {
 			    $errData[] = array('url'=>$phpQuery->html,'type'=>0);
 			    continue;
             }
+			ezServerLog("crawl id is: $i");
 			$crawlData[] = $data[0];
 		}
 		if(!empty($crawlData)&&count($crawlData)>0) {
@@ -109,7 +108,6 @@ class crawl extends ezControl {
 
         }
 	}
-
 	public function baiduyunpan_user(){
 		$yunUser = $this->getModel('yunUser');
 		$yunUserIds = $yunUser->select(array('id'));

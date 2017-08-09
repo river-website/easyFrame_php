@@ -1,9 +1,9 @@
 <html lang="en">
 <head>
-    <include src="head" />
+    <{include file="head.tpl"}>
 </head>
 <body>
-    <include src="header" />
+    <{include file="header.tpl"}>
     <div class="main">
         <div class="m-body">
             <div class="m-fileInfo"></div>
@@ -34,6 +34,6 @@
             </div>
         </div>
     </div>
-    <include src="'footer" />
+    <{include file="footer.tpl"}>
 </body>
 </html>
