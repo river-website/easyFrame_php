@@ -13,7 +13,7 @@ class crawl extends ezControl {
 	public function __construct(){
 		$this->initRules();
 	}
-	public function test(){
+	public function test1(){
 		$yunUrl = $this->getModel('yunUrl');
 		$d = $yunUrl->order(array('id'))->select(array('id'));
 		$min = $d[0]['id'];
@@ -25,6 +25,14 @@ class crawl extends ezControl {
 			if(!isset($g[$i]))
 				$f[] = $i;
 		echo implode(',',$f);
+	}
+	public function test2(){
+		sleep(10);
+		dfs(1);
+		sleep(10);
+	}
+	public function test(){
+		ezGLOBALS::$queEvent->add(array($this,'test2'));
 	}
 	private function initRules(){
 		$this->rules['http://www.baiduyunpan.com/file/%id%.html'] = array(
@@ -99,13 +107,12 @@ class crawl extends ezControl {
 		if(!empty($crawlData)&&count($crawlData)>0) {
             $yunUrl = $this->getModel('yunUrl');
             $yunUrl->insertList($crawlData);
-            echoDebug("crawl yun url data,count=".count($crawlData));
+			ezServerLog("crawl yun url data,count=".count($crawlData));
         }
 		if(!empty($errData)&&count($errData)>0){
 		    $err = $this->getModel('errCrawl');
 		    $err->insertList($errData);
-            echoDebug("crawl yun url err count=".count($errData));
-
+			ezServerLog("crawl yun url err count=".count($errData));
         }
 	}
 	public function baiduyunpan_user(){
