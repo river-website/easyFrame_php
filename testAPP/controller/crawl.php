@@ -27,12 +27,18 @@ class crawl extends ezControl {
 		echo implode(',',$f);
 	}
 	public function test2(){
-		sleep(10);
-		dfs(1);
-		sleep(10);
+        echo "back com in\n";
+
+        $hotSearch = $this->getModel('hotSearch');
+        $today = date('Ymd',time());
+        $hotSearchData = $hotSearch
+            ->where(array("date=$today"))
+            ->group(array('searchWord'))
+            ->order(array('count(searchWord)'))
+            ->select(array('searchWord'));
 	}
 	public function test(){
-		ezGLOBALS::$queEvent->add(array($this,'test2'));
+		ezGLOBALS::$queEvent->back(array($this,'test2'));
 	}
 	private function initRules(){
 		$this->rules['http://www.baiduyunpan.com/file/%id%.html'] = array(
@@ -76,7 +82,7 @@ class crawl extends ezControl {
 		else return true;
 	}
 	public function crawl(){
-	    $count = 100;
+	    $count = 1;
 	    while(--$count>=0)
           ezGLOBALS::$queEvent->add(array($this,'baiduyunpan_file'));
     }
@@ -89,16 +95,17 @@ class crawl extends ezControl {
 		$last = $crawlLast->where(array('web="http://www.baiduyunpan.com/file/"'))->select();
 		$last = $last[0];
 		$start = $last['last'] + 1;
-		$end = $start + 100;
-        $last['last'] = $last['last'] + 100;
+		$end = $start + 1;
+        $last['last'] = $last['last'] + 1;
         $crawlLast->update($last,array('id='.$last['id']));
 		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		for ($i=$start;$i<$end;$i++){
-			$phpQuery->html = str_replace('%id%',$i,$baseUrl);
+		    $url = str_replace('%id%',$i,$baseUrl);
+			$phpQuery->html = $url;
 			$data = $phpQuery->setQuery($rule)->data;
 			if(count($data) != 1 || count($data[0]) != 5){
-			    $errData[] = array('url'=>$phpQuery->html,'type'=>0);
+			    $errData[] = array('url'=>$url,'type'=>0);
 			    continue;
             }
 			ezServerLog("crawl id is: $i");
