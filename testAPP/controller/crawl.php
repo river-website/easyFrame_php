@@ -82,9 +82,17 @@ class crawl extends ezControl {
 		else return true;
 	}
 	public function crawl(){
-	    $count = 1;
+	    $count = 1000;
 	    while(--$count>=0)
           ezGLOBALS::$queEvent->add(array($this,'baiduyunpan_file'));
+    }
+    public function crawl_baiduyunurl(){
+        $count = 100;
+        while(--$count>=0)
+            $this->baiduyunpan_file();
+    }
+    public function back_crawl(){
+        ezGLOBALS::$queEvent->back(array($this,'crawl_baiduyunurl'));
     }
 	public function baiduyunpan_file(){
 		ezServerLog("crawl yun url start");
@@ -95,8 +103,8 @@ class crawl extends ezControl {
 		$last = $crawlLast->where(array('web="http://www.baiduyunpan.com/file/"'))->select();
 		$last = $last[0];
 		$start = $last['last'] + 1;
-		$end = $start + 1;
-        $last['last'] = $last['last'] + 1;
+		$end = $start + 100;
+        $last['last'] = $last['last'] + 100;
         $crawlLast->update($last,array('id='.$last['id']));
 		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
