@@ -68,7 +68,12 @@ class crawl extends ezControl {
 			'imgUrl'=>array('.main-left-a img','src')
 		);
 		$this->rules['http://pan.baidu.com/share/link?shareid=%shareid%&uk=%uk%&fid=%fid%'] = array(
-			'title'=>array('head title')
+			'title'=>array('head title','text'),
+			'ukName'=>array(),
+			'size'=>array()
+		);
+		$this->rules['https://wangpan007.com/redirect/file?id=%id%'] = array(
+			'url'=>array('#tip_msg p:eq(1)','text')
 		);
 	}
 	public function urlVariable($url){
@@ -154,4 +159,75 @@ class crawl extends ezControl {
 		}
 		$yunUser->insertList($crawlData);
 	}
+
+	public function backTask($taskName){
+		ezGLOBALS::$queEvent->back(array($this,$taskName));
+	}
+	public function crawl_wangpan007(){
+		$count = 100;
+		while(--$count>=0)
+			$this->wangpan007();
+	}
+	public function repairData(){
+		$share_file = $this->getModel('share_file');
+		$shareList = $share_file->select(array('id','url'));
+		for($i=0;$i<count($shareList);$i++){
+			$temp1 =explode('?',$shareList[$i]['url']);
+			if(count($temp1) != 2)continue;
+			parse_str($temp1[1],$temp2);
+			if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
+			if(!empty($temp2['uk']))$data['uk'] = $temp2['uk'];
+			if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
+			$share_file->update($data,array('id='.$shareList[$i]['id']));
+		}
+	}
+	public function checkUrl($urlList){
+		$baseUrl = 'hhttp://pan.baidu.com/share/link?shareid=%shareid%&uk=%uk%&fid=%fid%';
+		$rule = $this->rules[$baseUrl];
+		$phpQuery = new QueryList();
+		foreach ($urlList as $url){
+			$phpQuery->html = $url;
+			$crawl = $phpQuery->setQuery($rule)->data;
+		}
+	}
+	public function wangpan007(){
+		ezServerLog("crawl_wangpan007 url start");
+		$baseUrl = 'https://wangpan007.com/redirect/file?id=%id%';
+		$rule = $this->rules[$baseUrl];
+
+		$crawlLast = $this->getModel('crawlLast');
+		$last = $crawlLast->where(array('web="https://wangpan007.com/redirect/file?id=%id%"'))->select();
+		$last = $last[0];
+		$start = $last['last'] + 1;
+		$end = $start + 100;
+		$last['last'] = $last['last'] + 100;
+		$crawlLast->update($last,array('id='.$last['id']));
+		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		$phpQuery = new QueryList();
+		for ($i=$start;$i<$end;$i++){
+			$url = str_replace('%id%',$i,$baseUrl);
+			ezDebugLog($url);
+			$phpQuery->html = $url;
+			$data = $phpQuery->setQuery($rule)->data;
+			if(count($data) != 1 || count($data[0]) != 1){
+				continue;
+			}
+			$data = $data[0];
+			$data['url'] = str_replace('amp;','',$data['url']);
+			$temp1 =explode('?',$data['url']);
+			if(count($temp1) != 2)continue;
+			parse_str($temp1[1],$temp2);
+			if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
+			if(!empty($temp2['uk']))$data['uk'] = $temp2['uk'];
+			if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
+			ezServerLog("crawl id is: $i");
+			$crawlData[] = $data;
+		}
+		if(!empty($crawlData)&&count($crawlData)>0) {
+			$share_file = $this->getModel('share_file');
+			$share_file->insertList($crawlData);
+			ezServerLog("crawl_wangpan007 url data,count=".count($crawlData));
+		}
+	}
+
 }
