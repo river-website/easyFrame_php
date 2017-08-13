@@ -4,7 +4,7 @@
 //return;
 date_default_timezone_set("PRC");
 // 网站目录
-if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', '/phpstudy/www');
+if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', '/phpstudy/test');
 // website目录
 if(!defined('ezWEB_ROOT'))define('ezWEB_ROOT', dirname(__FILE__));
 // easy 核心目录
