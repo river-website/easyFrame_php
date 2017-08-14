@@ -182,7 +182,11 @@ class ezModel extends ezBase
 
 		$sql = 'insert into ' . $this->table . '(' . implode(',', array_keys($firstRow)) . ') values ';
 		foreach ($dataList as $data) {
-            $sql .= "('" . implode("','", array_values($data)) . "'),";
+			$temp = array_values($data);
+			$temp1 = array();
+			foreach ($temp as $value)
+				$temp1[] = addslashes($value);
+            $sql .= "('" . implode("','", $temp1) . "'),";
         }
 		$this->sql['option'] = substr($sql, 0, -1);
 		return $this->execute();
@@ -191,8 +195,10 @@ class ezModel extends ezBase
 	public function update(array $data, array $condition = array())
 	{
 		$sql = 'update ' . $this->table . ' set ';
-		foreach ($data as $key => $value)
+		foreach ($data as $key => $value){
+			$value = addslashes($value);
 			$temp[] = "$key='$value'";
+		}
         if(!empty($temp)&&count($temp)>0)
             $sql .= implode(',',$temp);
         if(count($condition)>0)
