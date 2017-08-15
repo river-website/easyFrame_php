@@ -255,37 +255,45 @@ class crawl extends ezControl {
 		}
 	}
 	public function repairData(){
-		$data = file_get_contents('/phpstudy/test/easyServer/runTime/error');
-		$ids = explode("\n",$data);
-		$baseUrl = 'https://wangpan007.com/redirect/file?id=%id%';
-		$rule = $this->rules[$baseUrl];
-		$phpQuery = new QueryList();
-		$share_file = $this->getModel('share_file');
-		foreach ($ids as $id){
-			$url = str_replace('%id%',$id,$baseUrl);
-			ezDebugLog($url);
-			$phpQuery->html = $url;
-			$data = $phpQuery->setQuery($rule)->data;
-			ezDebugLog(print_r($data,true));
-			if(count($data) != 1 || count($data[0]) != 1){
-				continue;
-			}
-			$data = $data[0];
-			$data['url'] = str_replace('amp;','',$data['url']);
-			$temp1 =explode('?',$data['url']);
-			if(count($temp1) != 2)continue;
-			parse_str($temp1[1],$temp2);
-			if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
-			if(!empty($temp2['uk']))$data['uk'] = $temp2['uk'];
-			if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
-			$data['wangpan007_id'] = $id;
-			ezServerLog("crawl id is: $id");
-			$crawlData[] = $data;
+		// 后缀
+		$suffix = $this->getModel('suffix');
+		$suffix_list = $suffix->select(array('id','suffix'));
+		foreach ($suffix_list as $value){
+			$id = $value['id'];
+			$value = strtolower($value['suffix']);
+			if(strpos($value,'.') === false)
+				$value = ".$value";
+			$suffix->update(array('suffix'=>$value),array("id=$id"));
 		}
-		if(!empty($crawlData)&&count($crawlData)>0) {
-			$share_file = $this->getModel('share_file');
-//            $share_file->insertList($crawlData);
-			ezServerLog("crawl_wangpan007 url data,count=".count($crawlData));
+		// 文件 后缀修复
+		$share_file = $this->getModel('share_file');
+		$offet = 0;
+		$limit = 1000;
+		while (true){
+			$share_list = $share_file->order(array('id'),'asc')->limit($limit,$offet)->select(array('id','fileName','suffix'));
+			if(count($share_list) == 0)break;
+			$offet += $limit;
+			foreach ($share_list as $value){
+				$update = array();
+				$fileSuffix = $value['suffix'];
+				$low = strtolower($fileSuffix);
+				if(empty($fileSuffix)){
+					$fileName = $value['fileName'];
+					$pos = strripos($fileName,'.');
+					if( $pos === false) {
+						$update['suffix'] = '/';
+					}
+					else{
+						$update['suffix'] = strtolower(substr($fileName,$pos));
+					}
+				}else{
+					if(strpos($low,'.') === false)
+						$low = '.'.$low;
+					else if($low===$fileSuffix)continue;
+					$update['suffix'] = $low;
+				}
+				$share_file->update($update,array('id=',$value['id']));
+			}
 		}
 	}
 	public function updateLast($www,$count){
