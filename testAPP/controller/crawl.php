@@ -40,9 +40,7 @@ class crawl extends ezControl {
 			'fileName'=>array('head title','text',null,function($contents){
 				return str_replace('_免费高速下载|百度网盘-分享无限制','',$contents);
 			}),
-			'size'=>array('.button-box .text:eq(1)','text',null,function($con){
-				return str_replace(')','',str_replace('(','',$con));
-			})
+			'shareTime'=>array('share-file-info span','text')
 		);
 		$this->rules['https://wangpan007.com/redirect/file?id=%id%'] = array(
 			'url'=>array('#tip_msg p:eq(1)','text')
@@ -239,21 +237,6 @@ class crawl extends ezControl {
 			return '/';
 		}
 	}
-	public function update_baiduyun_user(){
-		$share_user = $this->getModel('share_user');
-		$share_file = $this->getModel('share_file');
-		$all_uk_list = $share_file->group(array('uk'))->select(array('uk'));
-		$old_uk_list = $share_user->select(array('uk'));
-		foreach ($old_uk_list as $old_uk)
-			$uk_list[$old_uk['uk']] = $old_uk['uk'];
-		foreach ($all_uk_list as $uk)
-			if(!isset($uk_list[$uk['uk']]))
-				$new_uk_list[] = $uk;
-		if(!empty($new_uk_list)) {
-			$share_user->insertList($new_uk_list);
-			echo('inser user count='.count($new_uk_list));
-		}
-	}
 	public function repairData(){
 		// 后缀
 		$suffix = $this->getModel('suffix');
@@ -295,6 +278,18 @@ class crawl extends ezControl {
 				$share_file->update($update,array('id=',$value['id']));
 			}
 		}
+        // 用户，提取
+        $share_user = $this->getModel('share_user');
+        $all_uk_list = $share_file->group(array('uk'))->select(array('uk'));
+        $old_uk_list = $share_user->select(array('uk'));
+        foreach ($old_uk_list as $old_uk)
+            $uk_list[$old_uk['uk']] = $old_uk['uk'];
+        foreach ($all_uk_list as $uk)
+            if(!isset($uk_list[$uk['uk']]))
+                $new_uk_list[] = $uk;
+        if(!empty($new_uk_list)) {
+            $share_user->insertList($new_uk_list);
+        }
 	}
 	public function updateLast($www,$count){
 		$crawlLast = $this->getModel('crawlLast');
