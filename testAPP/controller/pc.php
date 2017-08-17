@@ -26,7 +26,7 @@ class pc extends ezControl{
         $this->display('index');
 	}
 	public function hot(){
-        $hotSearchData = ezGLOBALS::get('hotSearchData');
+        $hotSearchData = ezServer::getInterface()->get('hotSearchData');
         if(empty($hotSearchData)){
             $hotSearch = $this->getModel('hotSearch');
             $today = date('Ymd',time());
@@ -35,11 +35,11 @@ class pc extends ezControl{
                 ->group(array('searchWord'))
                 ->order(array('count(searchWord)'))
                 ->select(array('searchWord'));
-            ezGLOBALS::set('hotSearchData',$hotSearchData,600);
+            ezServer::getInterface()->set('hotSearchData',$hotSearchData,600);
         }
         $this->assign('hotSearchList',$hotSearchData);
 
-        $hotUrlData = ezGLOBALS::get('hotUrlData');
+        $hotUrlData = ezServer::getInterface()->get('hotUrlData');
         if(empty($hotUrlData)){
             $hotUrl = $this->getModel('hotUrl');
             $today = date('Ymd',time());
@@ -49,11 +49,11 @@ class pc extends ezControl{
                 ->group(array('yunUrlID'))
                 ->order(array('count(yunUrlID)'))
                 ->select(array('yunUrlID','yunUrl.name'));
-            ezGLOBALS::set('hotUrlData',$hotUrlData,600);
+            ezServer::getInterface()->set('hotUrlData',$hotUrlData,600);
         }
         $this->assign('hotUrlList',$hotUrlData);
 
-        $hotUserData = ezGLOBALS::get('hotUserData');
+        $hotUserData = ezServer::getInterface()->get('hotUserData');
         if(empty($hotUserData)){
             $hotUser = $this->getModel('hotUser');
             $today = date('Ymd',time());
@@ -63,7 +63,7 @@ class pc extends ezControl{
                 ->group(array('yunUserID'))
                 ->order(array('count(yunUserID)'))
                 ->select(array('yunUserID','name'));
-            ezGLOBALS::set('hotUserData',$hotUserData,600);
+            ezServer::getInterface()->set('hotUserData',$hotUserData,600);
         }
         $this->assign('hotUserList',$hotUserData);
     }
@@ -103,6 +103,7 @@ class pc extends ezControl{
 		$this->display('search');
 	}
 	public function file($fileID){
+	    fdfsdf();
 		$this->baseInfo();
 		$this->hot();
 		$yunUrl = $this->getModel('yunUrl');
