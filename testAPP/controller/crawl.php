@@ -73,7 +73,7 @@ class crawl extends ezControl {
 		);
 	}
 	public function backCrawlTask($taskName){
-		ezGLOBALS::$queEvent->back(array($this,'crawl'),$taskName);
+		ezQueueEvent::getInterface()->back(array($this,'crawl'),$taskName);
 	}
 	public function crawl($funcName){
 		$count = 1000;
@@ -81,6 +81,9 @@ class crawl extends ezControl {
 			if($this->$funcName())break;
 		}
 	}
+	public function test(){
+        ezServer::getInterface()->log('back do');
+    }
 	public function baiduyun_user(){
 		ezServerLog("baiduyun_user start");
 		$baseUrl = 'http://pan.baidu.com/share/home?uk=%id%';
@@ -107,16 +110,16 @@ class crawl extends ezControl {
 		return true;
 	}
 	public function sopanpan_file(){
-		ezServerLog("sopanpan_file start");
+        ezServer::getInterface()->log("sopanpan_file start");
 		$baseUrl = 'http://www.sopanpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,100);
-		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+        ezServer::getInterface()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		for ($i=$ids['start'];$i<$ids['end'];$i++){
 			$url = str_replace('%id%',$i,$baseUrl);
-			ezDebugLog($url);
+            ezServer::getInterface()->debugLog($url);
 			$phpQuery->html = $url;
 			$data = $phpQuery->setQuery($rule)->data;
 			if(count($data) != 1 || count($data[0]) != 3){
@@ -129,15 +132,15 @@ class crawl extends ezControl {
 				if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
 				if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
 			}
-			ezServerLog("sopanpan_file id is: $i");
+            ezServer::getInterface()->log("sopanpan_file id is: $i");
 			$crawlData[] = $data;
 		}
 		if(!empty($crawlData)&&count($crawlData)>0) {
 			$share_file = $this->getModel('share_file');
 			$share_file->insertList($crawlData);
-			ezServerLog("sopanpan_file count=".count($crawlData));
+            ezServer::getInterface()->log("sopanpan_file count=".count($crawlData));
 		}
-		ezServerLog("sopanpan_file end");
+        ezServer::getInterface()->log("sopanpan_file end");
 		return false;
 	}
 	public function wangpan007_file(){

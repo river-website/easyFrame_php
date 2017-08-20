@@ -26,148 +26,149 @@ class pc extends ezControl{
         $this->display('index');
 	}
 	public function hot(){
-        $hotSearchData = ezServer::getInterface()->get('hotSearchData');
-        if(empty($hotSearchData)){
+        $hotSearchList = ezServer::getInterface()->get('hotSearchList');
+        if(empty($hotSearchList)){
             $hotSearch = $this->getModel('hotSearch');
             $today = date('Ymd',time());
-            $hotSearchData = $hotSearch
+            $hotSearchList = $hotSearch
                 ->where(array("date=$today"))
                 ->group(array('searchWord'))
                 ->order(array('count(searchWord)'))
                 ->select(array('searchWord'));
-            ezServer::getInterface()->set('hotSearchData',$hotSearchData,600);
+            ezServer::getInterface()->set('hotSearchList',$hotSearchList,600);
         }
-        $this->assign('hotSearchList',$hotSearchData);
+        $this->assign('hotSearchList',$hotSearchList);
 
-        $hotUrlData = ezServer::getInterface()->get('hotUrlData');
-        if(empty($hotUrlData)){
-            $hotUrl = $this->getModel('hotUrl');
+        $hotFileList = ezServer::getInterface()->get('hotFileList');
+        if(empty($hotFileList)){
+            $hotFile = $this->getModel('hotFile');
             $today = date('Ymd',time());
-            $hotUrlData = $hotUrl
-                ->join('yunUrl','yunUrl.id=hotUrl.yunUrlID')
+            $hotFileList = $hotFile
+                ->join('yunUrl','yunUrl.id=hotFile.yunUrlID')
                 ->where(array("date=$today"))
                 ->group(array('yunUrlID'))
                 ->order(array('count(yunUrlID)'))
                 ->select(array('yunUrlID','yunUrl.name'));
-            ezServer::getInterface()->set('hotUrlData',$hotUrlData,600);
+            ezServer::getInterface()->set('hotFileList',$hotFileList,600);
         }
-        $this->assign('hotUrlList',$hotUrlData);
+        $this->assign('hotFileList',$hotFileList);
 
-        $hotUserData = ezServer::getInterface()->get('hotUserData');
-        if(empty($hotUserData)){
+        $hotUserList = ezServer::getInterface()->get('hotUserList');
+        if(empty($hotUserList)){
             $hotUser = $this->getModel('hotUser');
             $today = date('Ymd',time());
-            $hotUserData = $hotUser
+            $hotUserList = $hotUser
                 ->join('yunUser','yunUser.id=hotUser.yunUserid')
                 ->where(array("date=$today"))
                 ->group(array('yunUserID'))
                 ->order(array('count(yunUserID)'))
                 ->select(array('yunUserID','name'));
-            ezServer::getInterface()->set('hotUserData',$hotUserData,600);
+            ezServer::getInterface()->set('hotUserList',$hotUserList,600);
         }
-        $this->assign('hotUserList',$hotUserData);
+        $this->assign('hotUserList',$hotUserList);
     }
     public function baseInfo(){
 	    // 网站基本信息
-	    $webSite = $this->getModel('webSite');
-	    $webSiteData = $webSite->where(array('id=1'))->select();
-	    $this->assign('websiteInfo',$webSiteData[0]);
+        $webSiteInfo = ezServer::getInterface()->get('webSiteInfo');
+        if(empty($webSiteInfo)){
+            $webSite = $this->getModel('webSite');
+            $webSiteInfo = $webSite->where(array('id=1'))->select();
+            if(count($webSiteInfo) == 1)
+                $webSiteInfo = $webSiteInfo[0];
+            ezServer::getInterface()->set('webSiteInfo',$webSiteInfo,600);
+        }
+	    $this->assign('webSiteInfo',$webSiteInfo);
 
-	    $types = $this->getModel('types');
-	    $typesData = $types->select();
-	    $this->assign('typeList',$typesData);
+        $suffixType = ezServer::getInterface()->get('suffixType');
+        if(empty($suffixType)) {
+            $suffix = $this->getModel('suffix');
+            $suffixData = $suffix->join('types', 'types.id=suffix.typID')->select(array('types.name as typeName', 'suffix'));
+            foreach ($suffixData as $value) {
+                $suffixList[$value['suffix']] = $value['typeName'];
+                $typesList[$value['typeName']][] = $value['suffix'];
+            }
+            $suffixType['suffix'] = $suffixList;
+            $suffixType['types'] = $typesList;
+        }
+        $this->assign('suffixList',$suffixType['suffix']);
+        $this->assign('typesList',$suffixType['types']);
     }
-	public function search($type,$suffix,$searchWord,$page = 0){
+	public function search($typeName,$suffix,$searchWord,$page = 1){
+        $this->baseInfo();
 	    $this->hot();
-		$yunUrl = $this->getModel('yunUrl');
-		if(!empty($type)) {
-			$suffixTable = $this->getModel('suffix');
-			$data = $suffixTable->where(array("typeID=$type"))->select(array('suffix'));
-			foreach ($data as $value)
-				$suffixList[] = $value['suffix'];
-			if(empty($suffixList) || count($suffixList) == 0)return;
-			$yunUrl->where_in('suffix',$suffixList);
-		}
+		$share_file = $this->getModel('share_file');
+		if(!empty($typeName)) {
+            $typesList = ezServer::getInterface()->get('suffixType')['typesList'];
+            if(empty($typesList[$typeName]))return;
+            $suffixList = $typesList[$typeName];
+            $share_file->where_in('suffix',$typesList);
+        }
 		if(!empty($suffix))
-			$yunUrl->where(array("suffix=$suffix"));
+			$share_file->where(array("suffix=$suffix"));
 		if(!empty($searchWord)){
 		    $searchWord = urldecode($searchWord);
             $insertdata['searchWord'] = $searchWord;
             $insertdata['date'] = date('Ymd',time());
             $hotSearch = $this->getModel('hotSearch');
             $hotSearch->insert($insertdata);
-            $yunUrl->like(array('yunUrl.name'=>$searchWord));
+            $share_file->like(array('fileName'=>$searchWord));
         }
-		$searchData = $yunUrl->join('yunUser','yunUser.id=yunUrl.yunUserID')->limit(20)->select(array('yunUrl.*,yunUser.name as yunUserName'));
-		$this->assign('searchList',$searchData);
+        if(empty($page))$page = 1;
+		$searchList = $share_file->join('share_user','share_user.uk=share_file.uk')->limit(20,($page-1)*20)->select(array('share_file.id','fileName','suffix','size','shareTime','userName'));
+		$this->assign('searchList',$searchList);
 		$this->display('search');
 	}
-	public function file($fileID){
-	    fdfsdf();
+	public function share_file($fileID){
 		$this->baseInfo();
 		$this->hot();
-		$yunUrl = $this->getModel('yunUrl');
-		$fileInfo = $yunUrl
-            ->where(array("yunUrl.id=$fileID"))
-            ->join('yunUser','yunUser.id=yunUrl.yunUserID','left')
-            ->select(array('yunUrl.*','yunUser.name as userName'));
+		$share_file = $this->getModel('share_file');
+		$fileInfo = $share_file
+            ->where(array("share_file.id=$fileID"))
+            ->join('share_user','share_user.uk=share_file.uk','left')
+            ->select(array('share_file.*','share_user.userName','share_user.id as userID'));
 		if(empty($fileInfo) || count($fileInfo) == 0)
 		    return;
 		$fileInfo = $fileInfo[0];
-		$userFiles = $yunUrl
-            ->where(array('yunUserID='.$fileInfo['yunUserID']))
+		$userFiles = $share_file
+            ->where(array('uk='.$fileInfo['uk']))
             ->limit(20)
-            ->select(array('name','id'));
-		$likeFiles = $yunUrl
-            ->like(array('name'=>$fileInfo['name']))
+            ->select(array('id','fileName'));
+		$likeFiles = $share_file
+            ->like(array('fileName'=>$fileInfo['name']))
             ->limit(20)
-            ->select(array('id','name'));
+            ->select(array('id','fileName'));
 		$data['date'] = date('Ymd',time());
-		$data['yunUrlID'] = $fileID;
-		$hotUrl = $this->getModel('hotUrl');
-		$hotUrl->insert($data);
+		$data['fileID'] = $fileID;
+		$hotFile = $this->getModel('hotFile');
+		$hotFile->insert($data);
 		$this->assign('fileInfo',$fileInfo);
 		$this->assign('userFiles',$userFiles);
 		$this->assign('likeFiles',$likeFiles);
-		$this->display('file');
+		$this->display('share_fle');
 	}
-	public function yunUser($yunUserID,$page=0){
-	    $count = 20;
+	public function share_user($userID,$page=1){
 		$this->baseInfo();
 		$this->hot();
-		if(!empty($yunUserID)){
-			$yunUser = $this->getModel('yunUser');
-			$userInfo = $yunUser->where(array("id=$yunUserID"))->select();
-			$yunUrl = $this->getModel('yunUrl');
-			$userFiles = $yunUrl->where(array("yunUserID=$yunUserID"))->limit($count,$page*$count)->select();
-			$data['yunUserID'] = $yunUserID;
+		if(!empty($userID)){
+			$share_user = $this->getModel('share_user');
+			$userInfo = $share_user->where(array("id=$userID"))->select();
+			if(empty($userInfo) || count($userInfo)!=1)return;
+			$userInfo = $userInfo[0];
+			$share_file = $this->getModel('share_file');
+			$userFiles = $share_file->where(array("uk=".$userInfo['uk']))->limit(20,($page-1)*20)->select(array('id','fileName','suffix','size','shareTime'));
+			if(count($userFiles)>0) {
+                $suffixList = ezServer::getInterface()->get('suffixType')['suffixList'];
+                foreach ($userFiles as &$vaule)
+                    $vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '其他' : $suffixList[$vaule['suffix']];
+                unset($vaule);
+            }
+			$data['userID'] = $userID;
 			$data['date'] = date('Ymd',time());
 			$hotUser = $this->getModel('hotUser');
 			$hotUser->insert($data);
 			$this->assign('userInfo',$userInfo);
 			$this->assign('userFiles',$userFiles);
 		}
-		$this->display('yunUser');
-	}
-	public function admin(){
-		if(empty($_COOKIE['id']))$this->display('login');
-
-
-		$this->display('admin');
-	}
-	public function login(){
-		$name = $_POST['name'];
-		$pwd = $_POST['pwd'];
-		$user = $this->getModel('user');
-		$userData = $user->where(array("name=$name"))->select(array('user','pwd'));
-		if(count($userData) != 1){
-			echo "error";
-			return;
-		}
-		if($userData[0]['pwd'] != $pwd){
-			echo 'error';
-			return;
-		}
-		echo 'success';
+		$this->display('share_user');
 	}
 }

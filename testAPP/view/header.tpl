@@ -1,11 +1,11 @@
 <div class="header">
-    <div class="h-types">
-        <ul class="h-t-ul">
-            <{foreach from=$typeList item=type}>
-                <li class="h-t-u-li"><{$type.name}></li>
-            <{/foreach}>
-        </ul>
-    </div>
+    {*<div class="h-types">*}
+        {*<ul class="h-t-ul">*}
+            {*<{foreach from=$typeList item=suffixs key=type}>*}
+                {*<li class="h-t-u-li"><{$type.name}></li>*}
+            {*<{/foreach}>*}
+        {*</ul>*}
+    {*</div>*}
     <{include file='share.tpl'}>
     <div class="h-log">
         <img class="h-l-img" src="<{$websiteInfo.logoImg}>"  />
@@ -15,7 +15,7 @@
             <label class="btn btn-primary active">
                 <input type="checkbox" autocomplete="off" checked>全部
             </label>
-            <{foreach from=$typeList item=type}>
+            <{foreach from=$typeList item=suffixs key=type}>
                 <label class="btn btn-primary">
                     <input type="checkbox" autocomplete="off"> <{$type.name}>
                 </label>
