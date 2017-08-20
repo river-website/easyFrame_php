@@ -44,11 +44,11 @@ class pc extends ezControl{
             $hotFile = $this->getModel('hotFile');
             $today = date('Ymd',time());
             $hotFileList = $hotFile
-                ->join('yunUrl','yunUrl.id=hotFile.yunUrlID')
+                ->join('share_file','share_file.id=hotFile.fileID')
                 ->where(array("date=$today"))
-                ->group(array('yunUrlID'))
-                ->order(array('count(yunUrlID)'))
-                ->select(array('yunUrlID','yunUrl.name'));
+                ->group(array('fileID'))
+                ->order(array('count(fileID)'))
+                ->select(array('fileID','fileName'));
             ezServer::getInterface()->set('hotFileList',$hotFileList,600);
         }
         $this->assign('hotFileList',$hotFileList);
@@ -58,11 +58,11 @@ class pc extends ezControl{
             $hotUser = $this->getModel('hotUser');
             $today = date('Ymd',time());
             $hotUserList = $hotUser
-                ->join('yunUser','yunUser.id=hotUser.yunUserid')
+                ->join('share_user','share_user.id=hotUser.userID')
                 ->where(array("date=$today"))
-                ->group(array('yunUserID'))
-                ->order(array('count(yunUserID)'))
-                ->select(array('yunUserID','name'));
+                ->group(array('userID'))
+                ->order(array('count(userID)'))
+                ->select(array('userID','userName'));
             ezServer::getInterface()->set('hotUserList',$hotUserList,600);
         }
         $this->assign('hotUserList',$hotUserList);
@@ -82,7 +82,7 @@ class pc extends ezControl{
         $suffixType = ezServer::getInterface()->get('suffixType');
         if(empty($suffixType)) {
             $suffix = $this->getModel('suffix');
-            $suffixData = $suffix->join('types', 'types.id=suffix.typID')->select(array('types.name as typeName', 'suffix'));
+            $suffixData = $suffix->join('types', 'types.id=suffix.typeID')->select(array('types.name as typeName', 'suffix'));
             foreach ($suffixData as $value) {
                 $suffixList[$value['suffix']] = $value['typeName'];
                 $typesList[$value['typeName']][] = $value['suffix'];
@@ -134,7 +134,7 @@ class pc extends ezControl{
             ->limit(20)
             ->select(array('id','fileName'));
 		$likeFiles = $share_file
-            ->like(array('fileName'=>$fileInfo['name']))
+            ->like(array('fileName'=>$fileInfo['fileName']))
             ->limit(20)
             ->select(array('id','fileName'));
 		$data['date'] = date('Ymd',time());
@@ -144,7 +144,7 @@ class pc extends ezControl{
 		$this->assign('fileInfo',$fileInfo);
 		$this->assign('userFiles',$userFiles);
 		$this->assign('likeFiles',$likeFiles);
-		$this->display('share_fle');
+		$this->display('share_file');
 	}
 	public function share_user($userID,$page=1){
 		$this->baseInfo();
