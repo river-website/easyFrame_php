@@ -18,9 +18,9 @@
                         <label class="btn btn-primary active">
                             <input type="checkbox" autocomplete="off" checked>全部
                         </label>
-                        <{foreach from=$typeList item=type}>
+                        <{foreach from=$typesList item=suffix key=type}>
                         <label class="btn btn-primary">
-                            <input type="checkbox" autocomplete="off"> type.name
+                            <input type="checkbox" autocomplete="off"> <{$type}>
                         </label>
                         <{/foreach}>
                     </div>
@@ -31,9 +31,9 @@
                             <label class="btn btn-primary active">
                                 <input type="checkbox" autocomplete="off" checked>全部
                             </label>
-                            <{foreach from=$suffixList item=suffix}>
+                            <{foreach from=$suffixList item=type key=suffix}>
                             <label class="btn btn-primary">
-                                <input type="checkbox" autocomplete="off"> suffix.name
+                                <input type="checkbox" autocomplete="off"> <{$suffix}>
                             </label>
                             <{/foreach}>
                         </div>
@@ -52,9 +52,11 @@
                     <tbody>
                     <{foreach from=$searchList item=search}>
                         <tr>
-                            <td><{$search.name}></td>
+                            <td><{$search.fileName}></td>
                             <td><{$search.suffix}></td>
                             <td><{$search.size}></td>
+                            <td><{$search.shareTime}></td>
+                            <td><{$search.typeName}></td>
                         </tr>
                         <{/foreach}>
                     </tbody>
@@ -82,23 +84,26 @@
         </div>
         <div class="m-hot">
             <div class="m-h-url">
+                <div class="m-h-div">热门资源</div>
                 <ul class="m-h-u-ul">
-                    <{foreach from=$hotUrlList item=hotUrl}>
-                        <li class="m-h-u-ul-li"></li>
+                    <{foreach from=$hotFileList item=file}>
+                    <li class="m-h-u-ul-li"><{$file.fileName}></li>
                     <{/foreach}>
                 </ul>
             </div>
             <div class="m-h-search">
+                <div class="m-h-s-title">热门搜索</div>
                 <ul class="m-h-s-ul">
-                    <{foreach from=$hotSearchList item=hotSearch}>
-                    <li class="m-h-s-ul-li"></li>
+                    <{foreach from=$hotSearchList item=search}>
+                    <li class="m-h-s-ul-li"><{$search.searchWord}></li>
                     <{/foreach}>
                 </ul>
             </div>
             <div class="m-h-user">
+                <div class="m-h-u-title">热门用户</div>
                 <ul class="m-h-us-ul">
-                    <{foreach from=$hotUserList item=hotUser}>
-                    <li class="m-h-us-ul-li"></li>
+                    <{foreach from=$hotUserList item=user}>
+                    <li class="m-h-us-ul-li"><{$user.userName}></li>
                     <{/foreach}>
                 </ul>
             </div>

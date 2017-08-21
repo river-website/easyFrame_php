@@ -4,28 +4,34 @@
     </head>
     <body>
     <{include file="header.tpl"}>
-    <div class="h-searchWord">
-        <ul class="h-s-ul">
-            <{foreach from=$hotSearchList item=hotSearch}>
-            <li class="h-s-t-u-li"><{$hotSearch.searchWord}></li>
-            <{/foreach}>
-        </ul>
+    <div class="m-hot">
+        <div class="m-h-url">
+            <div class="m-h-div">热门资源</div>
+            <ul class="m-h-u-ul">
+                <{foreach from=$hotFileList item=file}>
+                <li class="m-h-u-ul-li"><{$file.fileName}></li>
+                <{/foreach}>
+            </ul>
+        </div>
+        <div class="m-h-search">
+            <div class="m-h-s-title">热门搜索</div>
+            <ul class="m-h-s-ul">
+                <{foreach from=$hotSearchList item=search}>
+                <li class="m-h-s-ul-li"><{$search.searchWord}></li>
+                <{/foreach}>
+            </ul>
+        </div>
+        <div class="m-h-user">
+            <div class="m-h-u-title">热门用户</div>
+            <ul class="m-h-us-ul">
+                <{foreach from=$hotUserList item=user}>
+                <li class="m-h-us-ul-li"><{$user.userName}></li>
+                <{/foreach}>
+            </ul>
+        </div>
     </div>
-    <div class="h-yunUrl">
-        <ul class="h-url-ul">
-            <{foreach from=$hotUrlList item=hotUrl}>
-            <li class="h-url-u-li"><{$hotUrl.name}></li>
-            <{/foreach}>
-        </ul>
     </div>
-    <div class="h-yunUser">
-        <ul class="h-user-ul">
-            <{foreach from=$hotUserList item=hotUser}>
-            <li class="h-user-u-li"><{$hotUser.name}></li>
-            <{/foreach}>
-        </ul>
-    </div>
-    <div class="m-yunUrl">
+    <div class="m-file">
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -35,11 +41,11 @@
                 </tr>
             </thead>
             <tbody>
-                <{foreach from=$newUrlList item=newUrl}>
+                <{foreach from=$newShareList item=newShare}>
                 <tr>
-                    <td><{$newUrl.name}></td>
-                    <td><{$newUrl.suffix}></td>
-                    <td><{$newUrl.size}></td>
+                    <td><{$newShare.fileName}></td>
+                    <td><{$newShare.suffix}></td>
+                    <td><{$newShare.size}></td>
                 </tr>
                 <{/foreach}>
             </tbody>

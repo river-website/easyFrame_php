@@ -8,9 +8,9 @@
             <label class="btn btn-primary active">
                 <input type="checkbox" autocomplete="off" checked>全部
             </label>
-            <{foreach from=$typeList item=suffixs key=type}>
+            <{foreach from=$typesList item=suffixs key=type}>
                 <label class="btn btn-primary">
-                    <input type="checkbox" autocomplete="off"> <{$type.name}>
+                    <input type="checkbox" autocomplete="off"> <{$type}>
                 </label>
             <{/foreach}>
         </div>
