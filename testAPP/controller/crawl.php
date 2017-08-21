@@ -76,7 +76,8 @@ class crawl extends ezControl {
 		ezQueueEvent::getInterface()->back(array($this,'crawl'),$taskName);
 	}
 	public function crawl($funcName){
-		$count = 1000;
+		ezServer::getInterface()->logFile = ezServer::getInterface()->logDir.'/crawl-$date.log';
+		$count = 10000;
 		while(--$count>=0){
 			if($this->$funcName())break;
 		}
@@ -115,7 +116,8 @@ class crawl extends ezControl {
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,100);
-        ezServer::getInterface()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer::getInterface()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer::getInterface()->addErrorIgnorePath(E_WARNING,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		for ($i=$ids['start'];$i<$ids['end'];$i++){
 			$url = str_replace('%id%',$i,$baseUrl);

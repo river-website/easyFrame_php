@@ -1,11 +1,4 @@
 <div class="header">
-    {*<div class="h-types">*}
-        {*<ul class="h-t-ul">*}
-            {*<{foreach from=$typeList item=suffixs key=type}>*}
-                {*<li class="h-t-u-li"><{$type.name}></li>*}
-            {*<{/foreach}>*}
-        {*</ul>*}
-    {*</div>*}
     <{include file='share.tpl'}>
     <div class="h-log">
         <img class="h-l-img" src="<{$websiteInfo.logoImg}>"  />

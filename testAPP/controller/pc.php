@@ -17,12 +17,16 @@ class pc extends ezControl{
 	public function index(){
 		$this->baseInfo();
         $this->hot();
-        $yunUrl = $this->getModel('yunUrl');
-        $newUrlData =  $yunUrl
-            ->order(array('id'))
-            ->limit(100)
-            ->select();
-        $this->assign('newUrlList',$newUrlData);
+		$newShareList = ezServer::getInterface()->get('newShareList');
+		if(empty($newShareList)) {
+			$share_file = $this->getModel('share_file');
+			$newShareList = $share_file
+				->order(array('id'))
+				->limit(100)
+				->select();
+			ezServer::getInterface()->set('newShareList',$newShareList,600);
+		}
+        $this->assign('newShareList',$newShareList);
         $this->display('index');
 	}
 	public function hot(){
@@ -93,7 +97,7 @@ class pc extends ezControl{
         $this->assign('suffixList',$suffixType['suffix']);
         $this->assign('typesList',$suffixType['types']);
     }
-	public function search($typeName,$suffix,$searchWord,$page = 1){
+	public function search($typeName=null,$suffix=null,$searchWord=null,$page = 1){
         $this->baseInfo();
 	    $this->hot();
 		$share_file = $this->getModel('share_file');
@@ -101,7 +105,7 @@ class pc extends ezControl{
             $typesList = ezServer::getInterface()->get('suffixType')['typesList'];
             if(empty($typesList[$typeName]))return;
             $suffixList = $typesList[$typeName];
-            $share_file->where_in('suffix',$typesList);
+            $share_file->where_in('suffix',$suffixList);
         }
 		if(!empty($suffix))
 			$share_file->where(array("suffix=$suffix"));
