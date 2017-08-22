@@ -80,3 +80,193 @@
     <{include file="footer.tpl"}>
 </body>
 </html>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="row-fluid">
+                <div class="span12">
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span2">
+                    <img alt="140x140" src="img/a.jpg" />
+                </div>
+                <div class="span6">
+                    <div class="btn-group">
+                        <button class="btn" type="button"><em class="icon-align-left"></em></button> <button class="btn" type="button"><em class="icon-align-center"></em></button> <button class="btn" type="button"><em class="icon-align-right"></em></button> <button class="btn" type="button"><em class="icon-align-justify"></em></button>
+                    </div>
+                    <form class="form-search">
+                        <input class="input-medium search-query" type="text" /> <button type="submit" class="btn">查找</button>
+                    </form>
+                </div>
+                <div class="span4">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <img alt="140x140" src="img/a.jpg" />
+                        </div>
+                        <div class="span8">
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <ol>
+                                <li>
+                                    新闻资讯
+                                </li>
+                                <li>
+                                    体育竞技
+                                </li>
+                                <li>
+                                    娱乐八卦
+                                </li>
+                                <li>
+                                    前沿科技
+                                </li>
+                                <li>
+                                    环球财经
+                                </li>
+                                <li>
+                                    天气预报
+                                </li>
+                                <li>
+                                    房产家居
+                                </li>
+                                <li>
+                                    网络游戏
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="span6">
+                            <ol>
+                                <li>
+                                    新闻资讯
+                                </li>
+                                <li>
+                                    体育竞技
+                                </li>
+                                <li>
+                                    娱乐八卦
+                                </li>
+                                <li>
+                                    前沿科技
+                                </li>
+                                <li>
+                                    环球财经
+                                </li>
+                                <li>
+                                    天气预报
+                                </li>
+                                <li>
+                                    房产家居
+                                </li>
+                                <li>
+                                    网络游戏
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ol>
+                                <li>
+                                    新闻资讯
+                                </li>
+                                <li>
+                                    体育竞技
+                                </li>
+                                <li>
+                                    娱乐八卦
+                                </li>
+                                <li>
+                                    前沿科技
+                                </li>
+                                <li>
+                                    环球财经
+                                </li>
+                                <li>
+                                    天气预报
+                                </li>
+                                <li>
+                                    房产家居
+                                </li>
+                                <li>
+                                    网络游戏
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ol>
+                                <li>
+                                    新闻资讯
+                                </li>
+                                <li>
+                                    体育竞技
+                                </li>
+                                <li>
+                                    娱乐八卦
+                                </li>
+                                <li>
+                                    前沿科技
+                                </li>
+                                <li>
+                                    环球财经
+                                </li>
+                                <li>
+                                    天气预报
+                                </li>
+                                <li>
+                                    房产家居
+                                </li>
+                                <li>
+                                    网络游戏
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ol>
+                                <li>
+                                    新闻资讯
+                                </li>
+                                <li>
+                                    体育竞技
+                                </li>
+                                <li>
+                                    娱乐八卦
+                                </li>
+                                <li>
+                                    前沿科技
+                                </li>
+                                <li>
+                                    环球财经
+                                </li>
+                                <li>
+                                    天气预报
+                                </li>
+                                <li>
+                                    房产家居
+                                </li>
+                                <li>
+                                    网络游戏
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

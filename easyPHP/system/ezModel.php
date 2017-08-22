@@ -78,13 +78,13 @@ class ezModel extends ezBase
 //		}
 //		return $data;
 	}
-
-	public function select(array $fields = array())
+	// select 搜索，字符串
+	public function select($fields = null)
 	{
 		if (gettype($fields) == 'array') {
 			$this->sql['option'] = 'select ' . (count($fields) == 0 ? '*' : implode(',', $fields)) . ' from ' . $this->table;
 		} else if (gettype($fields) == 'string') {
-			$this->sql['option'] = 'select ' . ($fields != '' ?: '*') . ' from ' . $this->table;
+			$this->sql['option'] = 'select ' . ($fields != '' ?$fields: '*') . ' from ' . $this->table;
 		} else if (gettype($fields) == 'NULL') {
 			$this->sql['option'] = 'select ' . '*' . ' from ' . $this->table;
 		}
