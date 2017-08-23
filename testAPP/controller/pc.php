@@ -156,7 +156,8 @@ class pc extends ezControl{
 		$this->assign('fileInfo',$fileInfo);
 		$this->assign('userFiles',$userFiles);
 		$this->assign('likeFiles',$likeFiles);
-		$this->display('share_file');
+		$this->assign('tplName','share_file');
+		$this->display('com');
 	}
 	public function share_user($userID=null,$page=1){
 		$this->baseInfo();
@@ -187,6 +188,7 @@ class pc extends ezControl{
 		$hotUser->insert($data);
 		$this->assign('userInfo',$userInfo);
 		$this->assign('userFiles',$userFiles);
-		$this->display('share_user');
+        $this->assign('tplName','share_user');
+        $this->display('com');
 	}
 }
