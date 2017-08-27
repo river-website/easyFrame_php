@@ -263,6 +263,7 @@ class QueryList
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);
             curl_setopt($ch, CURLOPT_REFERER, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_TIMEOUT,30);
             $result = curl_exec($ch);
             curl_close($ch);
         }elseif(version_compare(PHP_VERSION, '5.0.0')>=0){
