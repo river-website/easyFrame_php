@@ -1,10 +1,13 @@
+<!doctype html>
 <html lang="en">
-<head>
+<head> 
     <{include file="head.tpl"}>
 </head>
 <body>
-    <{include file="header.tpl"}>
-    <{include file="body.tpl"}>
-    <{include file="footer.tpl"}>
+    <div class="box">
+        <{include file="header.tpl"}>
+        <{include file="<{$tplName}>.tpl"}>
+        <{include file="footer.tpl"}>
+    </div>
 </body>
 </html>

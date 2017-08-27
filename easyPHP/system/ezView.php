@@ -25,7 +25,7 @@ class ezView
             $tpl->caching        = false;             //这里是调试时设为false,发布时请使用true
             $tpl->left_delimiter = '<{';
             $tpl->right_delimiter = '}>';
-//            $tpl->compile_check = true;
+           $tpl->compile_check = false;
             $tpl->debugging = true;
             self::$smarty = $tpl;
         }

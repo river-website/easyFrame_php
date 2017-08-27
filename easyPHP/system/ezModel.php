@@ -14,7 +14,7 @@ class ezModel extends ezBase
 	private $dbConnect = null;
 	private $table = null;
     static private $initsql = array('option' => '', 'where' => '','join'=>'', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
-    private $sql = array('option' => '', 'join'=>'', 'where' => '','group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
+    public $sql = array('option' => '', 'join'=>'', 'where' => '','group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
 	public $func = null;
 	public $lastSql = null;
 	// static function getInterface($model)
