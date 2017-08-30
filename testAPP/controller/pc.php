@@ -157,7 +157,7 @@ class pc extends ezControl{
 				->limit($limit,($page-1)*$limit)
 				->select('share_file.id,fileName,suffix,size,shareTime,userName');
 			foreach ($searchList as &$value) 
-				$value['typeName']=empty($suffixList[$vlaue['suffix']])?'未知':$suffixList[$vlaue['suffix']];
+				$value['typeName']=empty($suffixList[$value['suffix']])?'未知':$suffixList[$value['suffix']];
         }else $searchList = array();
         $searachInfo['word'] = $word;
         $searachInfo['count'] = $count;
