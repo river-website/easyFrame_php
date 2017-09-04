@@ -91,7 +91,7 @@ class pc extends ezControl{
         $this->assign('suffixList',$suffixType['suffix']);
         $this->assign('typesList',$suffixType['types']);
     }
-    private function reHone(){
+    private function reHome(){
     	$this->redirect_url($_SERVER['HTTP_HOST']);
     }
 	public function search($condition = null){
@@ -99,7 +99,7 @@ class pc extends ezControl{
 
 		$condition = explode('-', $condition);
 		if(count($condition)!=4){
-			$this->reHone();
+			$this->reHome();
 			return;
 		}
 		$typeName = urldecode($condition[0]);
@@ -107,7 +107,7 @@ class pc extends ezControl{
 		$word 	= urldecode($condition[2]);
 		$page 	= $condition[3];
  		if(empty($typeName)||empty($suffix)||empty($word)||!is_numeric($page) || $page<=0){
-			$this->reHone();
+			$this->reHome();
 			return;
 		}
         $this->baseInfo();
@@ -115,18 +115,18 @@ class pc extends ezControl{
         $suffixList = ezServer::getInterface()->get('suffixType')['suffixList'];
         if($typeName !='ALL'){
         	if(empty($typesList[$typeName])){
-				$this->reHone();
+				$this->reHome();
 				return;
 			}
 			$suffixs = $typesList[$typeName];
 			if($suffix != 'ALL' && empty($suffixs[$suffix])){
-				$this->reHone();
+				$this->reHome();
 				return;
 			}
         }else{ 
         	if($suffix != 'ALL'){
         		if(empty($suffixList[$suffix])){
-				$this->reHone();
+				$this->reHome();
 				return;
 				}
         	}
@@ -170,16 +170,6 @@ class pc extends ezControl{
 	public function redirect_url($url){
 		echo "<html><script language='javascript'>location.href='$url'</script></html>";
 	}
-	public function ttime(){
-		static $time;
-		if(empty($time))
-			$time = time();
-		else{
-			$now = time();
-			echo ($now-$time).'<br>';
-			$time = $now;
-		}
-	}
 	public function share_file($fileID = null){
 		$this->baseInfo();
 		$this->hot();
@@ -216,7 +206,8 @@ class pc extends ezControl{
             ->limit(20)
             ->select(array('id','fileName'));
 		$likeFiles = $share_file
-            ->like(array('fileName'=>$fileInfo['fileName']))
+//            ->like(array('fileName'=>$fileInfo['fileName']))
+            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
             ->limit(20)
             ->select(array('id','fileName'));
         $userShareCount = $share_file

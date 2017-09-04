@@ -111,10 +111,10 @@
                     </div>
                     <!--底部广告-->
                     
-                  <div class="main-images">
-                  <a title="" target="_blank" href="javascripr:;">
-                   <img alt="" src="http://www.baiduyunpan.com/images/26.png"/></a>
-                 </div>
+                    <div class="main-images">
+                        <a title="" target="_blank" href="javascripr:;">
+                        <img alt="" src="http://www.baiduyunpan.com/images/26.png"/></a>
+                    </div>
  
                 </div>
                 <!-- 右  -->
@@ -155,26 +155,28 @@
                     </div>
                     <!--右下广告-->
                     
-                     <div class="main-y-img">
-                      <a title="" target="_blank" href="javascripr:;">
-                       <img alt="" src="http://www.baiduyunpan.com/images/27.png"/></a>
-                     </div>
-                     <div class="main-y-img2">
-                      <a title="" target="_blank" href="javascripr:;" >
-                       <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
-                       <p class="y-img2-p">决明子</p>
-                      </a>
-                      <a title="" target="_blank" href="javascripr:;" style="float:right;">
-                       <img alt="" src="http://www.baiduyunpan.com/images/29.png"/>
-                       <p class="y-img2-p">交易</p>
-                      </a>
-                      <a title="" target="_blank" href="javascripr:;" >
-                       <img alt="" src="http://www.baiduyunpan.com/images/30.png"/>
-                       <p class="y-img2-p">减肥茶减</p>
-                      </a>
-                      <a title="" target="_blank" href="javascripr:;" style="float:right;">
-                       <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
-                       <p class="y-img2-p">决明子</p>
-                      </a>
-                      <p class="img2-p2">广告</p>
-                     </div>
+                    <div class="main-y-img">
+                        <a title="" target="_blank" href="javascripr:;">
+                        <img alt="" src="http://www.baiduyunpan.com/images/27.png"/></a>
+                    </div>
+                    <div class="main-y-img2">
+                        <a title="" target="_blank" href="javascripr:;" >
+                            <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
+                            <p class="y-img2-p">决明子</p>
+                        </a>
+                        <a title="" target="_blank" href="javascripr:;" style="float:right;">
+                            <img alt="" src="http://www.baiduyunpan.com/images/29.png"/>
+                        <p class="y-img2-p">交易</p>
+                        </a>
+                        <a title="" target="_blank" href="javascripr:;" >
+                            <img alt="" src="http://www.baiduyunpan.com/images/30.png"/>
+                            <p class="y-img2-p">减肥茶减</p>
+                        </a>
+                        <a title="" target="_blank" href="javascripr:;" style="float:right;">
+                            <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
+                            <p class="y-img2-p">决明子</p>
+                        </a>
+                        <p class="img2-p2">广告</p>
+                    </div>
+                </div>
+            </div>

@@ -242,50 +242,54 @@ class crawl extends ezControl {
 			return '/';
 		}
 	}
-	public function repairData(){
+	public function repairData_suffix(){
 		// 后缀
 		$suffix = $this->getModel('suffix');
-		$suffix_list = $suffix->select(array('id','suffix'));
-		foreach ($suffix_list as $value){
+		$suffix_list = $suffix->select(array('id', 'suffix'));
+		foreach ($suffix_list as $value) {
 			$id = $value['id'];
 			$value = strtolower($value['suffix']);
-			if(strpos($value,'.') === false)
-				$value = ".$value";
-			$suffix->update(array('suffix'=>$value),array("id=$id"));
+			$new = str_replace('.', '', $value);
+			$suffix->update(array('suffix' => $new), array("id=$id"));
 		}
+	}
+	public function repairData_share_file_suffix()
+	{
 		// 文件 后缀修复
 		$share_file = $this->getModel('share_file');
 		$offet = 0;
 		$limit = 1000;
-		while (true){
-			$share_list = $share_file->order(array('id'),'asc')->limit($limit,$offet)->select(array('id','fileName','suffix'));
-			if(count($share_list) == 0)break;
+		while (true) {
+			$share_list = $share_file->order(array('id'), 'asc')->limit($limit, $offet)->select(array('id', 'fileName', 'suffix'));
+			if (count($share_list) == 0) break;
 			$offet += $limit;
-			foreach ($share_list as $value){
+			foreach ($share_list as $value) {
 				$update = array();
 				$fileSuffix = $value['suffix'];
 				$low = strtolower($fileSuffix);
-				if(empty($fileSuffix)){
+				if (empty($fileSuffix)) {
 					$fileName = $value['fileName'];
-					$pos = strripos($fileName,'.');
-					if( $pos === false) {
+					$pos = strripos($fileName, '.');
+					if ($pos === false) {
 						$update['suffix'] = '/';
+					} else {
+						$update['suffix'] = strtolower(substr($fileName, $pos));
 					}
-					else{
-						$update['suffix'] = strtolower(substr($fileName,$pos));
-					}
-				}else{
-					if(strpos($low,'.') === false)
-						$low = '.'.$low;
-					else if($low===$fileSuffix)continue;
+				} else {
+					if (strpos($low, '.') === false)
+						$low = '.' . $low;
+					else if ($low === $fileSuffix) continue;
 					$update['suffix'] = $low;
 				}
-				$share_file->update($update,array('id=',$value['id']));
+				$share_file->update($update, array('id=', $value['id']));
 			}
 		}
-        // 用户，提取
+	}
+	public function repairData_share_user_get(){
+		// 从file中找user，将新的user插入
         $share_user = $this->getModel('share_user');
-        $all_uk_list = $share_file->group(array('uk'))->select(array('uk'));
+		$share_file = $this->getModel('share_file');
+		$all_uk_list = $share_file->group(array('uk'))->select(array('uk'));
         $old_uk_list = $share_user->select(array('uk'));
         foreach ($old_uk_list as $old_uk)
             $uk_list[$old_uk['uk']] = $old_uk['uk'];
@@ -295,6 +299,33 @@ class crawl extends ezControl {
         if(!empty($new_uk_list)) {
             $share_user->insertList($new_uk_list);
         }
+	}
+	public function repairData_share_user_update(){
+		// 获取user中空数据，从baidu更新数据
+		$share_user = $this->getModel('share_user');
+		$uk_list = $share_user->select();
+		foreach ($uk_list as $value)
+			if(empty($value['userName'])||empty($value['userInfo'])||empty($value['imgUrl']))
+				$new_uk_list[] = $value;
+		if(!empty($new_uk_list)){
+			ezS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+			$phpQuery = new QueryList();
+			foreach ($crawl_list as $crawl_id){
+				$url = str_replace('%id%',$crawl_id['uk'],$baseUrl);
+				ezDebugLog($url);
+				$phpQuery->html = $url;
+				$data = $phpQuery->setQuery($rule)->data;
+				if(count($data) != 1 || count($data[0]) != 2){
+					continue;
+				}
+				$data = $data[0];
+				ezServerLog('baiduyun_user id is: '.$crawl_id['id'].' uk is '.$crawl_id['uk']);
+				$share_user->update($data,array('id='.$crawl_id['id']));
+			}
+			foreach ($new_uk_list as $value){
+
+			}
+		}
 	}
 	public function updateLast($www,$count){
 		$crawlLast = $this->getModel('crawlLast');

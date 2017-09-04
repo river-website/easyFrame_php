@@ -207,7 +207,7 @@
                         <ul>
                         <{foreach from=$hotSearchList item=search}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="../search/<{searchWord}>-0-0-0"><{$search.searchWord}></a>
+                            <a target="_blank" href="../search/<{$searchWord}>-0-0-0"><{$search.searchWord}></a>
                         </li>
                         <{/foreach}>
                     </ul>
