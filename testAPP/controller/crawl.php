@@ -257,32 +257,14 @@ class crawl extends ezControl {
 	{
 		// 文件 后缀修复
 		$share_file = $this->getModel('share_file');
-		$offet = 0;
-		$limit = 1000;
-		while (true) {
-			$share_list = $share_file->order(array('id'), 'asc')->limit($limit, $offet)->select(array('id', 'fileName', 'suffix'));
-			if (count($share_list) == 0) break;
-			$offet += $limit;
-			foreach ($share_list as $value) {
-				$update = array();
-				$fileSuffix = $value['suffix'];
-				$low = strtolower($fileSuffix);
-				if (empty($fileSuffix)) {
-					$fileName = $value['fileName'];
-					$pos = strripos($fileName, '.');
-					if ($pos === false) {
-						$update['suffix'] = '/';
-					} else {
-						$update['suffix'] = strtolower(substr($fileName, $pos));
-					}
-				} else {
-					if (strpos($low, '.') === false)
-						$low = '.' . $low;
-					else if ($low === $fileSuffix) continue;
-					$update['suffix'] = $low;
-				}
-				$share_file->update($update, array('id=', $value['id']));
-			}
+		$suffix_list = $share_file->group(array('suffix'))->select('suffix');
+		foreach ($suffix_list as $value){
+			$old = $value['suffix'];
+			if(empty($old))continue;
+			if(preg_match("/([\x81-\xfe][\x40-\xfe])/", $old, $match))continue;
+			if(strripos($old,'.') === false || strripos($old,'.') > 0)continue;
+			$new  = str_replace('.','',$old);
+			$share_file->update(array('suffix'=>$new),array("suffix='$old'"));
 		}
 	}
 	public function repairData_share_user_get(){
