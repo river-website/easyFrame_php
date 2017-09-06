@@ -243,7 +243,7 @@ class crawl extends ezControl {
 		}
 	}
 	public function repairData_suffix(){
-		// 后缀
+		// 后缀 .txt -> txt
 		$suffix = $this->getModel('suffix');
 		$suffix_list = $suffix->select(array('id', 'suffix'));
 		foreach ($suffix_list as $value) {
@@ -255,9 +255,23 @@ class crawl extends ezControl {
 	}
 	public function repairData_share_file_suffix()
 	{
-		// 文件 后缀修复
+		// 文件 后缀修复  .txt -> txt  中文,null,'',t.txt  break
+		$offset = 0;
+		$limit = 10000;
 		$share_file = $this->getModel('share_file');
-		$suffix_list = $share_file->group(array('suffix'))->select('suffix');
+		while(true){
+			$suffix_list = $share_file->limit($limit,$offset)->select('id,fileName');
+			if(count($suffix_list)==0)break;
+			foreach ($suffix_list as $value){
+				$fileName = $value['fileName'];
+				$pos = strripos($fileName,'.');
+				if($pos === false || $pos === 0)continue;
+				$suffix = strtolower(substr($fileName,$pos));
+				if(!ctype_alnum($suffix))continue;
+				$id = $value['id'];
+				$share_file->update(array('suffix'=>$suffix),array("id=$id"));
+			}
+		}
 		foreach ($suffix_list as $value){
 			$old = $value['suffix'];
 			if(empty($old))continue;
