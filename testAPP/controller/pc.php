@@ -10,21 +10,21 @@ class pc extends ezControl{
 	public function index(){
 		$this->baseInfo();
         $this->hot();
-		$newShareList = ezServer::getInterface()->get('newShareList');
+		$newShareList = ezServer()->get('newShareList');
 		if(empty($newShareList)) {
 			$share_file = $this->getModel('share_file');
 			$newShareList = $share_file
 				->order(array('id'))
 				->limit(100)
 				->select();
-			ezServer::getInterface()->set('newShareList',$newShareList,600);
+			ezServer()->set('newShareList',$newShareList,600);
 		}
         $this->assign('newShareList',$newShareList);
         $this->display('index');
 	}
 	public function hot(){
 		// 热门搜索
-        $hotSearchList = ezServer::getInterface()->get('hotSearchList');
+        $hotSearchList = ezServer()->get('hotSearchList');
         if(empty($hotSearchList)){
             $hotSearch = $this->getModel('hotSearch');
             $today = date('Ymd',time());
@@ -33,11 +33,11 @@ class pc extends ezControl{
                 ->group(array('searchWord'))
                 ->order(array('count(searchWord)'))
                 ->select(array('searchWord'));
-            ezServer::getInterface()->set('hotSearchList',$hotSearchList,600);
+            ezServer()->set('hotSearchList',$hotSearchList,600);
         }
         $this->assign('hotSearchList',$hotSearchList);
         // 热门文件
-        $hotFileList = ezServer::getInterface()->get('hotFileList');
+        $hotFileList = ezServer()->get('hotFileList');
         if(empty($hotFileList)){
             $hotFile = $this->getModel('hotFile');
             $today = date('Ymd',time());
@@ -47,11 +47,11 @@ class pc extends ezControl{
                 ->group(array('fileID'))
                 ->order(array('count(fileID)'))
                 ->select(array('fileID','fileName'));
-            ezServer::getInterface()->set('hotFileList',$hotFileList,600);
+            ezServer()->set('hotFileList',$hotFileList,600);
         }
         $this->assign('hotFileList',$hotFileList);
         // 热门用户
-        $hotUserList = ezServer::getInterface()->get('hotUserList');
+        $hotUserList = ezServer()->get('hotUserList');
         if(empty($hotUserList)){
             $hotUser = $this->getModel('hotUser');
             $today = date('Ymd',time());
@@ -61,23 +61,23 @@ class pc extends ezControl{
                 ->group(array('userID'))
                 ->order(array('count(userID)'))
                 ->select(array('userID','userName'));
-            ezServer::getInterface()->set('hotUserList',$hotUserList,600);
+            ezServer()->set('hotUserList',$hotUserList,600);
         }
         $this->assign('hotUserList',$hotUserList);
     }
     public function baseInfo(){
 	    // 网站基本信息
-        $webSiteInfo = ezServer::getInterface()->get('webSiteInfo');
+        $webSiteInfo = ezServer()->get('webSiteInfo');
         if(empty($webSiteInfo)){
             $webSite = $this->getModel('webSite');
             $webSiteInfo = $webSite->where(array('id=1'))->select();
             if(count($webSiteInfo) == 1)
                 $webSiteInfo = $webSiteInfo[0];
-            ezServer::getInterface()->set('webSiteInfo',$webSiteInfo,600);
+            ezServer()->set('webSiteInfo',$webSiteInfo,600);
         }
 	    $this->assign('webSiteInfo',$webSiteInfo);
 	    // 格式类型信息
-        $suffixType = ezServer::getInterface()->get('suffixType');
+        $suffixType = ezServer()->get('suffixType');
         if(empty($suffixType)) {
             $suffix = $this->getModel('suffix');
             $suffixData = $suffix->join('types', 'types.id=suffix.typeID')->select(array('types.name as typeName', 'suffix'));
@@ -111,8 +111,8 @@ class pc extends ezControl{
 			return;
 		}
         $this->baseInfo();
-        $typesList = ezServer::getInterface()->get('suffixType')['typesList'];
-        $suffixList = ezServer::getInterface()->get('suffixType')['suffixList'];
+        $typesList = ezServer()->get('suffixType')['typesList'];
+        $suffixList = ezServer()->get('suffixType')['suffixList'];
         if($typeName !='ALL'){
         	if(empty($typesList[$typeName])){
 				$this->reHome();
@@ -244,7 +244,7 @@ class pc extends ezControl{
 		$share_file = $this->getModel('share_file');
 		$userFiles = $share_file->where(array("uk=".$userInfo['uk']))->limit(20,($page-1)*20)->select(array('id','fileName','suffix','size','shareTime'));
 		if(count($userFiles)>0) {
-			$suffixList = ezServer::getInterface()->get('suffixType')['suffixList'];
+			$suffixList = ezServer()->get('suffixType')['suffixList'];
 			foreach ($userFiles as &$vaule)
 				$vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '其他' : $suffixList[$vaule['suffix']];
 			unset($vaule);

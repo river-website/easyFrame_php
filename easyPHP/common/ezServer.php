@@ -15,3 +15,26 @@ if (!function_exists('ezLog')) {
         ezServer::getInterface()->log($msg);
     }
 }
+
+if (!function_exists('ezBack')) {
+	function ezBack($func,$args= null){
+		ezQueueEvent::getInterface()->back($func,$args);
+	}
+}
+
+if (!function_exists('ezQueue')) {
+	function ezQueue($func,$args= null){
+		ezQueueEvent::getInterface()->add($func,$args);
+	}
+}
+
+if (!function_exists('ezDbExcute')) {
+	function ezDbExcute($sql, $func = null,$queEvent = false){
+		return ezDbPool::getInterface()->excute($sql, $func, $queEvent);
+	}
+}
+if (!function_exists('ezServer')) {
+	function ezServer(){
+		return ezServer::getInterface();
+	}
+}

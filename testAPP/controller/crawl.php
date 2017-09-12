@@ -13,6 +13,11 @@ class crawl extends ezControl {
 	public function __construct(){
 		$this->initRules();
 	}
+	//开始采集任务
+	public function start(){
+		ezBack(array($this,'crawl_baiduyunpan_file'));
+	}
+	//采集规则
 	private function initRules(){
 		$this->rules['http://www.baiduyunpan.com/file/%id%.html'] = array(
 			'name'=>array('.resource-h2','text'),
@@ -68,31 +73,35 @@ class crawl extends ezControl {
 		);
 		$this->rules['http://pan.baidu.com/share/home?uk=%id%'] = array(
 			'userName'=>array('.homepagelink','text'),
-			'userInfo'=>array('.personal-info','text'),
+//			'userInfo'=>array('.personal-info','text'),
 			'imgUrl'=>array('.pic-frm-pic','src')
 		);
 	}
-	public function backCrawlTask($taskName){
-		ezQueueEvent::getInterface()->back(array($this,'crawl'),$taskName);
+	// 后台任务
+	public function back($backName){
+		ezBack(array($this,$backName));
 	}
+	//后台采集任务
+	public function backCrawlTask($taskName){
+		ezBack(array($this,'crawl'),$taskName);
+	}
+	//采集
 	public function crawl($funcName){
-		ezServer::getInterface()->logFile = ezServer::getInterface()->logDir.'/crawl-$date.log';
+		ezServer()->logFile = ezServer()->logDir.'/crawl-$date.log';
 		$count = 10000;
 		while(--$count>=0){
 			if($this->$funcName())break;
 		}
 	}
-	public function test(){
-        ezServer::getInterface()->log('back do');
-    }
+	//百度云用户
 	public function baiduyun_user(){
-		ezServerLog("baiduyun_user start");
+		ezDebugLog("baiduyun_user start");
 		$baseUrl = 'http://pan.baidu.com/share/home?uk=%id%';
 		$rule = $this->rules[$baseUrl];
 
 		$share_user = $this->getModel('share_user');
 		$crawl_list = $share_user->where(array("userName is null"))->order(array('id'),'asc')->limit(1000)->select(array('id','uk'));
-		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		foreach ($crawl_list as $crawl_id){
 			$url = str_replace('%id%',$crawl_id['uk'],$baseUrl);
@@ -103,25 +112,25 @@ class crawl extends ezControl {
 				continue;
 			}
 			$data = $data[0];
-			ezServerLog('baiduyun_user id is: '.$crawl_id['id'].' uk is '.$crawl_id['uk']);
+			ezLog('baiduyun_user id is: '.$crawl_id['id'].' uk is '.$crawl_id['uk']);
 			$share_user->update($data,array('id='.$crawl_id['id']));
 		}
-		ezServerLog("baiduyun_user end");
+		ezLog("baiduyun_user end");
 		if(count($crawl_list)>0)return false;
 		return true;
 	}
+	// sopan 文件
 	public function sopanpan_file(){
-        ezServer::getInterface()->log("sopanpan_file start");
+        ezLog("sopanpan_file start");
 		$baseUrl = 'http://www.sopanpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,100);
-		ezServer::getInterface()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
-		ezServer::getInterface()->addErrorIgnorePath(E_WARNING,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		for ($i=$ids['start'];$i<$ids['end'];$i++){
 			$url = str_replace('%id%',$i,$baseUrl);
-            ezServer::getInterface()->debugLog($url);
+            ezDebugLog($url);
 			$phpQuery->html = $url;
 			$data = $phpQuery->setQuery($rule)->data;
 			if(count($data) != 1 || count($data[0]) != 3){
@@ -134,7 +143,7 @@ class crawl extends ezControl {
 				if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
 				if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
 			}
-            ezServer::getInterface()->log("sopanpan_file id is: $i");
+            ezlog("sopanpan_file id is: $i");
 			$crawlData[] = $data;
 		}
 		if(!empty($crawlData)&&count($crawlData)>0) {
@@ -142,17 +151,18 @@ class crawl extends ezControl {
 			$share_file->insertList($crawlData);
             ezServer::getInterface()->log("sopanpan_file count=".count($crawlData));
 		}
-        ezServer::getInterface()->log("sopanpan_file end");
+        ezlog("sopanpan_file end");
 		return false;
 	}
+	// wangpan007 文件
 	public function wangpan007_file(){
-		ezServerLog("wangpan007_file start");
+		ezlog("wangpan007_file start");
 		$baseUrl = 'https://wangpan007.com/share/file/%id%';
 		$rule = $this->rules[$baseUrl];
 
 		$share_file = $this->getModel('share_file');
 		$crawl_list = $share_file->where(array("fileName is null"))->order(array('id'),'asc')->limit(1000)->select(array('id','wangpan007_id'));
-		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		foreach ($crawl_list as $crawl_id){
 			$url = str_replace('%id%',$crawl_id['wangpan007_id'],$baseUrl);
@@ -163,20 +173,21 @@ class crawl extends ezControl {
 				continue;
 			}
 			$data = $data[0];
-			ezServerLog('wangpan007_file id is: '.$crawl_id['id'].' wanpan007 id is '.$crawl_id['wangpan007_id']);
+			ezLog('wangpan007_file id is: '.$crawl_id['id'].' wanpan007 id is '.$crawl_id['wangpan007_id']);
 			$share_file->update($data,array('id='.$crawl_id['id']));
 		}
-		ezServerLog("wangpan007_file end");
+		ezLog("wangpan007_file end");
 		if(count($crawl_list)>0)return false;
 		return true;
 	}
+	// wangpan007 真实文件地址
 	public function wangpan007_redirect(){
-		ezServerLog("wangpan007_redirect start");
+		ezLog("wangpan007_redirect start");
 		$baseUrl = 'https://wangpan007.com/redirect/file?id=%id%';
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,1000);
-		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		for ($i=$ids['start'];$i<$ids['end'];$i++){
 			$url = str_replace('%id%',$i,$baseUrl);
@@ -195,45 +206,63 @@ class crawl extends ezControl {
 			if(!empty($temp2['uk']))$data['uk'] = $temp2['uk'];
 			if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
 			$data['wangpan007_id'] = $i;
-			ezServerLog("wangpan007_redirect id is: $i");
+			ezLog("wangpan007_redirect id is: $i");
 			$crawlData[] = $data;
 		}
 		if(!empty($crawlData)&&count($crawlData)>0) {
 			$share_file = $this->getModel('share_file');
 			$share_file->insertList($crawlData);
-			ezServerLog("crawl_wangpan007 count=".count($crawlData));
+			ezLog("crawl_wangpan007 count=".count($crawlData));
 		}
-		ezServerLog("wangpan007_redirect end");
+		ezLog("wangpan007_redirect end");
 		return false;
 	}
+	// 循环采集 file 一直执行
+	public function crawl_baiduyunpan_file(){
+	}
+
+	// baiduyunpan 文件
 	public function baiduyunpan_file(){
-		ezServerLog("baiduyunpan_file start");
+		ezLog("baiduyunpan_file start");
 		$baseUrl = 'http://www.baiduyunpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,1000);
-		ezGLOBALS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
-		for ($i=$ids['start'];$i<$ids['end'];$i++){
-		    $url = str_replace('%id%',$i,$baseUrl);
-			$phpQuery->html = $url;
-			$data = $phpQuery->setQuery($rule)->data;
-			if(count($data) != 1 || count($data[0]) != 5){
-			    $errData[] = array('url'=>$url,'type'=>0);
-			    continue;
-            }
-			ezServerLog("baiduyunpan_file id is: $i");
-			$crawlData[] = $data[0];
+		while(true) {
+			for ($i = $ids['start']; $i < $ids['end']; $i++) {
+				$url = str_replace('%id%', $i, $baseUrl);
+				$phpQuery->html = $url;
+				$data = $phpQuery->setQuery($rule)->data;
+				if (count($data) != 1 || count($data[0]) != 5) {
+					$errData[] = array('url' => $url, 'type' => 0);
+					continue;
+				}
+				$data = $data[0];
+				$pos = strripos($data['fileName'], '.');
+				if ($pos === false || $pos === 0) {
+				} else {
+					$suffix = strtolower(substr($data['fileName'], $pos));
+					if (!ctype_alnum($suffix)) {
+					} else $data['suffix'] = $suffix;
+				}
+				ezLog("baiduyunpan_file id is: $i");
+				$crawlData[] = $data;
+			}
+			if (!empty($crawlData) && count($crawlData) > 0) {
+				$yunUrl = $this->getModel('yunUrl');
+				$yunUrl->insertList($crawlData);
+				ezLog("baiduyunpan_file count=" . count($crawlData));
+				break;
+			}else{
+				sleep(1800);
+			}
 		}
-		if(!empty($crawlData)&&count($crawlData)>0) {
-            $yunUrl = $this->getModel('yunUrl');
-            $yunUrl->insertList($crawlData);
-			ezServerLog("baiduyunpan_file count=".count($crawlData));
-        }
-		ezServerLog("baiduyunpan_file end");
+		ezLog("baiduyunpan_file end");
 		return false;
 	}
-
+	// 文件名中获取 后缀
 	public function getSuffix($fileName){
 		$pos = strrpos($fileName,'.');
 		if($pos != false && $pos != 0){
@@ -242,8 +271,8 @@ class crawl extends ezControl {
 			return '/';
 		}
 	}
+	// 修复suffix表 后缀 .txt -> txt
 	public function repairData_suffix(){
-		// 后缀 .txt -> txt
 		$suffix = $this->getModel('suffix');
 		$suffix_list = $suffix->select(array('id', 'suffix'));
 		foreach ($suffix_list as $value) {
@@ -253,9 +282,9 @@ class crawl extends ezControl {
 			$suffix->update(array('suffix' => $new), array("id=$id"));
 		}
 	}
+	// 修复share_file表 文件 后缀修复  .txt -> txt  中文,null,'',t.txt  break
 	public function repairData_share_file_suffix()
 	{
-		// 文件 后缀修复  .txt -> txt  中文,null,'',t.txt  break
 		$offset = 0;
 		$limit = 10000;
 		$share_file = $this->getModel('share_file');
@@ -272,15 +301,8 @@ class crawl extends ezControl {
 				$share_file->update(array('suffix'=>$suffix),array("id=$id"));
 			}
 		}
-		foreach ($suffix_list as $value){
-			$old = $value['suffix'];
-			if(empty($old))continue;
-			if(preg_match("/([\x81-\xfe][\x40-\xfe])/", $old, $match))continue;
-			if(strripos($old,'.') === false || strripos($old,'.') > 0)continue;
-			$new  = str_replace('.','',$old);
-			$share_file->update(array('suffix'=>$new),array("suffix='$old'"));
-		}
 	}
+	// 将新的baidu user插入
 	public function repairData_share_user_get(){
 		// 从file中找user，将新的user插入
         $share_user = $this->getModel('share_user');
@@ -296,33 +318,38 @@ class crawl extends ezControl {
             $share_user->insertList($new_uk_list);
         }
 	}
+	// 从baidu 更新user表
 	public function repairData_share_user_update(){
 		// 获取user中空数据，从baidu更新数据
+		$offset = 0;
+		$limit = 1000;
+		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		ezServer()->addErrorIgnorePath(E_WARNING,ezSYSPATH.'/library/');
+		$baseUrl = 'http://pan.baidu.com/share/home?uk=%id%';
+		$rule = $this->rules[$baseUrl];
+		$phpQuery = new QueryList();
 		$share_user = $this->getModel('share_user');
-		$uk_list = $share_user->select();
-		foreach ($uk_list as $value)
-			if(empty($value['userName'])||empty($value['userInfo'])||empty($value['imgUrl']))
-				$new_uk_list[] = $value;
-		if(!empty($new_uk_list)){
-			ezS::addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
-			$phpQuery = new QueryList();
-			foreach ($crawl_list as $crawl_id){
-				$url = str_replace('%id%',$crawl_id['uk'],$baseUrl);
-				ezDebugLog($url);
-				$phpQuery->html = $url;
-				$data = $phpQuery->setQuery($rule)->data;
-				if(count($data) != 1 || count($data[0]) != 2){
-					continue;
+		while(true){
+			$uk_list = $share_user->limit($limit,$offset)->order(array('id'))->select();
+			$offset += $limit;
+			foreach ($uk_list as $value){
+				if(empty($value['userName'])||empty($value['imgUrl'])){
+					$url = str_replace('%id%',$value['uk'],$baseUrl);
+					ezDebugLog($url);
+					$phpQuery->html = $url;
+					$data = $phpQuery->setQuery($rule)->data;
+					if(count($data) != 1 || count($data[0]) != 2){
+						continue;
+					}
+					$data = $data[0];
+					var_dump($data);
+					ezLog('baiduyun_user id is: '.$value['id'].' uk is '.$value['uk']);
+					$share_user->update($data,array('id='.$value['id']));
 				}
-				$data = $data[0];
-				ezServerLog('baiduyun_user id is: '.$crawl_id['id'].' uk is '.$crawl_id['uk']);
-				$share_user->update($data,array('id='.$crawl_id['id']));
-			}
-			foreach ($new_uk_list as $value){
-
 			}
 		}
 	}
+	// 爬虫使用更新最后一次的id
 	public function updateLast($www,$count){
 		$crawlLast = $this->getModel('crawlLast');
 		$last = $crawlLast->where(array("web='$www'"))->select();
