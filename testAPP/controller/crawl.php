@@ -15,7 +15,8 @@ class crawl extends ezControl {
 	}
 	//开始采集任务
 	public function start(){
-		ezBack(array($this,'crawl_baiduyunpan_file'));
+//        ezBack(array($this,'crawl_sopanpan_file'));
+        ezBack(array($this,'crawl_baiduyun_user'));
 	}
 	//采集规则
 	private function initRules(){
@@ -125,32 +126,40 @@ class crawl extends ezControl {
 		$baseUrl = 'http://www.sopanpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
-		$ids = $this->updateLast($baseUrl,100);
-		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+		$ids = $this->updateLast($baseUrl,1000);
+        ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+        ezServer()->addErrorIgnorePath(E_WARNING,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
-		for ($i=$ids['start'];$i<$ids['end'];$i++){
-			$url = str_replace('%id%',$i,$baseUrl);
-            ezDebugLog($url);
-			$phpQuery->html = $url;
-			$data = $phpQuery->setQuery($rule)->data;
-			if(count($data) != 1 || count($data[0]) != 3){
-				continue;
-			}
-			$data = $data[0];
-			$temp1 =explode('?',$data['url']);
-			if(count($temp1) == 2){
-				parse_str($temp1[1],$temp2);
-				if(!empty($temp2['shareid']))$data['shareid'] = $temp2['shareid'];
-				if(!empty($temp2['fid']))$data['fid'] = $temp2['fid'];
-			}
-            ezlog("sopanpan_file id is: $i");
-			$crawlData[] = $data;
-		}
-		if(!empty($crawlData)&&count($crawlData)>0) {
-			$share_file = $this->getModel('share_file');
-			$share_file->insertList($crawlData);
-            ezServer::getInterface()->log("sopanpan_file count=".count($crawlData));
-		}
+		while(true) {
+            for ($i = $ids['start']; $i < $ids['end']; $i++) {
+                $url = str_replace('%id%', $i, $baseUrl);
+                ezDebugLog($url);
+                $phpQuery->html = $url;
+                $data = $phpQuery->setQuery($rule)->data;
+                if (count($data) != 1 || count($data[0]) != 3) {
+                    continue;
+                }
+                $data = $data[0];
+                $pos = strripos($data['fileName'], '.');
+                if ($pos === false || $pos === 0) {
+                } else {
+                    $suffix = strtolower(substr($data['fileName'], $pos));
+                    if (!ctype_alnum($suffix)) {
+                    } else $data['suffix'] = $suffix;
+                }
+                ezlog("sopanpan_file id is: $i");
+                $crawlData[] = $data;
+            }
+            if (!empty($crawlData) && count($crawlData) > 0) {
+                $share_file = $this->getModel('share_file');
+                $share_file->insertList($crawlData);
+                ezLog("sopanpan_file count=" . count($crawlData));
+                break;
+            }else{
+                ezLog('sleep 30min');
+                sleep(1800);
+            }
+        }
         ezlog("sopanpan_file end");
 		return false;
 	}
@@ -218,8 +227,23 @@ class crawl extends ezControl {
 		return false;
 	}
 	// 循环采集 file 一直执行
-	public function crawl_baiduyunpan_file(){
-	}
+    public function crawl_sopanpan_file(){
+        ezServer()->logFile = ezServer()->logDir.'/crawl-file-$date.log';
+        ezLog('start crawl_baiduyunpan_file');
+        while(true){
+            $this->sopanpan_file();
+        }
+    }
+    public function crawl_baiduyun_user(){
+        ezServer()->logFile = ezServer()->logDir.'/crawl-user-$date.log';
+        ezLog('start crawl_baiduyun_user');
+        while(true){
+            ezLog('crawl_baiduyun_user date:'.date('Y-m-d'));
+            $this->share_user_get();
+            $this->share_user_update();
+            sleep(86400);
+        }
+    }
 
 	// baiduyunpan 文件
 	public function baiduyunpan_file(){
@@ -228,7 +252,8 @@ class crawl extends ezControl {
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,1000);
-		ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+        ezServer()->addErrorIgnorePath(E_NOTICE,ezSYSPATH.'/library/');
+        ezServer()->addErrorIgnorePath(E_WARNING,ezSYSPATH.'/library/');
 		$phpQuery = new QueryList();
 		while(true) {
 			for ($i = $ids['start']; $i < $ids['end']; $i++) {
@@ -236,7 +261,6 @@ class crawl extends ezControl {
 				$phpQuery->html = $url;
 				$data = $phpQuery->setQuery($rule)->data;
 				if (count($data) != 1 || count($data[0]) != 5) {
-					$errData[] = array('url' => $url, 'type' => 0);
 					continue;
 				}
 				$data = $data[0];
@@ -256,6 +280,7 @@ class crawl extends ezControl {
 				ezLog("baiduyunpan_file count=" . count($crawlData));
 				break;
 			}else{
+			    ezLog('sleep 30min');
 				sleep(1800);
 			}
 		}
@@ -303,7 +328,7 @@ class crawl extends ezControl {
 		}
 	}
 	// 将新的baidu user插入
-	public function repairData_share_user_get(){
+	public function share_user_get(){
 		// 从file中找user，将新的user插入
         $share_user = $this->getModel('share_user');
 		$share_file = $this->getModel('share_file');
@@ -316,10 +341,12 @@ class crawl extends ezControl {
                 $new_uk_list[] = $uk;
         if(!empty($new_uk_list)) {
             $share_user->insertList($new_uk_list);
-        }
-	}
+            ezLog('new user count='.count($new_uk_list));
+        }else ezLog('new user count=0');
+
+    }
 	// 从baidu 更新user表
-	public function repairData_share_user_update(){
+	public function share_user_update(){
 		// 获取user中空数据，从baidu更新数据
 		$offset = 0;
 		$limit = 1000;
@@ -331,7 +358,9 @@ class crawl extends ezControl {
 		$share_user = $this->getModel('share_user');
 		while(true){
 			$uk_list = $share_user->limit($limit,$offset)->order(array('id'))->select();
+			ezLog("offset is $offset");
 			$offset += $limit;
+			if(count($uk_list)==0)break;
 			foreach ($uk_list as $value){
 				if(empty($value['userName'])||empty($value['imgUrl'])){
 					$url = str_replace('%id%',$value['uk'],$baseUrl);
@@ -342,7 +371,6 @@ class crawl extends ezControl {
 						continue;
 					}
 					$data = $data[0];
-					var_dump($data);
 					ezLog('baiduyun_user id is: '.$value['id'].' uk is '.$value['uk']);
 					$share_user->update($data,array('id='.$value['id']));
 				}
