@@ -15,8 +15,8 @@ class crawl extends ezControl {
 	}
 	//开始采集任务
 	public function start(){
-//        ezBack(array($this,'crawl_sopanpan_file'));
-        ezBack(array($this,'crawl_baiduyun_user'));
+        ezBack(array($this,'crawl_sopanpan_file'));
+//        ezBack(array($this,'crawl_baiduyun_user'));
 	}
 	//采集规则
 	private function initRules(){
