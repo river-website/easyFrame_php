@@ -2,6 +2,7 @@
 
 require_once ezSYSPATH . '/common/ezArray.php';
 require_once ezSYSPATH . '/common/ezFile.php';
+require_once ezSYSPATH . '/common/ezServer.php';
 require_once ezSYSPATH . '/system/ezConf.php';
 require_once ezSYSPATH . '/system/ezBase.php';
 require_once ezSYSPATH . '/system/ezRoute.php';
