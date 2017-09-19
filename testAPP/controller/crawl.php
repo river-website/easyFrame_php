@@ -64,7 +64,7 @@ class crawl extends ezControl {
 				return str_replace('分享时间：','',$con);
 			})
 		);
-		$this->rules['http://www.sopanpan.com/file/%id%.html'] = array(
+		$this->rules['https://www.sopanpan.com/file/%id%.html'] = array(
 			'fileName'=>array('.wbreak','text'),
 			'url'=>array('#down','href'),
 			'uk'=>array('.usrif .r a','href',null,function($con){
@@ -123,7 +123,7 @@ class crawl extends ezControl {
 	// sopan 文件
 	public function sopanpan_file(){
         ezLog("sopanpan_file start");
-		$baseUrl = 'http://www.sopanpan.com/file/%id%.html';
+		$baseUrl = 'https://www.sopanpan.com/file/%id%.html';
 		$rule = $this->rules[$baseUrl];
 
 		$ids = $this->updateLast($baseUrl,1000);
