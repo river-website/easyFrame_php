@@ -142,7 +142,8 @@ class pc extends ezControl{
             $insertdata['date'] = date('Ymd',time());
             $hotSearch = $this->getModel('hotSearch');
             $hotSearch->insert($insertdata);
-            $share_file->like(array('fileName'=>$word));
+//            $share_file->like(array('fileName'=>$word));
+            $share_file->where(array('match(fileName) against("'.$word.'")'));
         }
         $sql = $share_file->sql;
         $count = $share_file->select('count(id) as count');
