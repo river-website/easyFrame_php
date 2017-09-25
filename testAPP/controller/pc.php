@@ -10,14 +10,14 @@ class pc extends ezControl{
 	public function index(){
 		$this->baseInfo();
         $this->hot();
-		$newShareList = ezServer()->get('newShareList');
+		$newShareList = ezServer()->getCache('newShareList');
 		if(empty($newShareList)) {
 			$share_file = $this->getModel('share_file');
 			$newShareList = $share_file
 				->order(array('id'))
 				->limit(100)
 				->select();
-			ezServer()->set('newShareList',$newShareList,600);
+			ezServer()->setCache('newShareList',$newShareList,600);
 		}
         $this->assign('newShareList',$newShareList);
         $this->display('index');
@@ -112,8 +112,8 @@ class pc extends ezControl{
 			return;
 		}
         $this->baseInfo();
-        $typesList = ezServer()->get('suffixType')['typesList'];
-        $suffixList = ezServer()->get('suffixType')['suffixList'];
+        $typesList = ezServer()->getCache('suffixType')['typesList'];
+        $suffixList = ezServer()->getCache('suffixType')['suffixList'];
         if($typeName !='ALL'){
         	if(empty($typesList[$typeName])){
 				$this->reHome();
@@ -166,7 +166,7 @@ class pc extends ezControl{
 		$this->assign('searchList',$searchList);
 		$this->assign('searchCount',$count);
 		$this->assign('tplName','search');
-		$this->display('com');
+		$this->display('search');
 	}
 
 	public function redirect_url($url){
@@ -246,7 +246,7 @@ class pc extends ezControl{
 		$share_file = $this->getModel('share_file');
 		$userFiles = $share_file->where(array("uk=".$userInfo['uk']))->limit(20,($page-1)*20)->select(array('id','fileName','suffix','size','shareTime'));
 		if(count($userFiles)>0) {
-			$suffixList = ezServer()->get('suffixType')['suffixList'];
+			$suffixList = ezServer()->getCache('suffixType')['suffixList'];
 			foreach ($userFiles as &$vaule)
 				$vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '其他' : $suffixList[$vaule['suffix']];
 			unset($vaule);
@@ -262,6 +262,6 @@ class pc extends ezControl{
 		$this->assign('userInfo',$userInfo);
 		$this->assign('userFiles',$userFiles);
         $this->assign('tplName','share_user');
-        $this->display('com');
+        $this->display('share_user');
 	}
 }
