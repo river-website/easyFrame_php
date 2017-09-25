@@ -24,7 +24,7 @@ class pc extends ezControl{
 	}
 	public function hot(){
 		// 热门搜索
-        $hotSearchList = ezServer()->get('hotSearchList');
+        $hotSearchList = ezServer()->getCache('hotSearchList');
         if(empty($hotSearchList)){
             $hotSearch = $this->getModel('hotSearch');
             $today = date('Ymd',time());
@@ -33,11 +33,11 @@ class pc extends ezControl{
                 ->group(array('searchWord'))
                 ->order(array('count(searchWord)'))
                 ->select(array('searchWord'));
-            ezServer()->set('hotSearchList',$hotSearchList,600);
+            ezServer()->setCache('hotSearchList',$hotSearchList,600);
         }
         $this->assign('hotSearchList',$hotSearchList);
         // 热门文件
-        $hotFileList = ezServer()->get('hotFileList');
+        $hotFileList = ezServer()->getCache('hotFileList');
         if(empty($hotFileList)){
             $hotFile = $this->getModel('hotFile');
             $today = date('Ymd',time());
@@ -47,11 +47,11 @@ class pc extends ezControl{
                 ->group(array('fileID'))
                 ->order(array('count(fileID)'))
                 ->select(array('fileID','fileName'));
-            ezServer()->set('hotFileList',$hotFileList,600);
+            ezServer()->setCache('hotFileList',$hotFileList,600);
         }
         $this->assign('hotFileList',$hotFileList);
         // 热门用户
-        $hotUserList = ezServer()->get('hotUserList');
+        $hotUserList = ezServer()->getCache('hotUserList');
         if(empty($hotUserList)){
             $hotUser = $this->getModel('hotUser');
             $today = date('Ymd',time());
@@ -61,23 +61,23 @@ class pc extends ezControl{
                 ->group(array('userID'))
                 ->order(array('count(userID)'))
                 ->select(array('userID','userName'));
-            ezServer()->set('hotUserList',$hotUserList,600);
+            ezServer()->setCache('hotUserList',$hotUserList,600);
         }
         $this->assign('hotUserList',$hotUserList);
     }
     public function baseInfo(){
 	    // 网站基本信息
-        $webSiteInfo = ezServer()->get('webSiteInfo');
+        $webSiteInfo = ezServer()->getCache('webSiteInfo');
         if(empty($webSiteInfo)){
             $webSite = $this->getModel('webSite');
             $webSiteInfo = $webSite->where(array('id=1'))->select();
             if(count($webSiteInfo) == 1)
                 $webSiteInfo = $webSiteInfo[0];
-            ezServer()->set('webSiteInfo',$webSiteInfo,600);
+            ezServer()->setCache('webSiteInfo',$webSiteInfo,600);
         }
 	    $this->assign('webSiteInfo',$webSiteInfo);
 	    // 格式类型信息
-        $suffixType = ezServer()->get('suffixType');
+        $suffixType = ezServer()->getCache('suffixType');
         if(empty($suffixType)) {
             $suffix = $this->getModel('suffix');
             $suffixData = $suffix->join('types', 'types.id=suffix.typeID')->select(array('types.name as typeName', 'suffix'));
@@ -87,6 +87,7 @@ class pc extends ezControl{
             }
             $suffixType['suffix'] = $suffixList;
             $suffixType['types'] = $typesList;
+            ezServer()->setCache('suffixType',$suffixType,600);
         }
         $this->assign('suffixList',$suffixType['suffix']);
         $this->assign('typesList',$suffixType['types']);
@@ -208,7 +209,7 @@ class pc extends ezControl{
             ->select(array('id','fileName'));
 		$likeFiles = $share_file
 //            ->like(array('fileName'=>$fileInfo['fileName']))
-            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
+//            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
             ->limit(20)
             ->select(array('id','fileName'));
         $userShareCount = $share_file
@@ -225,7 +226,7 @@ class pc extends ezControl{
 		$this->assign('preFile',$preFile);
 		$this->assign('nextFile',$nextFile);
 		$this->assign('tplName','share_file');
-		$this->display('com');
+		$this->display('share_file');
 	}
 	public function share_user($userID=null,$page=1){
 		$this->baseInfo();

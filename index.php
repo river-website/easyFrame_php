@@ -1,7 +1,4 @@
 <?php
-//echo "com in";
-////exit();
-//return;
 date_default_timezone_set("PRC");
 // 网站目录
 if(!defined('ezSERVER_ROOT'))define('ezSERVER_ROOT', '/phpstudy/test');

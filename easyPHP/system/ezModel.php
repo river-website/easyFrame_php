@@ -66,7 +66,7 @@ class ezModel extends ezBase
 		}
 		$this->lastSql = $sql;
 		$this->sql = self::$initsql;
-	    return ezDbPool::getInterface()->excute($sql,$this->func);
+	    return ezDbExcute($sql,$this->func);
 //		// 执行sql查询
 //		$row = mysqli_query($this->dbConnect, $sql);
 //		if (gettype($row) != 'object')

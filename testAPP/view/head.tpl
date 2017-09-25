@@ -1,11 +1,8 @@
     <meta charset="UTF-8">
     <title><{$webSiteInfo.title}></title>
     <meta name="Keywords" content="<{$webSiteInfo.keyWords}>"> 
-    <meta name="Description" content="<{$webSiteInfo.description}>"> 
-    <!-- <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-xz.css" /> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-hyxq.css"> -->
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-lb.css">
+    <meta name="Description" content="<{$webSiteInfo.description}>">
+
     <!-- 百度推送 -->
 <!--     <script>
         (function () {

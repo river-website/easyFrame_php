@@ -16,7 +16,8 @@ class ezDB extends ezBase
 	{
 		$this->conf	= $GLOBALS['ezData']['conf']->getNode('db');
 //		$this->connect = $this->connectDB();
-	}
+        ezDb()->connectFunc = array($this,'conDb');
+    }
 
 	private function connectDB()
 	{
@@ -31,7 +32,14 @@ class ezDB extends ezBase
 		$GLOBALS['ezData']['dbConnect'] = $con;
 		return $con;
 	}
-	function checkTableExist($table)
+	public function conDb(){
+        $con = mysqli_connect($this->conf['host'], $this->conf['user'], $this->conf['password'], $this->conf['dataBase'], $this->conf['port']);
+        if (!$con) throw new Exception(mysqli_error($con));
+        mysqli_query($con,"set character set 'utf8'");//读库
+        mysqli_query($con,"set names 'utf8'");//写库
+        return $con;
+    }
+    function checkTableExist($table)
 	{
 		return true;
 		$row	= mysqli_query($this->connect, "show tables");

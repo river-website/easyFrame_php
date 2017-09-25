@@ -7,8 +7,8 @@ $GLOBALS['ezConf'] = array(
 		'conf' => array(
 			'host' => '127.0.0.1',
 			'user' => 'root',
-			'password' => '3f4/.45FV',
-			'dataBase' => 'test',
+			'password' => 'root',
+			'dataBase' => 'yun',
 			'port' => 3306
 		)
 	),
