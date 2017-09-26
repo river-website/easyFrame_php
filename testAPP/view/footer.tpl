@@ -2,29 +2,28 @@
         <!-- 返回顶部 -->
         <div class="fhdb-fixed">
             <a href="#">
-                <img src="http://www.baiduyunpan.com/images/fhdb.png" alt="返回顶部" />
+                <img src="__ROOT__<{$webSiteInfo.footerImg}>" alt="返回顶部" />
             </a>
         </div>
         <!-- 底部 -->
         <div class="footer">
             <div class="footer-auto">
                 <div class="footer-left">
-                    <a title="百度网盘" href="http://www.baiduyunpan.com">
-                        <img alt="百度网盘" src="http://www.baiduyunpan.com/images/11.png" />
+                    <a title="百度网盘" href="__ROOT__">
+                        <img alt="百度网盘" src="__ROOT__<{$webSiteInfo.logoImg}>" />
                     </a>
                     <p>最快的百度网盘搜索引擎</p>
                 </div>
                 <div class="footer-center">
                     <div class="footer-center-div">
-                        <a href="http://www.baiduyunpan.com">百度云搜索</a>
-                        <a href="http://www.baiduyunpan.com/new/">百度云下载</a>
-                        <a href="http://www.baiduyunpan.com/movie/">百度云电影</a>
-                        <a href="http://www.baiduyunpan.com/users/">百度云会员</a> 
+                        <a href="__ROOT__/search/ALL-ALL-ALL-1">百度云搜索</a>
+                        <a href="__ROOT__/share_file/1">百度云资源</a>
+                        <a href="__ROOT__/share_user/1">百度云会员</a>
                     </div>
                     <div class="footer-center-div2">
                         <p>Copyright&#160;©&#160;2016-2017
-                            <a href="http://www.baiduyunpan.com/">百度云盘（baiduyunpan.com）</a>All&#160;Rights&#160;Reserved</p>
-                        <p class="div2-p2">湘ICP备13002661号-8 Email:2540054847@qq.com
+                            <a href="__ROOT__">百度云盘（baiduyunpan.com）</a>All&#160;Rights&#160;Reserved</p>
+                        <p class="div2-p2">Email:2540054847@qq.com
                             <script src="http://s95.cnzz.com/stat.php?id=1258115369&web_id=1258115369" language="JavaScript"></script>
                         </p>
                     </div>
@@ -36,13 +35,13 @@
                     <div class="footer-right-div">
                         <p>分享至：</p>
                         <a title="微博" href="javascript:trigger_click('tsina');" target="_blank">
-                            <img alt="微博" src="http://www.baiduyunpan.com/images/12.png" />
+                            <img alt="微博" src="__ROOT__/images/12.png" />
                         </a>
                         <a title="微信" href="javascript:trigger_click('weixin');">
-                            <img alt="微信" src="http://www.baiduyunpan.com/images/13.png" />
+                            <img alt="微信" src="__ROOT__/images/13.png" />
                         </a>
                         <a title="QQ空间" href="javascript:trigger_click('qzone');" target="_blank" style="padding-right:0;">
-                            <img alt="QQ空间" src="http://www.baiduyunpan.com/images/14.png" />
+                            <img alt="QQ空间" src="__ROOT__/images/14.png" />
                         </a>
                     </div>
                     <div class="bdsharebuttonbox" style="display:none;">
