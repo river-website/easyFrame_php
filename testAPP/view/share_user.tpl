@@ -11,7 +11,7 @@
 
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="http://www.baiduyunpan.com" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="http://www.baiduyunpan.com/users/" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
+            当前位置： <a href="__ROOT__" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="__ROOT__/share_user/<{$userInfo.userID}>" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
         </h2>
         <div class="main-center">
             <div class="main-ain">
@@ -72,20 +72,13 @@
             </div>
             <div class="resource-center">
                 <ul>
-                    <li class="resource-conter-li resource-li2">文件名
-                    </li>
-                    <li class="resource-conter-li resource-li3 li5">百度会员
-                    </li>
-                    <li class="resource-conter-li li5">文件类型
-                    </li>
-                    <li class="resource-conter-li resource-li3 li5">文件格式
-                    </li>
-                    <li class="resource-conter-li li5">网盘
-                    </li>
-                    <li class="resource-conter-li resource-li5 li5">文件大小
-                    </li>
-                    <li class="resource-conter-li resource-li5 li5">分享时间
-                    </li>
+                    <li class="resource-conter-li resource-li2">文件名</li>
+                    <li class="resource-conter-li resource-li3 li5">百度会员</li>
+                    <li class="resource-conter-li li5">文件类型</li>
+                    <li class="resource-conter-li resource-li3 li5">文件格式</li>
+                    <li class="resource-conter-li li5">网盘</li>
+                    <li class="resource-conter-li resource-li5 li5">文件大小</li>
+                    <li class="resource-conter-li resource-li5 li5">分享时间</li>
                 </ul>
             </div>
             <{foreach from=$userFiles item=file}>
@@ -101,7 +94,7 @@
                     <li class="resource-conter-li resource-li3 li6"><{$file.suffix}><span>|</span>
                     </li>
                     <li class="resource-conter-li li6">
-                        <img class="resource-img" src="http://www.baiduyunpan.com/images/20.png"><span>|</span>
+                        <img class="resource-img" src="__ROOT__/images/20.png"><span>|</span>
                     </li>
                     <li class="resource-conter-li resource-li5 li6"><{$file.size}>
                     </li>
@@ -115,7 +108,7 @@
                 <table class='pagesec'>
                     <tr>
                         <td class='rd'>
-                            <span>第1/5页</span>
+                            <span>第<{$page.curPage}><{$page.countPage}>5页</span>
                         </td>
                         <td class='prev'>
                             <a class='db'>上一页</a>

@@ -12,7 +12,7 @@
     <!-- 百度云电影 -->
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="http://www.baiduyunpan.com/main/" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2">百度云搜索</a>
+            当前位置： <a href="__ROOT__" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2">百度云搜索</a>
         </h2>
         <div class="resource">
             <div class="resource-top">
@@ -23,11 +23,11 @@
             <div class="resource-center">
                 <ul>
                     <li class="resource-conter-li" id="b0">
-                        <a href="javascript:searchyunId(0);">全部</a>
+                        <a href="#">全部</a>
                     </li>
                     <{foreach from=$typesList item=suffixs key=type}>
                     <li class="resource-conter-li">
-                        <a href="javascript:searchyunId(1);"><{$type}></a>
+                        <a href="#"><{$type}></a>
                     </li>
                     <{/foreach}>
                 </ul>
@@ -37,9 +37,12 @@
                     <li class="resource-conter-li-suffix">
                         <a href="#">全部</a>
                     </li>
+                    <{foreach from=$suffixList item=suffixs key=type}>
                     <li class="resource-conter-li-suffix">
-                        <a href="#">torrent</a>
+                        <a href="#"><{$suffixs}></a>
                     </li>
+                    <{/foreach}>
+
                 </ul>
             </div>
             <{foreach from=$searchList item=file}>
@@ -63,7 +66,7 @@
                 </div>
                 <div class="main-x-right">
                     <p class="x-right-p x-right-p2">
-                        会员：<a href="../share_user/<{$file.userID}>/1" target="_blank"><{$file.userName}></a>
+                        会员：<a href="__ROOT__/share_user/<{$file.userID}>/1" target="_blank"><{$file.userName}></a>
                     </p>
                     <p class="x-right-p">
                         来源：百度网盘
@@ -76,41 +79,14 @@
                 <table class='pagesec'>
                     <tr>
                         <td class='rd'>
-                            <span>第1/38页</span>
+                            <span>第<{$page.curPage}>/<{$page.countPage}>页</span>
                         </td>
                         <td class='prev'>
-                            <a class='db'>上一页</a>
+                            <a class='db' href="__ROOT__/search/<{page.condition}>-<{$page.preID}>">上一页</a>
                         </td>
                         <td class='psec'></td>
                         <td class='pnum'>
-                            <a class='sel'>1</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-2.html'>2</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-3.html'>3</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-4.html'>4</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-5.html'>5</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-6.html'>6</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-7.html'>7</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-8.html'>8</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-9.html'>9</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-10.html'>10</a>
+                            <a class='sel' href="__ROOT__/search/">1</a>
                         </td>
                         <td class='nsec'></td>
                         <td class='next'>
@@ -158,7 +134,7 @@
                     <ul>
                         <{foreach from=$hotSearchList item=search}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="../search/<{$search.word}>"><{$search.word}></a>&nbsp;&nbsp;
+                            <a target="_blank" href="__ROOT__/search/ALL-ALL-<{$search.word}>-1"><{$search.word}></a>&nbsp;&nbsp;
                         </li>
                         <{/foreach}>
                     </ul>

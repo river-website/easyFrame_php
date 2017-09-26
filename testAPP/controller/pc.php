@@ -7,6 +7,32 @@
  */
 
 class pc extends ezControl{
+    private function toFileUrl($file){
+        $webSiteInfo = ezServer()->getCache('webSiteInfo');
+        return $webSiteInfo['webSite'].str_replace('$id',$file['id'],$webSiteInfo['fileSite']);
+    }
+    private function toUserUrl($user,$condition = null){
+        $webSiteInfo = ezServer()->getCache('webSiteInfo');
+        if(!isset($condition['type']))$condition['type'] = 'ALL';
+        if(!isset($condition['suffix']))$condition['suffix'] = 'ALL';
+        if(!isset($condition['word']))$condition['word'] = 'ALL';
+        if(!isset($condition['page']))$condition['page'] = 1;
+        return $webSiteInfo['webSite'].str_replace(
+            array('$id','$type','$suffix','$word','$page'),
+            array($user['id'],$condition['type'],$condition['suffix'],$condition['word'],$condition['page']),
+            $webSiteInfo['userSite']);
+    }
+    private function toSearchUrl($condition = null){
+        $webSiteInfo = ezServer()->getCache('webSiteInfo');
+        if(!isset($condition['type']))$condition['type'] = 'ALL';
+        if(!isset($condition['suffix']))$condition['suffix'] = 'ALL';
+        if(!isset($condition['word']))$condition['word'] = 'ALL';
+        if(!isset($condition['page']))$condition['page'] = 1;
+        return $webSiteInfo['webSite'].str_replace(
+                array('$type','$suffix','$word','$page'),
+                array($condition['type'],$condition['suffix'],$condition['word'],$condition['page']),
+                $webSiteInfo['searchSite']);
+    }
 	public function index(){
 		$this->baseInfo();
         $this->hot();
@@ -14,10 +40,12 @@ class pc extends ezControl{
 		if(empty($newShareList)) {
 			$share_file = $this->getModel('share_file');
 			$newShareList = $share_file
-				->order(array('id'))
+				->order(array('id'),'desc')
 				->limit(100)
 				->select();
-			ezServer()->setCache('newShareList',$newShareList,600);
+			foreach ($newShareList as &$file)
+			    $file['fileUrl'] = $this->toFileUrl($file);
+			ezServer()->setCache('newShareList',$newShareList,1800);
 		}
         $this->assign('newShareList',$newShareList);
         $this->display('index');
@@ -33,7 +61,9 @@ class pc extends ezControl{
                 ->group(array('searchWord'))
                 ->order(array('count(searchWord)'))
                 ->select(array('searchWord'));
-            ezServer()->setCache('hotSearchList',$hotSearchList,600);
+            foreach ($hotSearchList as &$search)
+                $search['searchUrl'] = $this->toSearchUrl(array('word'=>$search['word']));
+            ezServer()->setCache('hotSearchList',$hotSearchList,1800);
         }
         $this->assign('hotSearchList',$hotSearchList);
         // 热门文件
@@ -47,7 +77,9 @@ class pc extends ezControl{
                 ->group(array('fileID'))
                 ->order(array('count(fileID)'))
                 ->select(array('fileID','fileName'));
-            ezServer()->setCache('hotFileList',$hotFileList,600);
+            foreach ($hotFileList as &$file)
+                $file['fileUrl'] = $this->toFileUrl($file);
+            ezServer()->setCache('hotFileList',$hotFileList,1800);
         }
         $this->assign('hotFileList',$hotFileList);
         // 热门用户
@@ -61,7 +93,9 @@ class pc extends ezControl{
                 ->group(array('userID'))
                 ->order(array('count(userID)'))
                 ->select(array('userID','userName'));
-            ezServer()->setCache('hotUserList',$hotUserList,600);
+            foreach ($hotUserList as &$user)
+                $user['userUrl'] = $this->toUserUrl($user);
+            ezServer()->setCache('hotUserList',$hotUserList,1800);
         }
         $this->assign('hotUserList',$hotUserList);
     }
@@ -71,9 +105,8 @@ class pc extends ezControl{
         if(empty($webSiteInfo)){
             $webSite = $this->getModel('webSite');
             $webSiteInfo = $webSite->where(array('id=1'))->select();
-            if(count($webSiteInfo) == 1)
-                $webSiteInfo = $webSiteInfo[0];
-            ezServer()->setCache('webSiteInfo',$webSiteInfo,600);
+			$webSiteInfo = $webSiteInfo[0];
+            ezServer()->setCache('webSiteInfo',$webSiteInfo,3600);
         }
 	    $this->assign('webSiteInfo',$webSiteInfo);
 	    // 格式类型信息
@@ -88,6 +121,22 @@ class pc extends ezControl{
             $suffixType['suffix'] = $suffixList;
             $suffixType['types'] = $typesList;
             ezServer()->setCache('suffixType',$suffixType,600);
+        }
+        // 用户类型信息
+        $share_user = ezServer()->getCache('share_user');
+        if(empty($share_user)) {
+            $user = $this->getModel('share_user');
+            $userData = $user->select();
+            foreach ($userData as &$value)
+                $value['userUrl'] = $this->toUserUrl($value);
+            foreach ($userData as $value)
+                $user_id[$value['id']] = $value;
+            foreach ($userData as $value)
+                $user_uk[$value['uk']] = $value;
+
+            $share_user['user_id'] = $user_id;
+            $share_user['user_uk'] = $user_uk;
+            ezServer()->setCache('share_user',$share_user,3600);
         }
         $this->assign('suffixList',$suffixType['suffix']);
         $this->assign('typesList',$suffixType['types']);
@@ -127,8 +176,8 @@ class pc extends ezControl{
         }else{ 
         	if($suffix != 'ALL'){
         		if(empty($suffixList[$suffix])){
-				$this->reHome();
-				return;
+					$this->reHome();
+					return;
 				}
         	}
         }
@@ -155,17 +204,19 @@ class pc extends ezControl{
         if($count>0){
         	$share_file->sql = $sql;
         	$searchList = $share_file
-				->join('share_user','share_user.uk=share_file.uk')
+//				->join('share_user','share_user.uk=share_file.uk')
 				->limit($limit,($page-1)*$limit)
-				->select('share_file.id,fileName,suffix,size,shareTime,userName');
-			foreach ($searchList as &$value) 
-				$value['typeName']=empty($suffixList[$value['suffix']])?'未知':$suffixList[$value['suffix']];
+				->select('share_file.id,fileName,suffix,size,shareTime');
+        	$share_user_uk = ezServer()->getCache('share_user')['user_uk'];
+			foreach ($searchList as &$value) {
+                $value['typeName']=empty($suffixList[$value['suffix']])?'未知':$suffixList[$value['suffix']];
+
+			}
         }else $searchList = array();
         $searachInfo['word'] = $word;
         $searachInfo['count'] = $count;
 		$this->assign('searchList',$searchList);
 		$this->assign('searchCount',$count);
-		$this->assign('tplName','search');
 		$this->display('search');
 	}
 
