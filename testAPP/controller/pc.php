@@ -92,7 +92,7 @@ class pc extends ezControl{
                 ->where(array("date=$today"))
                 ->group(array('userID'))
                 ->order(array('count(userID)'))
-                ->select(array('userID','userName'));
+                ->select(array('userID','userName','imgUrl'));
             foreach ($hotUserList as &$user)
                 $user['userUrl'] = $this->toUserUrl($user);
             ezServer()->setCache('hotUserList',$hotUserList,1800);
@@ -106,6 +106,10 @@ class pc extends ezControl{
             $webSite = $this->getModel('webSite');
             $webSiteInfo = $webSite->where(array('id=1'))->select();
 			$webSiteInfo = $webSiteInfo[0];
+			$share_file = $this->getModel('share_file');
+			$count = $share_file->select('count(id) as count')[0]['count'];
+			$webSiteInfo['fileCount'] = $count;
+			$webSiteInfo['fileNewCount'] = rand(10000,1000000);
             ezServer()->setCache('webSiteInfo',$webSiteInfo,3600);
         }
 	    $this->assign('webSiteInfo',$webSiteInfo);
@@ -219,27 +223,28 @@ class pc extends ezControl{
 		$this->assign('searchCount',$count);
 		$this->display('search');
 	}
-
 	public function redirect_url($url){
 		echo "<html><script language='javascript'>location.href='$url'</script></html>";
 	}
 	public function share_file($fileID = null){
 		$this->baseInfo();
 		$this->hot();
-		if(empty($fileID)){
-			$this->redirect_url($_SERVER['HTTP_HOST']);
-			return;
-		}
+		if(empty($fileID)){$this->redirect_url($_SERVER['HTTP_HOST']);return;}
 		$share_file = $this->getModel('share_file');
 		$fileInfo = $share_file
             ->where(array("share_file.id=$fileID"))
-            ->join('share_user','share_user.uk=share_file.uk','left')
-            ->select('share_file.*,share_user.*,share_user.id as userID');
-		if(empty($fileInfo) || count($fileInfo) == 0){
-			$this->redirect_url($_SERVER['HTTP_HOST']);
-			return;
-		}
+//            ->join('share_user','share_user.uk=share_file.uk','left')
+            ->select('share_file.*');
+		if(empty($fileInfo) || count($fileInfo) == 0){$this->redirect_url($_SERVER['HTTP_HOST']);return;}
 		$fileInfo = $fileInfo[0];
+		$fileInfo['fileUrl'] = $this->toFileUrl($fileInfo);
+		$suffixList = ezServer()->getCache('suffixList');
+		$fileInfo['typeName'] = isset($suffixList[$fileInfo['suffix']])?$suffixList[$fileInfo['suffix']]:'未知';
+		$user_uk = ezServer()->getCache('share_user')['user_uk'];
+		$userInfo = $user_uk[$fileInfo['uk']];
+		$fileInfo['userName'] = $userInfo['userName'];
+		$fileInfo['imgUrl'] = $userInfo['imgUrl'];
+		$fileInfo['userUrl'] = $this->toUserUrl($userInfo);
 		$preFile = $share_file
 			->where(array("id<$fileID"))
 			->order(array('id'),'desc')
@@ -247,6 +252,7 @@ class pc extends ezControl{
 			->select('id,fileName');
 		if(empty($preFile))$preFile = array('id'=>null,'fileName'=>null);
 		else $preFile = $preFile[0];
+		$preFile['fileUrl'] = $this->toFileUrl($preFile);
 		$nextFile = $share_file
 			->where(array("id>$fileID"))
 			->order(array('id'),'asc')
@@ -254,15 +260,20 @@ class pc extends ezControl{
 			->select('id,fileName');
 		if(empty($nextFile))$nextFile = array('id'=>null,'fileName'=>null);
 		else $nextFile = $nextFile[0];
+		$nextFile['fileUrl'] = $this->toFileUrl($nextFile);
 		$userFiles = $share_file
             ->where(array('uk='.$fileInfo['uk']))
             ->limit(20)
             ->select(array('id','fileName'));
+		foreach ($userFiles as &$value)
+			$value['fileUrl'] = $this->toFileUrl($value);
 		$likeFiles = $share_file
 //            ->like(array('fileName'=>$fileInfo['fileName']))
 //            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
             ->limit(20)
             ->select(array('id','fileName'));
+		foreach ($likeFiles as &$value)
+			$value['fileUrl'] = $this->toFileUrl($value);
         $userShareCount = $share_file
         	->where(array('uk='.$fileInfo['uk']))
         	->select('count(id) as count');
@@ -276,8 +287,8 @@ class pc extends ezControl{
 		$this->assign('likeFiles',$likeFiles);
 		$this->assign('preFile',$preFile);
 		$this->assign('nextFile',$nextFile);
-		$this->assign('tplName','share_file');
-		$this->display('share_file');
+		//$this->display('share_file');
+		echo 'com in';
 	}
 	public function share_user($userID=null,$page=1){
 		$this->baseInfo();

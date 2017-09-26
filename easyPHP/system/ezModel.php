@@ -15,7 +15,6 @@ class ezModel extends ezBase
 	private $table = null;
     static private $initsql = array('option' => '', 'where' => '','join'=>'', 'group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
     public $sql = array('option' => '', 'join'=>'', 'where' => '','group by' => '', 'having' => '', 'union' => '', 'order by' => '', 'limit' => '');
-	public $func = null;
 	public $lastSql = null;
 	// static function getInterface($model)
 	// {
@@ -53,7 +52,7 @@ class ezModel extends ezBase
 		$this->table	 = $model;
 	}
 
-	private function execute()
+	private function execute($func=null)
 	{
 		//組合sql
 		$sql				 = $this->sql['option'];
@@ -66,7 +65,7 @@ class ezModel extends ezBase
 		}
 		$this->lastSql = $sql;
 		$this->sql = self::$initsql;
-	    return ezDbExcute($sql,$this->func);
+	    return ezDbExcute($sql,$func);
 //		// 执行sql查询
 //		$row = mysqli_query($this->dbConnect, $sql);
 //		if (gettype($row) != 'object')
@@ -79,7 +78,7 @@ class ezModel extends ezBase
 //		return $data;
 	}
 	// select 搜索，字符串
-	public function select($fields = null)
+	public function select($fields = null,$func = null)
 	{
 		if (gettype($fields) == 'array') {
 			$this->sql['option'] = 'select ' . (count($fields) == 0 ? '*' : implode(',', $fields)) . ' from ' . $this->table;
@@ -88,7 +87,7 @@ class ezModel extends ezBase
 		} else if (gettype($fields) == 'NULL') {
 			$this->sql['option'] = 'select ' . '*' . ' from ' . $this->table;
 		}
-		return $this->execute();
+		return $this->execute($func);
 	}
 
 	public function where_in($key, array $condition = array())

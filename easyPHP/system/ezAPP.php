@@ -11,8 +11,6 @@ require_once ezSYSPATH . '/system/ezRewrite.php';
 require_once ezSYSPATH . '/system/ezException.php';
 require_once ezSYSPATH . '/system/ezCacheHtml.php';
 
-define('__ROOT__',$_SERVER['host']);
-
 $GLOBALS['ezData'] = array();
 
 class ezAPP
