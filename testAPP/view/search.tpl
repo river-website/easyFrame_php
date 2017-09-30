@@ -82,7 +82,7 @@
                             <span>第<{$page.curPage}>/<{$page.countPage}>页</span>
                         </td>
                         <td class='prev'>
-                            <a class='db' href="__ROOT__/search/<{page.condition}>-<{$page.preID}>">上一页</a>
+                            <a class='db' href="__ROOT__/search/<{$page.condition}>-<{$page.preID}>">上一页</a>
                         </td>
                         <td class='psec'></td>
                         <td class='pnum'>
