@@ -11,7 +11,7 @@
 
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="__ROOT__" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="__ROOT__/share_user/<{$userInfo.userID}>" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
+            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="<{$userInfo.userUrl}>" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
         </h2>
         <div class="main-center">
             <div class="main-ain">
@@ -26,7 +26,7 @@
                     <h2 class="main-right-h2">
                         <{$userInfo.userName}>分享的百度云资源
                     </h2>
-                    <p style="margin-bottom:20px;"><{$userInfo.userInfo}></p>
+                    <p style="margin-bottom:20px;"><{$userInfo.userUrl}></p>
                     <p class="main-right-p">
                         <img src="<{$userInfo.imgUrl}>">
                     </p>
@@ -85,7 +85,7 @@
             <div class="resource-centerx">
                 <ul>
                     <li class="resource-conter-li resource-li7">
-                        <a target="_blank" href="../share_file/<{$file.id}>"><{$file.fileName}></a>
+                        <a target="_blank" href="<{$file.fileUrl}>"><{$file.fileName}></a>
                     </li>
                     <li class="resource-conter-li resource-li3 li6"><{$userInfo.userName}><span>|</span>
                     </li>
@@ -107,33 +107,15 @@
             <div class="gow">
                 <table class='pagesec'>
                     <tr>
-                        <td class='rd'>
-                            <span>第<{$page.curPage}><{$page.countPage}>5页</span>
-                        </td>
-                        <td class='prev'>
-                            <a class='db'>上一页</a>
-                        </td>
-                        <td class='psec'></td>
-                        <td class='pnum'>
-                            <a class='sel'>1</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/user/2251194350-0-2.html'>2</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/user/2251194350-0-3.html'>3</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/user/2251194350-0-4.html'>4</a>
-                        </td>
-                        <td class='pnum'>
-                            <a class='ab' href='/user/2251194350-0-5.html'>5</a>
-                        </td>
-                        <td class='nsec'></td>
-                        <td class='next'>
-                            <a class='ab' href='/user/2251194350-0-2.html'>下一页</a>
-                        </td>
-                        <td class='jmp'></td>
+                        <td class='prev'><a class='db' href="<{$pages.pre}>">上一页</a></td>
+                        <td class="pnum"><a class="ab" href="<{$pages.first.url}>"><{$pages.first.page}></a></td>
+                        <td class="pnum"><{$pages.preFix}></td>
+                        <{foreach from=$pages.cur item=item}>
+                        <td class="pnum"><a class="ab" href="<{$item.url}>"><{$item.page}></a></td>
+                        <{/foreach}>
+                        <td class="pnum"><{$pages.nextFix}></td>
+                        <td class="pnum"><a class="ab" href="<{$pages.last.url}>"><{$pages.last.page}></a></td>
+                        <td class='next'><a class='ab' href="<{$pages.next}>">下一页</a></td>
                     </tr>
                 </table>
             </div>

@@ -221,10 +221,27 @@ class pc extends ezControl{
 				}
 			}
         }else $searchList = array();
-        $searachInfo['word'] = $word;
-        $searachInfo['count'] = $count;
+
+		$condition['type'] = $condition[0];
+		$condition['suffix'] = $condition[1];
+		$condition['searchWord'] = $condition[2];
+		$condition['page'] = $condition[3];
+
+		$pages = $this->pages($count,$limit,$page);
+		if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toSearchUrl($condition);}
+		if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toSearchUrl($condition);}
+		if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toSearchUrl($condition));}
+		if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toSearchUrl($condition));}
+		foreach ($pages['cur'] as &$value) {
+			$condition['page']=$value;
+			$value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toSearchUrl($condition));
+		}
+
+		$searchInfo['word'] = $word;
+		$searchInfo['count'] = $count;
 		$this->assign('searchList',$searchList);
-		$this->assign('searchCount',$count);
+		$this->assign('searchInfo',$searchInfo);
+		$this->assign('pages',$pages);
 		$this->display('search');
 	}
 	public function share_file($fileID = null){
@@ -251,7 +268,7 @@ class pc extends ezControl{
 			->order(array('id'),'desc')
 			->limit(1)
 			->select('id,fileName');
-		if(empty($preFile)||count($preFile) == 0)$preFile = array('id'=>null,'fileName'=>null);
+		if(empty($preFile)||count($preFile) == 0)$preFile = array('id'=>null,'fileName'=>null,'fileUrl'=>null);
 		else{
 		    $preFile = $preFile[0];
 		    $preFile['fileUrl'] = $this->toFileUrl($preFile);
@@ -282,7 +299,7 @@ class pc extends ezControl{
         $userShareCount = $share_file
         	->where(array('uk='.$fileInfo['uk']))
         	->select('count(id) as count');
-        $fileInfo['count'] = $userShareCount[0]['count'];
+		$userInfo['count'] = $userShareCount[0]['count'];
 
         $data['date'] = date('Ymd',time());
 		$data['fileID'] = $fileID;
@@ -337,14 +354,13 @@ class pc extends ezControl{
 			$share_file->where(array('match(fileName) against("'.$word.'")'));
 		}
 		$sql = $share_file->where(array("uk=".$userInfo['uk']))->sql;
-
 		$userFiles = $share_file->limit($limit,($page-1)*$limit)->select(array('id','fileName','suffix','size','shareTime'));
+		$userInfo['count']=0;
+		$condition['type'] = $condition[0];
+		$condition['suffix'] = $condition[1];
+		$condition['searchWord'] = $condition[2];
+		$condition['page'] = $condition[3];
 		if(count($userFiles)>0) {
-			$condition['type'] = $condition[0];
-			$condition['suffix'] = $condition[1];
-			$condition['searchWord'] = $condition[2];
-			$condition['page'] = $condition[3];
-
 			foreach ($userFiles as &$vaule) {
 				$vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '未知' : $suffixList[$vaule['suffix']];
 				$vaule['fileUrl'] = $this->toUserUrl($vaule,$condition);
@@ -360,8 +376,55 @@ class pc extends ezControl{
 		$hotUser = $this->getModel('hotUser');
 		$hotUser->insert($data);
 
+		$pages = $this->pages($userInfo['count'],$limit,$page);
+		if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toUserUrl($userInfo,$condition);}
+		if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toUserUrl($userInfo,$condition);}
+		if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toUserUrl($userInfo,$condition));}
+		if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toUserUrl($userInfo,$condition));}
+		foreach ($pages['cur'] as &$value) {
+			$condition['page']=$value;
+			$value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toUserUrl($userInfo,$condition));
+		}
+
+		$this->assign('pages',$pages);
 		$this->assign('userInfo',$userInfo);
 		$this->assign('userFiles',$userFiles);
         $this->display('share_user');
+	}
+	public function pages($count,$limit,$curPage){
+		$ret['pre'] = null;
+		$ret['next'] = null;
+		$ret['first'] = null;
+		$ret['last'] = null;
+		$ret['preFix'] = null;
+		$ret['nextFix'] = null;
+		$ret['cur'] = null;
+		if(!is_numeric($count)||!is_numeric($limit)||!is_numeric($curPage))return false;
+		if($count<0 || $limit<1||$curPage<1)return false;
+		$pageCount = ceil($count / $limit);
+		if($pageCount==0)$pageCount = 1;
+		if($curPage>$pageCount)return false;
+
+		if($curPage==1)$ret['pre'] = null;
+		if($curPage==$pageCount)$ret['next'] = null;
+		if($curPage>1)$ret['pre'] = $curPage-1;
+		if($curPage<$pageCount)$ret['next'] = $curPage+1;
+
+		if($curPage==1)$ret['first'] = null;
+		if($curPage==$pageCount)$ret['last'] = null;
+		if($curPage>1)$ret['first']=1;
+		if($curPage<$pageCount)$ret['last'] = $pageCount;
+
+		if($curPage>1+3)$ret['preFix'] = '...';
+		if($curPage<$pageCount-3)$ret['nextFix'] = '...';
+		if($curPage<=1+3)$ret['preFix'] = null;
+		if($curPage>=$pageCount-3)$ret['nextFix'] = null;
+
+		if($curPage-2>1)$ret['cur'][] = $curPage-2;
+		if($curPage-1>1)$ret['cur'][] = $curPage-1;
+		$ret['cur'][] = $curPage;
+		if($curPage+1<$pageCount)$ret['cur'][] = $curPage+1;
+		if($curPage+2<$pageCount)$ret['cur'][] = $curPage+2;
+		return $ret;
 	}
 }

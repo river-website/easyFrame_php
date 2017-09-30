@@ -11,7 +11,7 @@
     <!-- main -->
     <div class="main">
         <h2 class="main-h3">
-            当前位置：<a href="__ROOT__" class="main-h3-a">首页</a>&#160;>&#160; <a href="<{$fileInfo.fileUrl}>" class=" main-h3-a2">百度云资源</a>
+            当前位置：<a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a>&#160;>&#160; <a href="<{$fileInfo.fileUrl}>" class=" main-h3-a2">百度云资源</a>
         </h2>
         <div class="resource">
             <div class="resource-center">
@@ -29,7 +29,7 @@
                     <!-- 文件信息 -->
                     <ul>
                         <li class="x-right-li">
-                            百度云会员：<a href="<{$fileInfo.userUrl}>" target="_blank" class="x-right-li-a"><{$fileInfo.userName}></a>
+                            百度云会员：<a href="<{$userInfo.userUrl}>" target="_blank" class="x-right-li-a"><{$userInfo.userName}></a>
                         </li>
                         <li class="x-right-li">
                             收录时间：<span><{$fileInfo.shareTime}></span>
@@ -72,7 +72,7 @@
                     </ul>
                     <div class="main-xzfx">
                         <a href="<{$fileInfo.url}>" class="main-xzfx-a" target="_blank">进入百度资源</a>
-                        <a href="<{$fileInfo.userUrl}>" class="main-xzfx-a main-xzfx-a2" target="_">查看TA的相关资源</a>
+                        <a href="<{$userInfo.userUrl}>" class="main-xzfx-a main-xzfx-a2" target="_">查看TA的相关资源</a>
                     </div>
                     <!-- 广告 -->
                     <script type="text/javascript">
@@ -133,7 +133,7 @@
                                         <img src="" alt="<{$file.fileName}>" />
                                     </a>
                                 </div>
-                                <strong class="maina-nr-y-strong"><a href="__ROOT__/share_file/<{$file.fileID}>" target="_blank"><{$file.fileName}></a></strong>
+                                <strong class="maina-nr-y-strong"><a href="<{$file.fileUrl}>" target="_blank"><{$file.fileName}></a></strong>
                             </li>
                             <{/foreach}>
                         </ul>
@@ -146,10 +146,10 @@
             </div>
             <div class="main-sx">
                 <p class="main-sx-p">上一个：
-                    <a title="" href="__ROOT__/share_file/<{$preFile.id}>"><{$preFile.fileName}></a>
+                    <a title="" href="<{$preFile.fileUrl}>"><{$preFile.fileName}></a>
                 </p>
                 <p class="main-sx-p">下一个：
-                    <a title="" href="__ROOT__/share_file/<{$nextFile.id}>"><{$nextFile.fileName}></a>
+                    <a title="" href="<{$nextFile.fileUrl}>"><{$nextFile.fileName}></a>
                 </p>
             </div>
         </div>
@@ -160,14 +160,14 @@
                     <h2 class="member-top-h2">百度云会员</h2>
                 </div>
                 <div class="member-imagess">
-                    <a target="_blank" href="<{$fileInfo.userUrl}>">
-                        <img alt="会员图片" src="<{$fileInfo.imgUrl}>" />
-                        <p class="maember-img-p"><{$fileInfo.userName}></p>
+                    <a target="_blank" href="<{$userInfo.userUrl}>">
+                        <img alt="会员图片" src="<{$userInfo.imgUrl}>" />
+                        <p class="maember-img-p"><{$userInfo.userName}></p>
                     </a>
                 </div>
                 <div class="maember-x">
                     <a class="maember-x-a">
-                        <span class="maember-x-a-span"><{$fileInfo.count}></span>
+                        <span class="maember-x-a-span"><{$userInfo.count}></span>
                         <span class="maember-x-a-span maember-x-a-span2">分享数</span>
                     </a>
                     <a class="maember-x-a">
@@ -189,7 +189,7 @@
             <div class="ranklist-yp" style="min-height:380px;">
                 <div class="ranklist-yp-dt">
                     <h2 class="dt-h2">TA的分享</h2>
-                    <p class="rm-p"><a target="_blank" href="<{$fileInfo.userUrl}>">更多></a>
+                    <p class="rm-p"><a target="_blank" href="<{$userInfo.userUrl}>">更多></a>
                     </p>
                 </div>
                 <div class="yp-dt-center" style="min-height:380px;">
@@ -217,7 +217,7 @@
                     <ul>
                         <{foreach from=$hotSearchList item=search}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="__ROOT__/search/<{$searchWord}>-0-0-0"><{$search.searchWord}></a>
+                            <a target="_blank" href="<{$search.searchUrl}>-0-0-0"><{$search.searchWord}></a>
                         </li>
                         <{/foreach}>
                     </ul>

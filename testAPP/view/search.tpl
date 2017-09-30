@@ -12,7 +12,7 @@
     <!-- 百度云电影 -->
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="__ROOT__" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2">百度云搜索</a>
+            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2">百度云搜索</a>
         </h2>
         <div class="resource">
             <div class="resource-top">
@@ -22,7 +22,7 @@
             </div>
             <div class="resource-center">
                 <ul>
-                    <li class="resource-conter-li" id="b0">
+                    <li class="resource-conter-li">
                         <a href="#">全部</a>
                     </li>
                     <{foreach from=$typesList item=suffixs key=type}>
@@ -37,9 +37,9 @@
                     <li class="resource-conter-li-suffix">
                         <a href="#">全部</a>
                     </li>
-                    <{foreach from=$suffixList item=suffixs key=type}>
+                    <{foreach from=$suffixList item=typeName key=suffix}>
                     <li class="resource-conter-li-suffix">
-                        <a href="#"><{$suffixs}></a>
+                        <a href="#"><{$suffix}></a>
                     </li>
                     <{/foreach}>
 
@@ -51,7 +51,7 @@
                 <div class="main-x-left">
                     <h3 class="x-left-h3">
                         <!--查询字段为空查询结果为空情况的解决-->
-                        <a target="_blank" href="../share_file/<{$file.id}>"><{$file.fileName}></a>
+                        <a target="_blank" href="<{$file.fileUrl}>"><{$file.fileName}></a>
                     </h3>
                     <ul class="x-left-ul">
                         <li class="x-left-li li-sj">类型：<{$file.typeName}><span>|</span>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="main-x-right">
                     <p class="x-right-p x-right-p2">
-                        会员：<a href="__ROOT__/share_user/<{$file.userID}>/1" target="_blank"><{$file.userName}></a>
+                        会员：<a href="<{$file.userUrl}>/1" target="_blank"><{$file.userName}></a>
                     </p>
                     <p class="x-right-p">
                         来源：百度网盘
@@ -78,21 +78,15 @@
             <div class="gow">
                 <table class='pagesec'>
                     <tr>
-                        <td class='rd'>
-                            <span>第<{$page.curPage}>/<{$page.countPage}>页</span>
-                        </td>
-                        <td class='prev'>
-                            <a class='db' href="__ROOT__/search/<{$page.condition}>-<{$page.preID}>">上一页</a>
-                        </td>
-                        <td class='psec'></td>
-                        <td class='pnum'>
-                            <a class='sel' href="__ROOT__/search/">1</a>
-                        </td>
-                        <td class='nsec'></td>
-                        <td class='next'>
-                            <a class='ab' href='/search/Wildes.Japan-0-%E5%85%A8%E9%83%A8-2.html'>下一页</a>
-                        </td>
-                        <td class='jmp'></td>
+                        <td class='prev'><a class='db' href="<{$pages.pre}>">上一页</a></td>
+                        <td class="pnum"><a class="ab" href="<{$pages.first.url}>"><{$pages.first.page}></a></td>
+                        <td class="pnum"><{$pages.preFix}></td>
+                        <{foreach from=$pages.cur item=item}>
+                        <td class="pnum"><a class="ab" href="<{$item.url}>"><{$item.page}></a></td>
+                        <{/foreach}>
+                        <td class="pnum"><{$pages.nextFix}></td>
+                        <td class="pnum"><a class="ab" href="<{$pages.last.url}>"><{$pages.last.page}></a></td>
+                        <td class='next'><a class='ab' href="<{$pages.next}>">下一页</a></td>
                     </tr>
                 </table>
             </div>
@@ -117,7 +111,7 @@
                     <ul>
                         <{foreach from=$hotFileList item=file}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="../share_file/<{$file.fileID}>"><{$file.fileName}></a>
+                            <a target="_blank" href="<{$file.fileUrl}>"><{$file.fileName}></a>
                         </li>
                         <{/foreach}>
                     </ul>
@@ -134,7 +128,7 @@
                     <ul>
                         <{foreach from=$hotSearchList item=search}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="__ROOT__/search/ALL-ALL-<{$search.word}>-1"><{$search.word}></a>&nbsp;&nbsp;
+                            <a target="_blank" href="<{$search.searchUrl}>-1"><{$search.word}></a>&nbsp;&nbsp;
                         </li>
                         <{/foreach}>
                     </ul>
