@@ -47,7 +47,8 @@ class pc extends ezControl{
 		echo "<html><script language='javascript'>location.href='$url'</script></html>";
 	}
 	private function reHome(){
-		$this->redirect_url($_SERVER['HTTP_HOST']);
+		$webSiteInfo = ezServer()->getCache('webSiteInfo');
+		$this->redirect_url($webSiteInfo['webSite'].'/index.php/pc/index');
 	}
 	public function hot(){
 		// 热门搜索
