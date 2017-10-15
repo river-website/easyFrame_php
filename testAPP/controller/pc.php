@@ -19,7 +19,7 @@
 class pc extends ezControl{
     private function toFileUrl($file){
         $webSiteInfo = ezServer()->getCache('webSiteInfo');
-        return $webSiteInfo['webSite'].str_replace('$id',$file['id'],$webSiteInfo['fileSite']);
+        return str_replace('$id',$file['id'],$webSiteInfo['fileSite']);
     }
     private function toUserUrl($user,$condition = null){
         $webSiteInfo = ezServer()->getCache('webSiteInfo');
@@ -27,7 +27,7 @@ class pc extends ezControl{
         if(!isset($condition['suffix']))$condition['suffix'] = 'ALL';
         if(!isset($condition['searchWord']))$condition['searchWord'] = 'ALL';
         if(!isset($condition['page']))$condition['page'] = 1;
-        return $webSiteInfo['webSite'].str_replace(
+        return str_replace(
             array('$id','$type','$suffix','$searchWord','$page'),
             array($user['id'],$condition['type'],$condition['suffix'],$condition['searchWord'],$condition['page']),
             $webSiteInfo['userSite']);
@@ -38,7 +38,7 @@ class pc extends ezControl{
         if(!isset($condition['suffix']))$condition['suffix'] = 'ALL';
         if(!isset($condition['searchWord']))$condition['searchWord'] = 'ALL';
         if(!isset($condition['page']))$condition['page'] = 1;
-        return $webSiteInfo['webSite'].str_replace(
+        return str_replace(
                 array('$type','$suffix','$searchWord','$page'),
                 array($condition['type'],$condition['suffix'],$condition['searchWord'],$condition['page']),
                 $webSiteInfo['searchSite']);
@@ -110,6 +110,13 @@ class pc extends ezControl{
 			$count = $share_file->select('count(id) as count')[0]['count'];
 			$webSiteInfo['fileCount'] = $count;
 			$webSiteInfo['fileNewCount'] = rand(10000,1000000);
+
+            $webSiteInfo['fileSite'] = $webSiteInfo['webSite'].$webSiteInfo['fileSite'];
+            $webSiteInfo['userSite'] = $webSiteInfo['webSite'].$webSiteInfo['userSite'];
+            $webSiteInfo['searchSite'] = $webSiteInfo['webSite'].$webSiteInfo['searchSite'];
+            $webSiteInfo['logoImg'] = $webSiteInfo['pubSite'].$webSiteInfo['logoImg'];
+            $webSiteInfo['footerImg'] = $webSiteInfo['pubSite'].$webSiteInfo['footerImg'];
+
             ezServer()->setCache('webSiteInfo',$webSiteInfo,3600);
         }
 	    $this->assign('webSiteInfo',$webSiteInfo);
@@ -146,22 +153,47 @@ class pc extends ezControl{
             ezServer()->setCache('share_user_id',$share_user_id,3600);
             ezServer()->setCache('share_user_uk',$share_user_uk,3600);
         }
+
+        // 目录的链接
+        $menus = ezServer()->getCache('menus');
+        if(empty($menus)){
+            $menus['search'] = $this->toSearchUrl();
+            $menus['file'] = $this->toFileUrl(array('id'=>1));
+            $menus['user'] = $this->toUserUrl(array('id'=>1));
+            ezServer()->setCache('menus',$menus,3600);
+        }
+        $this->assign('menus',$menus);
     }
 	public function index(){
 		$this->baseInfo();
 		$this->hot();
-		$newShareList = ezServer()->getCache('newShareList');
-		if(empty($newShareList)) {
+		$newFileList = ezServer()->getCache('newFileList');
+		if(empty($newFileList)) {
 			$share_file = $this->getModel('share_file');
-			$newShareList = $share_file
+            $newFileList = $share_file
 				->order(array('id'),'desc')
 				->limit(100)
 				->select();
-			foreach ($newShareList as &$file)
+			foreach ($newFileList as &$file)
 				$file['fileUrl'] = $this->toFileUrl($file);
-			ezServer()->setCache('newShareList',$newShareList,1800);
+			ezServer()->setCache('newFileList',$newFileList,1800);
 		}
-		$this->assign('newShareList',$newShareList);
+		$this->assign('newFileList',$newFileList);
+
+		$todySearchList = ezServer()->getCache('todySearchList');
+        if(empty($todySearchList)) {
+            $hotSearch = $this->getModel('hotSearch');
+            $today = date('Ymd',time());
+            $todySearchList = $hotSearch
+                ->where(array("date=$today"))
+                ->limit(100)
+                ->select('searchWord');
+            foreach ($todySearchList as &$search)
+                $search['searchUrl'] = $this->toSearchUrl($search);
+            ezServer()->setCache('todySearchList',$todySearchList,1800);
+        }
+        $this->assign('todySearchList',$todySearchList);
+
 		$this->display('index');
 	}
 	public function search($condition = null){

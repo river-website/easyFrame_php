@@ -2,46 +2,46 @@
         <!-- 返回顶部 -->
         <div class="fhdb-fixed">
             <a href="#">
-                <img src="__ROOT__<{$webSiteInfo.footerImg}>" alt="返回顶部" />
+                <img src="<{$webSiteInfo.footerImg}>" alt="返回顶部" />
             </a>
         </div>
         <!-- 底部 -->
         <div class="footer">
             <div class="footer-auto">
                 <div class="footer-left">
-                    <a title="百度网盘" href="__ROOT__">
-                        <img alt="百度网盘" src="__ROOT__<{$webSiteInfo.logoImg}>" />
+                    <a title="百度网盘" href="<{$webSiteInfo.webSite}>">
+                        <img alt="百度网盘" src="<{$webSiteInfo.logoImg}>" />
                     </a>
                     <p>最快的百度网盘搜索引擎</p>
                 </div>
                 <div class="footer-center">
                     <div class="footer-center-div">
-                        <a href="__ROOT__/search/ALL-ALL-ALL-1">百度云搜索</a>
-                        <a href="__ROOT__/share_file/1">百度云资源</a>
-                        <a href="__ROOT__/share_user/1">百度云会员</a>
+                        <a href="<{$menus.search}>">百度云搜索</a>
+                        <a href="<{$menus.file}>">百度云资源</a>
+                        <a href="<{$menus.user}>">百度云会员</a>
                     </div>
                     <div class="footer-center-div2">
                         <p>Copyright&#160;©&#160;2016-2017
-                            <a href="__ROOT__">百度云盘（baiduyunpan.com）</a>All&#160;Rights&#160;Reserved</p>
+                            <a href="<{$webSiteInfo.webSite}>">百度云盘（<{$webSiteInfo.webSite}>）</a>All&#160;Rights&#160;Reserved</p>
                         <p class="div2-p2">Email:2540054847@qq.com
                             <script src="http://s95.cnzz.com/stat.php?id=1258115369&web_id=1258115369" language="JavaScript"></script>
                         </p>
                     </div>
                     <div style="width:600px;margin: 0 auto;text-align:center; padding-top:4px;">
-                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43310102000217" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="http://www.baiduyunpan.com/images/gongan.png"" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">湘公网安备 43310102000217号</p></a>
+                        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43310102000217" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="<{$webSiteInfo.pubSite}>/images/gongan.png"" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">湘公网安备 43310102000217号</p></a>
                     </div>
                 </div>
                 <div class="footer-right">
                     <div class="footer-right-div">
                         <p>分享至：</p>
                         <a title="微博" href="javascript:trigger_click('tsina');" target="_blank">
-                            <img alt="微博" src="__ROOT__/images/12.png" />
+                            <img alt="微博" src="<{$webSiteInfo.pubSite}>/images/12.png" />
                         </a>
                         <a title="微信" href="javascript:trigger_click('weixin');">
-                            <img alt="微信" src="__ROOT__/images/13.png" />
+                            <img alt="微信" src="<{$webSiteInfo.pubSite}>/images/13.png" />
                         </a>
                         <a title="QQ空间" href="javascript:trigger_click('qzone');" target="_blank" style="padding-right:0;">
-                            <img alt="QQ空间" src="__ROOT__/images/14.png" />
+                            <img alt="QQ空间" src="<{$webSiteInfo.pubSite}>/images/14.png" />
                         </a>
                     </div>
                     <div class="bdsharebuttonbox" style="display:none;">
@@ -119,9 +119,9 @@
             };
             BaiduSuggestion.bind("searchbox", params, show);
         </script>
-        <script type="text/javascript" src="http://www.baiduyunpan.com/js/_common.js"></script>
-        <script type="text/javascript" src="http://www.baiduyunpan.com/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="http://www.baiduyunpan.com/js/jquery_own.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/_common.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/jquery_own.js"></script>
         <script charset="gbk" src="http://www.baidu.com/js/opensug.js"></script>
         <script>
             $.setNavStyle('百度云下载');

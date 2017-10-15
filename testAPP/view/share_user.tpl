@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-hyxq.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-bjtp.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-hyxq.css">
 </head>
 <body>
 <div class="box">
@@ -11,7 +11,7 @@
 
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="<{$userInfo.userUrl}>" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
+            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a href="<{$menus.user}>" class=" main-h3-a">百度云会员</a> &nbsp;&gt;&nbsp; <span style="color: #2E99EB;"><{$userInfo.userName}>的百度网盘</span>
         </h2>
         <div class="main-center">
             <div class="main-ain">
@@ -94,7 +94,7 @@
                     <li class="resource-conter-li resource-li3 li6"><{$file.suffix}><span>|</span>
                     </li>
                     <li class="resource-conter-li li6">
-                        <img class="resource-img" src="__ROOT__/images/20.png"><span>|</span>
+                        <img class="resource-img" src="<{$webSiteInfo.pubSite}>/images/20.png"><span>|</span>
                     </li>
                     <li class="resource-conter-li resource-li5 li6"><{$file.size}>
                     </li>

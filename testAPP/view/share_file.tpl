@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-xz.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-xz.css">
 </head>
 <body>
 <div class="box">
@@ -11,7 +11,7 @@
     <!-- main -->
     <div class="main">
         <h2 class="main-h3">
-            当前位置：<a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a>&#160;>&#160; <a href="<{$fileInfo.fileUrl}>" class=" main-h3-a2">百度云资源</a>
+            当前位置：<a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a>&#160;>&#160; <a href="<{$menus.file}>" class=" main-h3-a2">百度云资源</a>
         </h2>
         <div class="resource">
             <div class="resource-center">
@@ -51,22 +51,22 @@
                         <li class="x-right-li x-right-li2">
                             收&nbsp;藏&nbsp;到&nbsp;：
                             <a title="" href="javascript:trigger_click('more');">
-                                <img alt="" src="__ROOT__/images/34.png" />
+                                <img alt="" src="<{$webSiteInfo.pubSite}>/images/34.png" />
                             </a>
                             <a title="收藏到QQ空间" href="javascript:trigger_click('qzone');">
-                                <img alt="收藏到QQ空间" src="__ROOT__/images/35.png" />
+                                <img alt="收藏到QQ空间" src="<{$webSiteInfo.pubSite}>/images/35.png" />
                             </a>
                             <a title="收藏到新浪微博" href="javascript:trigger_click('tsina');">
-                                <img alt="收藏到新浪微博" src="__ROOT__/images/36.png" />
+                                <img alt="收藏到新浪微博" src="<{$webSiteInfo.pubSite}>/images/36.png" />
                             </a>
                             <a title="收藏到人人网" href="javascript:trigger_click('renren');">
-                                <img alt="收藏到人人网" src="__ROOT__/images/37.png" />
+                                <img alt="收藏到人人网" src="<{$webSiteInfo.pubSite}>/images/37.png" />
                             </a>
                             <a title="收藏到腾讯微博" href="javascript:trigger_click('tqq');">
-                                <img alt="收藏到腾讯微博" src="__ROOT__/images/38.png" />
+                                <img alt="收藏到腾讯微博" src="<{$webSiteInfo.pubSite}>/images/38.png" />
                             </a>
                             <a title="收藏到微信" href="javascript:trigger_click('weixin');">
-                                <img alt="收藏到微信" src="__ROOT__/images/39.png" />
+                                <img alt="收藏到微信" src="<{$webSiteInfo.pubSite}>/images/39.png" />
                             </a>
                         </li>
                     </ul>
@@ -113,7 +113,7 @@
                                         <img src="<{$user.imgUrl}>" alt="<{$user.userName}>" />
                                     </a>
                                 </div>
-                                <strong class="maina-nr-y-strong"><a href=<{$user.userUrl}>" target="_blank"><{$user.userName}></a></strong>
+                                <strong class="maina-nr-y-strong"><a href="<{$user.userUrl}>" target="_blank"><{$user.userName}></a></strong>
                             </li>
                             <{/foreach}>
                         </ul>
@@ -196,7 +196,7 @@
                     <ul>
                         <{foreach from=$userFiles item=file}>
                         <li class="dt-center-li">
-                            <a target="_blank" href="<{$fileInfo.fileUrl}>"><{$file.fileName}></a>
+                            <a target="_blank" href="<{$file.fileUrl}>"><{$file.fileName}></a>
                         </li>
                         <{/foreach}>
                     </ul>
