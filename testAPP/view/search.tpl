@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="http://www.baiduyunpan.com/css/baiduyunpan-lb.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-bjtp.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-lb.css">
 </head>
 <body>
 <div class="box">
@@ -12,7 +12,7 @@
     <!-- 百度云电影 -->
     <div class="main">
         <h2 class="main-h3">
-            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2">百度云搜索</a>
+            当前位置： <a href="<{$webSiteInfo.webSite}>" class="main-h3-a">首页</a> &nbsp;&gt;&nbsp; <a class=" main-h3-a2" href="<{$menus.search}>">百度云搜索</a>
         </h2>
         <div class="resource">
             <div class="resource-top">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="main-x-right">
                     <p class="x-right-p x-right-p2">
-                        会员：<a href="<{$file.userUrl}>/1" target="_blank"><{$file.userName}></a>
+                        会员：<a href="<{$file.userUrl}>" target="_blank"><{$file.userName}></a>
                     </p>
                     <p class="x-right-p">
                         来源：百度网盘

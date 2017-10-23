@@ -71,7 +71,7 @@ var _hmt = _hmt || [];
                 <span id="search_init" style="display:none;">0</span> <span id="search_suffix" style="display:none;">全部</span>
                 <div class="search-auto">
                     <h2 class="search-left">
-                        <a title="百度云盘" href="http://www.baiduyunpan.com"><img alt="百度云盘" src="http://www.baiduyunpan.com/images/logo.png"></a>
+                        <a title="百度云盘" href="<{$webSiteInfo.webSite}>"><img alt="百度云盘" src="<{$webSiteInfo.pubSite}>/images/logo.png"></a>
                     </h2>
                     <div class="search-center">
                         <div class="search-wrap">

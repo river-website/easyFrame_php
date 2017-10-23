@@ -28,9 +28,9 @@ class pc extends ezControl{
         if(!isset($condition['searchWord']))$condition['searchWord'] = 'ALL';
         if(!isset($condition['page']))$condition['page'] = 1;
         return $webSiteInfo['webSite'].str_replace(
-            array('$id','$type','$suffix','$searchWord','$page'),
-            array($user['id'],$condition['type'],$condition['suffix'],$condition['searchWord'],$condition['page']),
-            $webSiteInfo['userSite']);
+                array('$id','$type','$suffix','$searchWord','$page'),
+                array($user['id'],$condition['type'],$condition['suffix'],$condition['searchWord'],$condition['page']),
+                $webSiteInfo['userSite']);
     }
     private function toSearchUrl($condition = null){
         $webSiteInfo = ezServer()->getCache('webSiteInfo');
@@ -43,15 +43,15 @@ class pc extends ezControl{
                 array($condition['type'],$condition['suffix'],$condition['searchWord'],$condition['page']),
                 $webSiteInfo['searchSite']);
     }
-	public function redirect_url($url){
-		echo "<html><script language='javascript'>location.href='$url'</script></html>";
-	}
-	private function reHome(){
-		$webSiteInfo = ezServer()->getCache('webSiteInfo');
-		$this->redirect_url($webSiteInfo['webSite'].'/index.php/pc/index');
-	}
-	public function hot(){
-		// 热门搜索
+    public function redirect_url($url){
+        echo "<html><script language='javascript'>location.href='$url'</script></html>";
+    }
+    private function reHome(){
+        $webSiteInfo = ezServer()->getCache('webSiteInfo');
+        $this->redirect_url($webSiteInfo['webSite'].'/index.php/pc/index');
+    }
+    public function hot(){
+        // 热门搜索
         $hotSearchList = ezServer()->getCache('hotSearchList');
         if(empty($hotSearchList)){
             $hotSearch = $this->getModel('hotSearch');
@@ -100,20 +100,20 @@ class pc extends ezControl{
         $this->assign('hotUserList',$hotUserList);
     }
     public function baseInfo(){
-	    // 网站基本信息
+        // 网站基本信息
         $webSiteInfo = ezServer()->getCache('webSiteInfo');
         if(empty($webSiteInfo)){
             $webSite = $this->getModel('webSite');
             $webSiteInfo = $webSite->where(array('id=1'))->select();
-			$webSiteInfo = $webSiteInfo[0];
-			$share_file = $this->getModel('share_file');
-			$count = $share_file->select('count(id) as count')[0]['count'];
-			$webSiteInfo['fileCount'] = $count;
-			$webSiteInfo['fileNewCount'] = rand(10000,1000000);
+            $webSiteInfo = $webSiteInfo[0];
+            $share_file = $this->getModel('share_file');
+            $count = $share_file->select('count(id) as count')[0]['count'];
+            $webSiteInfo['fileCount'] = $count;
+            $webSiteInfo['fileNewCount'] = rand(10000,1000000);
             ezServer()->setCache('webSiteInfo',$webSiteInfo,3600);
         }
-	    $this->assign('webSiteInfo',$webSiteInfo);
-	    // 后缀信息,类型信息
+        $this->assign('webSiteInfo',$webSiteInfo);
+        // 后缀信息,类型信息
         $suffixList = ezServer()->getCache('suffixList');
         $typesList = ezServer()->getCache('typesList');
         if(empty($suffixList)||empty($typesList)) {
@@ -147,51 +147,51 @@ class pc extends ezControl{
             ezServer()->setCache('share_user_uk',$share_user_uk,3600);
         }
     }
-	public function index(){
-		$this->baseInfo();
-		$this->hot();
-		$newShareList = ezServer()->getCache('newShareList');
-		if(empty($newShareList)) {
-			$share_file = $this->getModel('share_file');
-			$newShareList = $share_file
-				->order(array('id'),'desc')
-				->limit(100)
-				->select();
-			foreach ($newShareList as &$file)
-				$file['fileUrl'] = $this->toFileUrl($file);
-			ezServer()->setCache('newShareList',$newShareList,1800);
-		}
-		$this->assign('newShareList',$newShareList);
-		$this->display('index');
-	}
-	public function search($condition = null){
-		$this->baseInfo();
-		$this->hot();
+    public function index(){
+        $this->baseInfo();
+        $this->hot();
+        $newShareList = ezServer()->getCache('newShareList');
+        if(empty($newShareList)) {
+            $share_file = $this->getModel('share_file');
+            $newShareList = $share_file
+                ->order(array('id'),'desc')
+                ->limit(100)
+                ->select();
+            foreach ($newShareList as &$file)
+                $file['fileUrl'] = $this->toFileUrl($file);
+            ezServer()->setCache('newShareList',$newShareList,1800);
+        }
+        $this->assign('newShareList',$newShareList);
+        $this->display('index');
+    }
+    public function search($condition = null){
+        $this->baseInfo();
+        $this->hot();
 
-		$limit = 20;
-		$condition = explode('-', $condition);
-		if(count($condition)!=4){$this->reHome();return;}
-		$typeName = urldecode($condition[0]);
-		$suffix = $condition[1];
-		$word 	= urldecode($condition[2]);
-		$page 	= $condition[3];
- 		if(empty($typeName)||empty($suffix)||empty($word)||!is_numeric($page) || $page<=0){$this->reHome();return;}
+        $limit = 20;
+        $condition = explode('-', $condition);
+        if(count($condition)!=4){$this->reHome();return;}
+        $typeName = urldecode($condition[0]);
+        $suffix = $condition[1];
+        $word 	= urldecode($condition[2]);
+        $page 	= $condition[3];
+        if(empty($typeName)||empty($suffix)||empty($word)||!is_numeric($page) || $page<=0){$this->reHome();return;}
 
         $typesList = ezServer()->getCache('typesList');
         $suffixList = ezServer()->getCache('suffixList');
         if($typeName !='ALL'){
-        	if(empty($typesList[$typeName])){$this->reHome();return;}
-			$suffixs = $typesList[$typeName];
-			if($suffix != 'ALL' && empty($suffixs[$suffix])){$this->reHome();return;}
+            if(empty($typesList[$typeName])){$this->reHome();return;}
+            $suffixs = $typesList[$typeName];
+            if($suffix != 'ALL' && empty($suffixs[$suffix])){$this->reHome();return;}
         }else if($suffix != 'ALL'){
-			if(empty($suffixList[$suffix])){$this->reHome();return;}
+            if(empty($suffixList[$suffix])){$this->reHome();return;}
         }
-		$share_file = $this->getModel('share_file');
-		if(!empty($suffixs)) 
+        $share_file = $this->getModel('share_file');
+        if(!empty($suffixs))
             $share_file->where_in('suffix',array_keys($suffixs));
-		if($suffix != 'ALL')
-			$share_file->where(array("suffix=$suffix"));
-		if($word != 'ALL'){
+        if($suffix != 'ALL')
+            $share_file->where(array("suffix=$suffix"));
+        if($word != 'ALL'){
             $insertdata['searchWord'] = $word;
             $insertdata['date'] = date('Ymd',time());
             $hotSearch = $this->getModel('hotSearch');
@@ -203,228 +203,241 @@ class pc extends ezControl{
         if(empty($count) || count($count) != 1) $count = 0;
         else $count = $count[0]['count'];
         if($count>0){
-        	$share_file->sql = $sql;
-        	$searchList = $share_file
-				->limit($limit,($page-1)*$limit)
-				->select('id,fileName,suffix,size,shareTime,uk');
-        	$user_uk = ezServer()->getCache('share_user_uk');
-			foreach ($searchList as &$value) {
-				$value['typeName'] = empty($suffixList[$value['suffix']])?'未知':$suffixList[$value['suffix']];
-				$value['fileUrl'] = $this->toFileUrl($value);
+            $share_file->sql = $sql;
+            $searchList = $share_file
+                ->limit($limit,($page-1)*$limit)
+                ->select('id,fileName,suffix,size,shareTime,uk');
+            $user_uk = ezServer()->getCache('share_user_uk');
+            foreach ($searchList as &$value) {
+                $value['typeName'] = empty($suffixList[$value['suffix']])?'未知':$suffixList[$value['suffix']];
+                $value['fileUrl'] = $this->toFileUrl($value);
                 if(!empty($user_uk[$value['uk']])){
-                	$uk =  $user_uk[$value['uk']];
-					$value['userName'] = $uk['userName'];
-					$value['userUrl'] = $this->toUserUrl($uk);
-				}else{
-					$value['userName'] = '未知';
-					$value['userUrl'] = '';
-				}
-			}
+                    $uk =  $user_uk[$value['uk']];
+                    $value['userName'] = $uk['userName'];
+                    $value['userUrl'] = $this->toUserUrl($uk);
+                }else{
+                    $value['userName'] = '未知';
+                    $value['userUrl'] = '';
+                }
+            }
         }else $searchList = array();
 
-		$condition['type'] = $condition[0];
-		$condition['suffix'] = $condition[1];
-		$condition['searchWord'] = $condition[2];
-		$condition['page'] = $condition[3];
+        $condition['type'] = $condition[0];
+        $condition['suffix'] = $condition[1];
+        $condition['searchWord'] = $condition[2];
+        $condition['page'] = $condition[3];
 
-		$pages = $this->pages($count,$limit,$page);
-		if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toSearchUrl($condition);}
-		if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toSearchUrl($condition);}
-		if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toSearchUrl($condition));}
-		if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toSearchUrl($condition));}
-		foreach ($pages['cur'] as &$value) {
-			$condition['page']=$value;
-			$value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toSearchUrl($condition));
-		}
+        $pages = $this->pages($count,$limit,$page);
+        if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toSearchUrl($condition);}
+        if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toSearchUrl($condition);}
+        if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toSearchUrl($condition));}
+        if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toSearchUrl($condition));}
+        foreach ($pages['cur'] as &$value) {
+            $condition['page']=$value;
+            $value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toSearchUrl($condition));
+        }
 
-		$searchInfo['word'] = $word;
-		$searchInfo['count'] = $count;
-		$this->assign('searchList',$searchList);
-		$this->assign('searchInfo',$searchInfo);
-		$this->assign('pages',$pages);
-		$this->display('search');
-	}
-	public function share_file($fileID = null){
-		$this->baseInfo();
-		$this->hot();
-		if(empty($fileID) || !is_numeric($fileID)){$this->reHome();return;}
-		$share_file = $this->getModel('share_file');
-		$fileInfo = $share_file
+        $searchInfo['word'] = $word;
+        $searchInfo['count'] = $count;
+        $this->assign('searchList',$searchList);
+        $this->assign('searchInfo',$searchInfo);
+        $this->assign('pages',$pages);
+        $this->display('search');
+    }
+    public function share_file($fileID = null){
+        $this->baseInfo();
+        $this->hot();
+        if(empty($fileID) || !is_numeric($fileID)){$this->reHome();return;}
+        $share_file = $this->getModel('share_file');
+        $fileInfo = $share_file
             ->where(array("share_file.id=$fileID"))
             ->select('share_file.*');
-		if(empty($fileInfo) || count($fileInfo) == 0){$this->reHome();return;}
-		$fileInfo = $fileInfo[0];
-		$fileInfo['fileUrl'] = $this->toFileUrl($fileInfo);
-		$suffixList = ezServer()->getCache('suffixList');
-		$fileInfo['typeName'] = isset($suffixList[$fileInfo['suffix']])?$suffixList[$fileInfo['suffix']]:'未知';
-		$user_uk = ezServer()->getCache('share_user_uk');
-		if(!isset($user_uk[$fileInfo['uk']]))$userInfo = array();
-		else{
-		    $userInfo = $user_uk[$fileInfo['uk']];
+        if(empty($fileInfo) || count($fileInfo) == 0){$this->reHome();return;}
+        $fileInfo = $fileInfo[0];
+        $fileInfo['fileUrl'] = $this->toFileUrl($fileInfo);
+        $suffixList = ezServer()->getCache('suffixList');
+        $fileInfo['typeName'] = isset($suffixList[$fileInfo['suffix']])?$suffixList[$fileInfo['suffix']]:'未知';
+        $user_uk = ezServer()->getCache('share_user_uk');
+        if(!isset($user_uk[$fileInfo['uk']]))$userInfo = array();
+        else{
+            $userInfo = $user_uk[$fileInfo['uk']];
             $userInfo['userUrl'] = $this->toUserUrl($userInfo);
         }
-		$preFile = $share_file
-			->where(array("id<$fileID"))
-			->order(array('id'),'desc')
-			->limit(1)
-			->select('id,fileName');
-		if(empty($preFile)||count($preFile) == 0)$preFile = array('id'=>null,'fileName'=>null,'fileUrl'=>null);
-		else{
-		    $preFile = $preFile[0];
-		    $preFile['fileUrl'] = $this->toFileUrl($preFile);
-		}
-		$nextFile = $share_file
-			->where(array("id>$fileID"))
-			->order(array('id'),'asc')
-			->limit(1)
-			->select('id,fileName');
-		if(empty($nextFile)||count($nextFile) == 0)$nextFile = array('id'=>null,'fileName'=>null);
-		else{
-		    $nextFile = $nextFile[0];
+        $preFile = $share_file
+            ->where(array("id<$fileID"))
+            ->order(array('id'),'desc')
+            ->limit(1)
+            ->select('id,fileName');
+        if(empty($preFile)||count($preFile) == 0)$preFile = array('id'=>null,'fileName'=>null,'fileUrl'=>null);
+        else{
+            $preFile = $preFile[0];
+            $preFile['fileUrl'] = $this->toFileUrl($preFile);
+        }
+        $nextFile = $share_file
+            ->where(array("id>$fileID"))
+            ->order(array('id'),'asc')
+            ->limit(1)
+            ->select('id,fileName');
+        if(empty($nextFile)||count($nextFile) == 0)$nextFile = array('id'=>null,'fileName'=>null);
+        else{
+            $nextFile = $nextFile[0];
             $nextFile['fileUrl'] = $this->toFileUrl($nextFile);
         }
-		$userFiles = $share_file
+        $userFiles = $share_file
             ->where(array('uk='.$fileInfo['uk']))
             ->limit(20)
             ->select(array('id','fileName'));
-		foreach ($userFiles as &$value)
-			$value['fileUrl'] = $this->toFileUrl($value);
-		$likeFiles = $share_file
+        foreach ($userFiles as &$value)
+            $value['fileUrl'] = $this->toFileUrl($value);
+        $likeFiles = $share_file
 //            ->like(array('fileName'=>$fileInfo['fileName']))
 //            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
             ->limit(20)
             ->select(array('id','fileName'));
-		foreach ($likeFiles as &$value)
-			$value['fileUrl'] = $this->toFileUrl($value);
+        foreach ($likeFiles as &$value)
+            $value['fileUrl'] = $this->toFileUrl($value);
         $userShareCount = $share_file
-        	->where(array('uk='.$fileInfo['uk']))
-        	->select('count(id) as count');
-		$userInfo['count'] = $userShareCount[0]['count'];
+            ->where(array('uk='.$fileInfo['uk']))
+            ->select('count(id) as count');
+        $userInfo['count'] = $userShareCount[0]['count'];
 
         $data['date'] = date('Ymd',time());
-		$data['fileID'] = $fileID;
-		$hotFile = $this->getModel('hotFile');
-		$hotFile->insert($data);
+        $data['fileID'] = $fileID;
+        $hotFile = $this->getModel('hotFile');
+        $hotFile->insert($data);
 
         $this->assign('fileInfo',$fileInfo);
         $this->assign('userInfo',$userInfo);
-		$this->assign('userFiles',$userFiles);
-		$this->assign('likeFiles',$likeFiles);
-		$this->assign('preFile',$preFile);
-		$this->assign('nextFile',$nextFile);
-		$this->display('share_file');
-	}
-	public function share_user($userID=null,$condition=null){
-		$this->baseInfo();
-		$this->hot();
+        $this->assign('userFiles',$userFiles);
+        $this->assign('likeFiles',$likeFiles);
+        $this->assign('preFile',$preFile);
+        $this->assign('nextFile',$nextFile);
+        $this->display('share_file');
+    }
+    public function share_user($userID=null,$condition=null){
+        $this->baseInfo();
+        $this->hot();
 
-		$limit = 20;
-		$condition = explode('-', $condition);
-		if(count($condition)!=4){$this->reHome();return;}
-		$typeName = urldecode($condition[0]);
-		$suffix = $condition[1];
-		$word 	= urldecode($condition[2]);
-		$page 	= $condition[3];
-		if(empty($typeName)||empty($suffix)||empty($word)||!is_numeric($page) || $page<=0){$this->reHome();return;}
+        $limit = 20;
+        $condition = explode('-', $condition);
+        if(count($condition)!=4){$this->reHome();return;}
+        $typeName = urldecode($condition[0]);
+        $suffix = $condition[1];
+        $word 	= urldecode($condition[2]);
+        $page 	= $condition[3];
+        if(empty($typeName)||empty($suffix)||empty($word)||!is_numeric($page) || $page<=0){$this->reHome();return;}
 
-		if(empty($userID)||!is_numeric($userID)){$this->reHome();return;}
-		$user_id = ezServer()->getCache('share_user_id');
-		if(!isset($user_id[$userID])){$this->reHome();return;}
-		$userInfo = $user_id[$userID];
+        if(empty($userID)||!is_numeric($userID)){$this->reHome();return;}
+        $user_id = ezServer()->getCache('share_user_id');
+        if(!isset($user_id[$userID])){$this->reHome();return;}
+        $userInfo = $user_id[$userID];
 
-		$typesList = ezServer()->getCache('typesList');
-		$suffixList = ezServer()->getCache('suffixList');
-		$share_file = $this->getModel('share_file');
-		if($typeName !='ALL'){
-			if(empty($typesList[$typeName])){$this->reHome();return;}
-			$suffixs = $typesList[$typeName];
-			if($suffix != 'ALL' && empty($suffixs[$suffix])){$this->reHome();return;}
-		}else if($suffix != 'ALL') {
-			if (empty($suffixList[$suffix])) {$this->reHome();return;}
-		}
-		if(!empty($suffixs))
-			$share_file->where_in('suffix',array_keys($suffixs));
-		if($suffix != 'ALL')
-			$share_file->where(array("suffix=$suffix"));
-		if($word != 'ALL'){
-			$insertdata['searchWord'] = $word;
-			$insertdata['date'] = date('Ymd',time());
-			$hotSearch = $this->getModel('hotSearch');
-			$hotSearch->insert($insertdata);
-			$share_file->where(array('match(fileName) against("'.$word.'")'));
-		}
-		$sql = $share_file->where(array("uk=".$userInfo['uk']))->sql;
-		$userFiles = $share_file->limit($limit,($page-1)*$limit)->select(array('id','fileName','suffix','size','shareTime'));
-		$userInfo['count']=0;
-		$condition['type'] = $condition[0];
-		$condition['suffix'] = $condition[1];
-		$condition['searchWord'] = $condition[2];
-		$condition['page'] = $condition[3];
-		if(count($userFiles)>0) {
-			foreach ($userFiles as &$vaule) {
-				$vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '未知' : $suffixList[$vaule['suffix']];
-				$vaule['fileUrl'] = $this->toUserUrl($vaule,$condition);
-			}
-			$share_file->sql = $sql;
-			$count = $share_file->select('count(id) as count');
-			if(empty($count) || count($count)!=1)
-				$userInfo['count'] = 0;
-			else $userInfo['count'] = $count[0]['count'];
-		}
-		$data['userID'] = $userID;
-		$data['date'] = date('Ymd',time());
-		$hotUser = $this->getModel('hotUser');
-		$hotUser->insert($data);
+        $typesList = ezServer()->getCache('typesList');
+        $suffixList = ezServer()->getCache('suffixList');
+        $share_file = $this->getModel('share_file');
+        if($typeName !='ALL'){
+            if(empty($typesList[$typeName])){$this->reHome();return;}
+            $suffixs = $typesList[$typeName];
+            if($suffix != 'ALL' && empty($suffixs[$suffix])){$this->reHome();return;}
+        }else if($suffix != 'ALL') {
+            if (empty($suffixList[$suffix])) {$this->reHome();return;}
+        }
+        if(!empty($suffixs))
+            $share_file->where_in('suffix',array_keys($suffixs));
+        if($suffix != 'ALL')
+            $share_file->where(array("suffix=$suffix"));
+        if($word != 'ALL'){
+            $insertdata['searchWord'] = $word;
+            $insertdata['date'] = date('Ymd',time());
+            $hotSearch = $this->getModel('hotSearch');
+            $hotSearch->insert($insertdata);
+            $share_file->where(array('match(fileName) against("'.$word.'")'));
+        }
+        $sql = $share_file->where(array("uk=".$userInfo['uk']))->sql;
+        $userFiles = $share_file->limit($limit,($page-1)*$limit)->select(array('id','fileName','suffix','size','shareTime'));
+        $userInfo['count']=0;
+        $condition['type'] = $condition[0];
+        $condition['suffix'] = $condition[1];
+        $condition['searchWord'] = $condition[2];
+        $condition['page'] = $condition[3];
+        if(count($userFiles)>0) {
+            foreach ($userFiles as &$vaule) {
+                $vaule['typeName'] = empty($suffixList[$vaule['suffix']]) ? '未知' : $suffixList[$vaule['suffix']];
+                $vaule['fileUrl'] = $this->toUserUrl($vaule,$condition);
+            }
+            $share_file->sql = $sql;
+            $count = $share_file->select('count(id) as count');
+            if(empty($count) || count($count)!=1)
+                $userInfo['count'] = 0;
+            else $userInfo['count'] = $count[0]['count'];
+        }
+        $data['userID'] = $userID;
+        $data['date'] = date('Ymd',time());
+        $hotUser = $this->getModel('hotUser');
+        $hotUser->insert($data);
 
-		$pages = $this->pages($userInfo['count'],$limit,$page);
-		if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toUserUrl($userInfo,$condition);}
-		if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toUserUrl($userInfo,$condition);}
-		if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toUserUrl($userInfo,$condition));}
-		if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toUserUrl($userInfo,$condition));}
-		foreach ($pages['cur'] as &$value) {
-			$condition['page']=$value;
-			$value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toUserUrl($userInfo,$condition));
-		}
+        $pages = $this->pages($userInfo['count'],$limit,$page);
+        if($pages['pre']){$condition['page']=$pages['pre']; $pages['pre'] = $this->toUserUrl($userInfo,$condition);}
+        if($pages['next']){$condition['page']=$pages['next']; $pages['next'] = $this->toUserUrl($userInfo,$condition);}
+        if($pages['first']){$condition['page']=$pages['first'];$pages['first'] = array('page'=>$pages['first'],'url'=>$this->toUserUrl($userInfo,$condition));}
+        if($pages['last']){$condition['page']=$pages['last'];$pages['last'] = array('page'=>$pages['last'],'url'=>$this->toUserUrl($userInfo,$condition));}
+        foreach ($pages['cur'] as &$value) {
+            $condition['page']=$value;
+            $value = array('page' => $value, 'active' => ($value == $page) ? true : false, 'url' => $this->toUserUrl($userInfo,$condition));
+        }
 
-		$this->assign('pages',$pages);
-		$this->assign('userInfo',$userInfo);
-		$this->assign('userFiles',$userFiles);
+        $this->assign('pages',$pages);
+        $this->assign('userInfo',$userInfo);
+        $this->assign('userFiles',$userFiles);
         $this->display('share_user');
-	}
-	public function pages($count,$limit,$curPage){
-		$ret['pre'] = null;
-		$ret['next'] = null;
-		$ret['first'] = null;
-		$ret['last'] = null;
-		$ret['preFix'] = null;
-		$ret['nextFix'] = null;
-		$ret['cur'] = null;
-		if(!is_numeric($count)||!is_numeric($limit)||!is_numeric($curPage))return false;
-		if($count<0 || $limit<1||$curPage<1)return false;
-		$pageCount = ceil($count / $limit);
-		if($pageCount==0)$pageCount = 1;
-		if($curPage>$pageCount)return false;
+    }
+    public function pages($count,$limit,$curPage){
+        $ret['pre'] = null;
+        $ret['next'] = null;
+        $ret['first'] = null;
+        $ret['last'] = null;
+        $ret['preFix'] = null;
+        $ret['nextFix'] = null;
+        $ret['cur'] = null;
+        if(!is_numeric($count)||!is_numeric($limit)||!is_numeric($curPage))return false;
+        if($count<0 || $limit<1||$curPage<1)return false;
+        $pageCount = ceil($count / $limit);
+        if($pageCount==0)$pageCount = 1;
+        if($curPage>$pageCount)return false;
 
-		if($curPage==1)$ret['pre'] = null;
-		if($curPage==$pageCount)$ret['next'] = null;
-		if($curPage>1)$ret['pre'] = $curPage-1;
-		if($curPage<$pageCount)$ret['next'] = $curPage+1;
+        if($curPage==1)$ret['pre'] = null;
+        if($curPage==$pageCount)$ret['next'] = null;
+        if($curPage>1)$ret['pre'] = $curPage-1;
+        if($curPage<$pageCount)$ret['next'] = $curPage+1;
 
-		if($curPage==1)$ret['first'] = null;
-		if($curPage==$pageCount)$ret['last'] = null;
-		if($curPage>1)$ret['first']=1;
-		if($curPage<$pageCount)$ret['last'] = $pageCount;
+        if($curPage==1)$ret['first'] = null;
+        if($curPage==$pageCount)$ret['last'] = null;
+        if($curPage>1)$ret['first']=1;
+        if($curPage<$pageCount)$ret['last'] = $pageCount;
 
-		if($curPage>1+3)$ret['preFix'] = '...';
-		if($curPage<$pageCount-3)$ret['nextFix'] = '...';
-		if($curPage<=1+3)$ret['preFix'] = null;
-		if($curPage>=$pageCount-3)$ret['nextFix'] = null;
+        if($curPage>1+3)$ret['preFix'] = '...';
+        if($curPage<$pageCount-3)$ret['nextFix'] = '...';
+        if($curPage<=1+3)$ret['preFix'] = null;
+        if($curPage>=$pageCount-3)$ret['nextFix'] = null;
 
-		if($curPage-2>1)$ret['cur'][] = $curPage-2;
-		if($curPage-1>1)$ret['cur'][] = $curPage-1;
-		$ret['cur'][] = $curPage;
-		if($curPage+1<$pageCount)$ret['cur'][] = $curPage+1;
-		if($curPage+2<$pageCount)$ret['cur'][] = $curPage+2;
-		return $ret;
-	}
+        if($curPage-2>1)$ret['cur'][] = $curPage-2;
+        if($curPage-1>1)$ret['cur'][] = $curPage-1;
+        $ret['cur'][] = $curPage;
+        if($curPage+1<$pageCount)$ret['cur'][] = $curPage+1;
+        if($curPage+2<$pageCount)$ret['cur'][] = $curPage+2;
+        return $ret;
+    }
+
+    public function yieldd(){
+        $share_file = $this->getModel('share_file');
+        $fileInfo = (yield $share_file->where(array("share_file.id=1"))->select('share_file.*',true));
+        echo("get sql data ".print_r($fileInfo,true));
+        $fileInfo1 = (yield $share_file->where(array("share_file.id=1"))->select('share_file.*',true));
+        echo("get sql 2 data ".print_r($fileInfo1,true));
+    }
+
+    public function testYield(){
+//        new runG(array($this,'yieldd'));
+        runG(array($this,'yieldd'));
+    }
 }
