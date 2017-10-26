@@ -34,13 +34,13 @@
                 <div class="footer-right">
                     <div class="footer-right-div">
                         <p>分享至：</p>
-                        <a title="微博" href="javascript:trigger_click('tsina');" target="_blank">
+                        <a title="微博" href="trigger_click('tsina');" target="_blank">
                             <img alt="微博" src="<{$webSiteInfo.pubSite}>/images/weibo.png" />
                         </a>
-                        <a title="微信" href="javascript:trigger_click('weixin');">
+                        <a title="微信" href="trigger_click('weixin');">
                             <img alt="微信" src="<{$webSiteInfo.pubSite}>/images/weixinhui.png" />
                         </a>
-                        <a title="QQ空间" href="javascript:trigger_click('qzone');" target="_blank" style="padding-right:0;">
+                        <a title="QQ空间" href="trigger_click('qzone');" target="_blank" style="padding-right:0;">
                             <img alt="QQ空间" src="<{$webSiteInfo.pubSite}>/images/QQhui.png" />
                         </a>
                     </div>
@@ -79,50 +79,7 @@
                 </div>
             </div>
         </div>
-        <script language="javascript" type="text/javascript">
-            function addfavorite(obj, url, title) {
-                !url ? url = location.href : null;
-                !title ? title = document.title : null;
-                try {
-                    window.external.addFavorite(url, title);
-                    return false;
-                } catch (e) {
-                    try {
-                        window.sidebar.addPanel(title, url, "");
-                        return false;
-                    } catch (e) {
-                        alert("加入收藏失败，请使用Ctrl+D进行添加");
-                        if (location.href.toLowerCase().indexOf(obj.href.toLowerCase(), 0) >= 0) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        </script>
-        <script type="text/javascript">
-            var txtObj = document.getElementById("alertSpan");
-             //回调函数，用于获取用户当前选择的文字
-            function show(str) {
-                txtObj.innerHTML = str;
-            }
-            var params = {
-                "XOffset": 0, //提示框位置横向偏移量,单位px
-                "YOffset": 10, //提示框位置纵向偏移量,单位px
-                "width": 326, //提示框宽度，单位px  
-                "fontColor": "black", //提示框文字颜色
-                "fontColorHI": "#FFF", //提示框高亮选择时文字颜色
-                "fontSize": "15px", //文字大小
-                "fontFamily": "宋体", //文字字体
-                "borderColor": "gray", //提示框的边框颜色
-                "bgcolorHI": "#2B91E3", //提示框高亮选择的颜色
-                "sugSubmit": false //在选择提示词条是是否提交表单
-            };
-            BaiduSuggestion.bind("searchbox", params, show);
-        </script>
-        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/_common.js"></script>
-        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="<{$webSiteInfo.puSite}>/js/jquery_own.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.pubSite}>/js/_common.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.pubSite}>/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<{$webSiteInfo.pubSite}>/js/jquery_own.js"></script>
         <script charset="gbk" src="http://www.baidu.com/js/opensug.js"></script>
-        <script>
-            $.setNavStyle('百度云下载');
-        </script>

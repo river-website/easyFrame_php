@@ -150,9 +150,41 @@ function isDeskMobile(name)
    document.cookie="isMobile="+name;
    window.location.href="http://"+name+".baiduyunpan.com";  
 }
- 
- 
+ function addfavorite(obj, url, title) {
+     !url ? url = location.href : null;
+     !title ? title = document.title : null;
+     try {
+         window.external.addFavorite(url, title);
+         return false;
+     } catch (e) {
+         try {
+             window.sidebar.addPanel(title, url, "");
+             return false;
+         } catch (e) {
+             alert("加入收藏失败，请使用Ctrl+D进行添加");
+             if (location.href.toLowerCase().indexOf(obj.href.toLowerCase(), 0) >= 0) {
+                 return false;
+             }
+         }
+     }
+ }
 
-
- 
- 
+ var txtObj = document.getElementById("alertSpan");
+ //回调函数，用于获取用户当前选择的文字
+ function show(str) {
+     txtObj.innerHTML = str;
+ }
+ var params = {
+     "XOffset": 0, //提示框位置横向偏移量,单位px
+     "YOffset": 10, //提示框位置纵向偏移量,单位px
+     "width": 326, //提示框宽度，单位px
+     "fontColor": "black", //提示框文字颜色
+     "fontColorHI": "#FFF", //提示框高亮选择时文字颜色
+     "fontSize": "15px", //文字大小
+     "fontFamily": "宋体", //文字字体
+     "borderColor": "gray", //提示框的边框颜色
+     "bgcolorHI": "#2B91E3", //提示框高亮选择的颜色
+     "sugSubmit": false //在选择提示词条是是否提交表单
+ };
+ BaiduSuggestion.bind("searchbox", params, show);
+ $.setNavStyle('百度云下载');

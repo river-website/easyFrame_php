@@ -46,22 +46,22 @@
                         <!-- 分享 -->
                         <li class="x-right-li x-right-li2">
                             收&nbsp;藏&nbsp;到&nbsp;：
-                            <a title="" href="javascript:trigger_click('more');">
+                            <a title="" href="trigger_click('more')">
                                 <img alt="" src="<{$webSiteInfo.pubSite}>/images/Add.png" />
                             </a>
-                            <a title="收藏到QQ空间" href="javascript:trigger_click('qzone');">
+                            <a title="收藏到QQ空间" href="trigger_click('qzone')">
                                 <img alt="收藏到QQ空间" src="<{$webSiteInfo.pubSite}>/images/QQkongjian.png" />
                             </a>
-                            <a title="收藏到新浪微博" href="javascript:trigger_click('tsina');">
+                            <a title="收藏到新浪微博" href="trigger_click('tsina')">
                                 <img alt="收藏到新浪微博" src="<{$webSiteInfo.pubSite}>/images/xinlang.png" />
                             </a>
-                            <a title="收藏到人人网" href="javascript:trigger_click('renren');">
+                            <a title="收藏到人人网" href="trigger_click('renren')">
                                 <img alt="收藏到人人网" src="<{$webSiteInfo.pubSite}>/images/renren.png" />
                             </a>
-                            <a title="收藏到腾讯微博" href="javascript:trigger_click('tqq');">
+                            <a title="收藏到腾讯微博" href="trigger_click('tqq')">
                                 <img alt="收藏到腾讯微博" src="<{$webSiteInfo.pubSite}>/images/tengxu.png" />
                             </a>
-                            <a title="收藏到微信" href="javascript:trigger_click('weixin');">
+                            <a title="收藏到微信" href="trigger_click('weixin')">
                                 <img alt="收藏到微信" src="<{$webSiteInfo.pubSite}>/images/weixin.png" />
                             </a>
                         </li>

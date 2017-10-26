@@ -11,10 +11,10 @@
     <div class="top">
         <div class="top-auto">
             <p class="top-left">
-                <{$webSiteInfo.logoTitle}>（<a href="javascript:;"><{$webSiteInfo.webSite}></a>）,是百度搜索和百度网盘搜索引擎的官网，千万级的百度云资源下载，最好用的百度云搜索引擎！
+                <{$webSiteInfo.logoTitle}>（<a href="#"><{$webSiteInfo.webSite}></a>）,是百度搜索和百度网盘搜索引擎的官网，千万级的百度云资源下载，最好用的百度云搜索引擎！
             </p>
             <p class="top-right">
-                <span onclick="javascript:trigger_click('more');" class="top-right-fx top-fx2">分享</span>
+                <span onclick="trigger_click('more')" class="top-right-fx top-fx2">分享</span>
                 <span onclick="addfavorite(this,'<{$webSiteInfo.webSite}>','资源下载_资源搜索和资源下载的官网，千万级的资源资源分享吧，搜索资源下载资源的百度网盘搜索引擎！');" class="top-right-sc">收藏</span>
             </p>
         </div>
@@ -69,11 +69,7 @@
         </div>
         <div class="search-images" style="padding:10px 0;">
             <div style="text-align:center;margin-bottom:5px;">
-                <script type="text/javascript">
-                    /*首页搜索框下面*/
-                    var cpro_id = "u3020850";
-                </script>
-                <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script><div id="BAIDU_SSP__wrapper_u3020850_0"><iframe id="iframeu3020850_0" name="iframeu3020850_0" src="http://pos.baidu.com/xctm?rdid=3020850&amp;dc=3&amp;di=u3020850&amp;dri=0&amp;dis=0&amp;dai=1&amp;ps=453x410&amp;dcb=___adblockplus&amp;dtm=HTML_POST&amp;dvi=0.0&amp;dci=-1&amp;dpt=none&amp;tsr=0&amp;tpr=1506315235832&amp;ti=%E7%99%BE%E5%BA%A6%E4%BA%91%E7%9B%98_%E7%99%BE%E5%BA%A6%E4%BA%91%E6%90%9C%E7%B4%A2%2C%E7%BD%91%E7%9B%98%E6%90%9C%E7%B4%A2%2C%E7%99%BE%E5%BA%A6%E4%BA%91%E8%B5%84%E6%BA%90%2C%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E!&amp;ari=2&amp;dbv=2&amp;drs=1&amp;pcs=1920x974&amp;pss=1920x604&amp;cfv=0&amp;cpl=4&amp;chi=4&amp;cce=true&amp;cec=UTF-8&amp;tlm=1506315235&amp;rw=974&amp;ltu=http%3A%2F%2Fwww.<{$webSiteInfo.pubSite}>unpan.com%2F&amp;ltr=http%3A%2F%2F39.108.148.255%2Findex.php%2Fpc%2Findex&amp;ecd=1&amp;uc=1920x1040&amp;pis=-1x-1&amp;sr=1920x1080&amp;tcn=1506315236&amp;qn=1ccdad96e4b49dab&amp;tt=1506315235804.31.31.33" width="640" height="60" align="center,center" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" style="border:0;vertical-align:bottom;margin:0;width:640px;height:60px" allowtransparency="true"></iframe></div>
+
             </div>
             <span>今日搜索：</span>
             <{foreach from=$todySearchList item=search}>

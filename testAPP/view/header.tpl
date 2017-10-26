@@ -8,8 +8,8 @@
                     <li class="nav-li"><a href="<{$menus.user}>">百度云会员</a></li>
                 </ul>
                 <div class="nav-right">
-                    <a href="javascript:trigger_click('more');" class="nav-right-a">分享本站</a>
-                    <a href="javascript:addfavorite(this,'<{$webSiteInfo.webSite}>','<{$webSiteInfo.shareInfo}>');" class="nav-right-a nav-right-a2">收藏本站</a>
+                    <a href="trigger_click('more')" class="nav-right-a">分享本站</a>
+                    <a href="addfavorite(this,'<{$webSiteInfo.webSite}>','<{$webSiteInfo.shareInfo}>')" class="nav-right-a nav-right-a2">收藏本站</a>
                 </div>
             </div>
         </div>
