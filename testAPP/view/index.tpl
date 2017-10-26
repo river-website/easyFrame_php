@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="http://www.<{$webSiteInfo.pubSite}>unpan.com/css/<{$webSiteInfo.pubSite}>unpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="http://www.<{$webSiteInfo.pubSite}>unpan.com/css/<{$webSiteInfo.pubSite}>unpan-sy.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/share_user_1.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/sy.css">
 </head>
 <body>
 <div class="box">
@@ -27,19 +27,7 @@
                     <img alt="百度云下载" src="<{$webSiteInfo.logoImg}>" data-bd-imgshare-binded="1"></a>
             </h2>
             <div class="header-right">
-
-                <!-- 广告隐藏
-                 <script type="text/javascript">
-                    /*首页头部*/
-                    var cpro_id = "u3020870";
-                </script>
-                <div style="margin-left:400px;float:left;">
-                <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
-                </div>
-                  -->
-                <ul class="bdyp-sygg-ul">
-
-                </ul>
+                广告
             </div>
         </div>
     </div>
@@ -53,16 +41,6 @@
             </ul>
         </div>
     </div>
-    <!-- 图片轮播广告 -->
-    <!-- <div class="ad">
-    <ul>
-     <li class="ad-li">
-      <img alt src="http://www.<{$webSiteInfo.pubSite}>unpan.com/images/30.jpg"/>
-      <a target="_blank" href="javascripr:;" class="ad-a">￥2100.00/3100.00</a>
-     </li>
-   </ul>
-    </div>
-    -->
 
     <!--搜索  -->
     <div class="search" style="margin-top:10px;">
@@ -77,7 +55,7 @@
             <form id="form1" class="search_form">
                 <input type="text" id="searchbox" class="form-key" name="key" onkeypress="if(event.keyCode==13) {searchyun();return false;}" placeholder="共27724631个资源，今日已更新839423" autocomplete="off">
                 <input type="button" onclick="searchyun();" value="" class="form-ss">
-                <i class="form-i"><img src="<{$webSiteInfo.pubSite}>/images/1.png" id="indextest" onclick="searchyun();" data-bd-imgshare-binded="1"></i>
+                <i class="form-i"><img src="<{$webSiteInfo.pubSite}>/images/searchhui.png" id="indextest" onclick="searchyun();" data-bd-imgshare-binded="1"></i>
             </form>
 
             <div class="search_info">
@@ -89,12 +67,6 @@
                 <a href="javascripr:;" class="search-info-a">总下载次数&gt;<span>7.73亿</span>次</a>
             </div>
         </div>
-        <!--
-         <div class="search-right">
-         <a href="javascript:;" class="search-right-a">点击支持我们</a>
-         <a href="javascript:;" class="search-right-a search-right-a2">提建议给我们</a>
-         </div>
-        -->
         <div class="search-images" style="padding:10px 0;">
             <div style="text-align:center;margin-bottom:5px;">
                 <script type="text/javascript">
@@ -165,30 +137,6 @@
             </div>
         </div>
     </div>
-    <!-- 图片轮播广告 -->
-    <!-- <div class="ad">
-     <ul>
-      <li class="ad-li">
-       <img alt src="http://www.<{$webSiteInfo.pubSite}>unpan.com/images/30.jpg"/>
-       <a target="_blank" href="javascripr:;" class="ad-a">￥2100.00/3100.00</a>
-      </li>
-    </ul>
-     </div>
-     -->
-
-    <!-- 百度云最新热门专题 -->
-    <!--
-     <div class="member zxrmzt" >
-     <div class="member-top">
-      <h2 class="member-h2 zxrmzt-h2">百度云最新热门专题</h2>
-      <p class="rm-p"><a target="_blank" href="http://www.<{$webSiteInfo.pubSite}>unpan.com/ztlist/1.html">更多></a></p>
-     </div>
-     <div class="zxrmzt-div">
-       <a href="http://www.<{$webSiteInfo.pubSite}>unpan.com/zt/三浦展-三浦展.html" class="zxrmzt-a" target="_blank">三浦展</a>
-     </div>
-     <div class="cnxh"><p class="cnxh-p">猜你喜欢</p></div>
-     </div>
-    -->
     <!-- 百度云会员 -->
     <div class="member">
         <div class="member-top">
@@ -251,13 +199,6 @@
                     <td class="nsec"></td>
                     <td class="next"><a class="ab" href="/search/-0-全部-2.html">下一页</a></td><td class="jmp"></td></tr></tbody></table>
         </div>
-        <!--底部广告-->
-        <!--
-       <div class="search-images resource-imsges">
-         <a title="" target="_blank" href="javascripr:;">
-          <img alt="" src="http://www.<{$webSiteInfo.pubSite}>unpan.com/images/25.png"/></a>
-        </div>
-        -->
     </div>
 
 

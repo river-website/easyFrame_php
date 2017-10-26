@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-xz.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/share_file_1.css">
 </head>
 <body>
 <div class="box">
@@ -19,11 +19,7 @@
             </div>
             <div class="main-x">
                 <div class="main-x-left">
-                    <!-- 图片轮播广告 -->
-                    <script type="text/javascript">
-                        var cpro_id = "u3021509";
-                    </script>
-                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
+                    广告
                 </div>
                 <div class="main-x-right">
                     <!-- 文件信息 -->
@@ -51,22 +47,22 @@
                         <li class="x-right-li x-right-li2">
                             收&nbsp;藏&nbsp;到&nbsp;：
                             <a title="" href="javascript:trigger_click('more');">
-                                <img alt="" src="<{$webSiteInfo.pubSite}>/images/34.png" />
+                                <img alt="" src="<{$webSiteInfo.pubSite}>/images/Add.png" />
                             </a>
                             <a title="收藏到QQ空间" href="javascript:trigger_click('qzone');">
-                                <img alt="收藏到QQ空间" src="<{$webSiteInfo.pubSite}>/images/35.png" />
+                                <img alt="收藏到QQ空间" src="<{$webSiteInfo.pubSite}>/images/QQkongjian.png" />
                             </a>
                             <a title="收藏到新浪微博" href="javascript:trigger_click('tsina');">
-                                <img alt="收藏到新浪微博" src="<{$webSiteInfo.pubSite}>/images/36.png" />
+                                <img alt="收藏到新浪微博" src="<{$webSiteInfo.pubSite}>/images/xinlang.png" />
                             </a>
                             <a title="收藏到人人网" href="javascript:trigger_click('renren');">
-                                <img alt="收藏到人人网" src="<{$webSiteInfo.pubSite}>/images/37.png" />
+                                <img alt="收藏到人人网" src="<{$webSiteInfo.pubSite}>/images/renren.png" />
                             </a>
                             <a title="收藏到腾讯微博" href="javascript:trigger_click('tqq');">
-                                <img alt="收藏到腾讯微博" src="<{$webSiteInfo.pubSite}>/images/38.png" />
+                                <img alt="收藏到腾讯微博" src="<{$webSiteInfo.pubSite}>/images/tengxu.png" />
                             </a>
                             <a title="收藏到微信" href="javascript:trigger_click('weixin');">
-                                <img alt="收藏到微信" src="<{$webSiteInfo.pubSite}>/images/39.png" />
+                                <img alt="收藏到微信" src="<{$webSiteInfo.pubSite}>/images/weixin.png" />
                             </a>
                         </li>
                     </ul>
@@ -74,20 +70,14 @@
                         <a href="<{$fileInfo.url}>" class="main-xzfx-a" target="_blank">进入百度资源</a>
                         <a href="<{$userInfo.userUrl}>" class="main-xzfx-a main-xzfx-a2" target="_">查看TA的相关资源</a>
                     </div>
-                    <!-- 广告 -->
-                    <script type="text/javascript">
-                        var cpro_id = "u3021533";
-                    </script>
-                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
+                    <div>
+                        广告
+                    </div>
                 </div>
             </div>
             <div class="main-x main-x2" style="height:400px;margin-bottom:15px;">
                 <div class="main-x-left2" style="height:400px;">
-                    <!-- 广告 -->
-                    <script type="text/javascript">
-                        var cpro_id = "u3021516";
-                    </script>
-                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
+                    广告
                 </div>
                 <div class="main-x-right main-x-right2" style="height:400px;">
                     <h2 class="main-x-right-h2">百度云盘相关资源</h2>
@@ -204,10 +194,7 @@
             </div>
             <!-- 广告 -->
             <div style="width:292px;margin-left: 1.5px;height:650px;margin-top:15px;0verflow:hidden;">
-                <script type="text/javascript">
-                    var cpro_id = "u3021633";
-                </script>
-                <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
+                广告
             </div>
             <div class="ranklist-yp" style="min-height:760px;">
                 <div class="ranklist-yp-dt">

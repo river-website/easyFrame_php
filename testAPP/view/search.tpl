@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-lb.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/share_user_2.css.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/search_1.css.css">
 </head>
 <body>
 <div class="box">
@@ -93,8 +93,7 @@
             <!--底部广告-->
 
             <div class="main-images">
-                <a title="" target="_blank" href="javascripr:;">
-                    <img alt="" src="http://www.baiduyunpan.com/images/26.png"/></a>
+                广告
             </div>
 
         </div>
@@ -137,27 +136,10 @@
             <!--右下广告-->
 
             <div class="main-y-img">
-                <a title="" target="_blank" href="javascripr:;">
-                    <img alt="" src="http://www.baiduyunpan.com/images/27.png"/></a>
+                广告
             </div>
             <div class="main-y-img2">
-                <a title="" target="_blank" href="javascripr:;" >
-                    <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
-                    <p class="y-img2-p">决明子</p>
-                </a>
-                <a title="" target="_blank" href="javascripr:;" style="float:right;">
-                    <img alt="" src="http://www.baiduyunpan.com/images/29.png"/>
-                    <p class="y-img2-p">交易</p>
-                </a>
-                <a title="" target="_blank" href="javascripr:;" >
-                    <img alt="" src="http://www.baiduyunpan.com/images/30.png"/>
-                    <p class="y-img2-p">减肥茶减</p>
-                </a>
-                <a title="" target="_blank" href="javascripr:;" style="float:right;">
-                    <img alt="" src="http://www.baiduyunpan.com/images/28.png"/>
-                    <p class="y-img2-p">决明子</p>
-                </a>
-                <p class="img2-p2">广告</p>
+                广告
             </div>
         </div>
     </div>

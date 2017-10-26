@@ -30,17 +30,12 @@
                     <form id="form1" class="search_form">
                         <input type="text" id="searchbox" value="" class="form-key" name="key" onkeypress="if(event.keyCode==13) {searchyun();return false;}" placeholder="共<{$webSiteInfo.fileCount}>个资源，今日已更新<{$webSiteInfo.fileNewCount}>" />
                         <input type="button" onclick="searchyun();" value class="form-ss" />
-                        <i class="form-i"><img src="<{$webSiteInfo.pubSite}>/images/1.png" onclick="searchyun()" /></i>
+                        <i class="form-i"><img src="<{$webSiteInfo.pubSite}>/images/searchhui.png" onclick="searchyun()" /></i>
                     </form>
                 </div>
             </div>
         </div>
         <!-- 图片轮播广告 -->
         <div class="ad">
-            <ul>
-                <li class="ad-li">
-                    <img alt src="<{$webSiteInfo.pubSite}>/images/30.jpg" />
-                    <a target="_blank" href="javascripr:;" class="ad-a">￥2100.00/3100.00</a>
-                </li>
-            </ul>
+           广告
         </div>

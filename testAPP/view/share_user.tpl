@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <{include file="head.tpl"}>
-    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-bjtp.css">
-    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/baiduyunpan-hyxq.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/share_user_1.css">
+    <link rel="stylesheet" type="text/css" href="<{$webSiteInfo.pubSite}>/css/share_user_2.css">
 </head>
 <body>
 <div class="box">
@@ -16,11 +16,7 @@
         <div class="main-center">
             <div class="main-ain">
                 <div class="main-center-left">
-                    <!-- 图片轮播广告 -->
-                    <script type="text/javascript">
-                        var cpro_id = "u3021509";
-                    </script>
-                    <script type="text/javascript" src="http://cpro.baidustatic.com/cpro/ui/c.js"></script>
+                    广告
                 </div>
                 <div class="main-center-right">
                     <h2 class="main-right-h2">

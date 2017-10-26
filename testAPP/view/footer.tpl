@@ -35,13 +35,13 @@
                     <div class="footer-right-div">
                         <p>分享至：</p>
                         <a title="微博" href="javascript:trigger_click('tsina');" target="_blank">
-                            <img alt="微博" src="<{$webSiteInfo.pubSite}>/images/12.png" />
+                            <img alt="微博" src="<{$webSiteInfo.pubSite}>/images/weibo.png" />
                         </a>
                         <a title="微信" href="javascript:trigger_click('weixin');">
-                            <img alt="微信" src="<{$webSiteInfo.pubSite}>/images/13.png" />
+                            <img alt="微信" src="<{$webSiteInfo.pubSite}>/images/weixinhui.png" />
                         </a>
                         <a title="QQ空间" href="javascript:trigger_click('qzone');" target="_blank" style="padding-right:0;">
-                            <img alt="QQ空间" src="<{$webSiteInfo.pubSite}>/images/14.png" />
+                            <img alt="QQ空间" src="<{$webSiteInfo.pubSite}>/images/QQhui.png" />
                         </a>
                     </div>
                     <div class="bdsharebuttonbox" style="display:none;">
