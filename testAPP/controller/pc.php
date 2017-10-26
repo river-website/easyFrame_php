@@ -249,9 +249,9 @@ class pc extends ezControl{
         $this->hot();
         if(empty($fileID) || !is_numeric($fileID)){$this->reHome();return;}
         $share_file = $this->getModel('share_file');
-        $fileInfo = (yield $share_file
+        $fileInfo = $share_file
             ->where(array("share_file.id=$fileID"))
-            ->select('share_file.*',true));
+            ->select('share_file.*');
         if(empty($fileInfo) || count($fileInfo) == 0){$this->reHome();return;}
         $fileInfo = $fileInfo[0];
         $fileInfo['fileUrl'] = $this->toFileUrl($fileInfo);
@@ -289,11 +289,11 @@ class pc extends ezControl{
             ->select(array('id','fileName'));
         foreach ($userFiles as &$value)
             $value['fileUrl'] = $this->toFileUrl($value);
-        $likeFiles = $share_file
+        $likeFiles = (yield $share_file
 //            ->like(array('fileName'=>$fileInfo['fileName']))
-//            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
+            ->where(array('match(fileName) against("'.$fileInfo['fileName'].'")'))
             ->limit(20)
-            ->select(array('id','fileName'));
+            ->select(array('id','fileName'),true));
         foreach ($likeFiles as &$value)
             $value['fileUrl'] = $this->toFileUrl($value);
         $userShareCount = $share_file
@@ -312,7 +312,8 @@ class pc extends ezControl{
         $this->assign('likeFiles',$likeFiles);
         $this->assign('preFile',$preFile);
         $this->assign('nextFile',$nextFile);
-        $this->display('share_file');
+//        $this->display('share_file');
+        echo "comin";
     }
     public function share_user($userID=null,$condition=null){
         $this->baseInfo();

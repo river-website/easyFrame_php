@@ -167,10 +167,10 @@ class ezModel extends ezBase
 		}
 	}
 
-	public function insert($data)
+	public function insert($data,$func=null)
 	{
 		$this->sql['option'] = 'insert into ' . $this->table . '(' . implode(',', array_keys($data)) . ') values ("' . implode('","', array_values($data)) . '")';
-		return $this->execute();
+		return $this->execute($func);
 	}
 
 	public function insertList($dataList)
